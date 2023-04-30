@@ -58,6 +58,14 @@ const ClothingForm = () => {
         e.preventDefault();
         // 여기서 백엔드로 데이터를 보내는 로직을 구현해야 합니다.
         console.log({ image, category, subcategory, seasons, description });
+        const data = {
+            image,
+            category,
+            subcategory,
+            seasons,
+            description,
+        };
+        localStorage.setItem('clothingData', JSON.stringify(data));
         const formData = new FormData();
         formData.append('image', image);
         formData.append('category', category);
