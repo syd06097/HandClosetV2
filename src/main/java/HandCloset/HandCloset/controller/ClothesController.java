@@ -18,13 +18,13 @@ public class ClothesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Clothes saveClothes(@RequestParam String imgUrl,
-                               @RequestParam String category,
-                               @RequestParam String subcategory,
-                               @RequestParam String season,
-                               @RequestParam String description) {
+    public Clothes saveClothes(@RequestPart String imgurl,
+                               @RequestPart String category,
+                               @RequestPart String subcategory,
+                               @RequestPart String season,
+                               @RequestPart(required = false) String description) {
         Clothes clothes = new Clothes();
-        clothes.setImgUrl(imgUrl);
+        clothes.setImgUrl(imgurl);
         clothes.setCategory(category);
         clothes.setSubcategory(subcategory);
         clothes.setSeason(season);

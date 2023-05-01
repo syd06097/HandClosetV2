@@ -18,7 +18,7 @@ public class Clothes {
     private Long id;
 
     @Column(nullable = false)
-    private String imgUrl;
+    private String imgurl;
 
     @Column(nullable = false)
     private String category;
@@ -29,7 +29,6 @@ public class Clothes {
     @Column(nullable = false)
     private String season;
 
-    @Column(nullable = false)
     private String description;
 
     public Long getId() {
@@ -41,11 +40,11 @@ public class Clothes {
     }
 
     public String getImgUrl() {
-        return imgUrl;
+        return imgurl;
     }
 
     public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+        this.imgurl = imgUrl;
     }
 
     public String getCategory() {

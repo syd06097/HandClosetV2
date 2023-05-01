@@ -3,7 +3,7 @@ import styles from "./ClothingForm.module.css"
 
 
 const ClothingForm = () => {
-    const [imgUrl, setImgUrl] = useState(null);
+    const [imgurl, setImgurl] = useState(null);
     const [category, setCategory] = useState("");
     const [subcategory, setSubcategory] = useState("");
     const [season, setSeason] = useState([]);
@@ -16,7 +16,7 @@ const ClothingForm = () => {
             if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
               const reader = new FileReader();
               reader.onloadend = () => {
-                setImgUrl(reader.result);
+                setImgurl(reader.result);
               };
               reader.readAsDataURL(selectedFile);
             } else {
@@ -25,7 +25,7 @@ const ClothingForm = () => {
                 e.target.value = null;
             }
           } else {
-            setImgUrl("");
+            setImgurl("");
           }
     };
 
@@ -50,25 +50,17 @@ const ClothingForm = () => {
     };
 
     const handleImageCancel = () => {
-        setImgUrl(null);
+        setImgurl(null);
     };
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let season_str = season.join();
+        let season_str = season ? season.join():'';
         // 여기서 백엔드로 데이터를 보내는 로직을 구현해야 합니다.
-        console.log({ imgUrl, category, subcategory, season_str, description });
-        const data = {
-            imgUrl,
-            category,
-            subcategory,
-            season_str,
-            description,
-        };
-        localStorage.setItem('clothingData', JSON.stringify(data));
+        console.log({ imgurl, category, subcategory, season_str, description });
         const formData = new FormData();
-        formData.append('imgUrl', imgUrl);
+        formData.append('imgurl', imgurl);
         formData.append('category', category);
         formData.append('subcategory', subcategory);
         formData.append('season', season_str)
@@ -79,9 +71,6 @@ const ClothingForm = () => {
         try {
             const response = await fetch('/api/clothing', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: formData,
             });
             const data = await response.json();
@@ -106,9 +95,9 @@ const ClothingForm = () => {
             <div className={styles.formGroup}>
                 <label className={styles.label}>아이템추가</label>
                 <div className={styles.thumbnailContainer}>
-                    {imgUrl ? (
+                    {imgurl ? (
                         <div>
-                        <img src={imgUrl} alt="clothing" className={styles.thumbnail} />
+                        <img src={imgurl} alt="clothing" className={styles.thumbnail} />
                         <button onClick={handleImageCancel}>취소</button>
                         </div>
                     ) : (
