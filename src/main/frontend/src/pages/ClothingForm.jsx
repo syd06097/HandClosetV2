@@ -20,9 +20,9 @@ const ClothingForm = () => {
               };
               reader.readAsDataURL(selectedFile);
             } else {
-              // 이미지 파일이 아닐 경우 처리할 내용
-              alert("이미지 파일만 업로드 가능합니다.");
-              e.target.value = null;
+                // 이미지 파일이 아닐 경우 처리할 내용
+                alert("이미지 파일만 업로드 가능합니다.");
+                e.target.value = null;
             }
           } else {
             setImgUrl("");
@@ -112,21 +112,21 @@ const ClothingForm = () => {
                     )}
                 </div>
                 <label for={styles.file}>
-                        <div className={styles.btn_upload}>파일업로드</div>             
-                <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange} required/>
+                    <div className={styles.btn_upload}>파일업로드</div>
+                    <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange} required/>
                 </label>
             </div>
             <div>
-                <label className={styles.label}>카테고리</label>    
-                    <br/>
-                    <select value={category} onChange={handleCategoryChange} className={styles.select} required>
-                        <option value="">없음</option>
-                        {categories.map((category) => (
-                            <option key={category.name} value={category.name}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
+                <label className={styles.label}>카테고리</label>
+                <br/>
+                <select value={category} onChange={handleCategoryChange} className={styles.select} required>
+                    <option value="">없음</option>
+                    {categories.map((category) => (
+                        <option key={category.name} value={category.name}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             {category && (
                 <div style={{marginTop:"1px"}}>
@@ -140,7 +140,7 @@ const ClothingForm = () => {
                                         name="subcategory"
                                         value={subcat}
                                         checked={subcategory === subcat}
-                                        onChange={handleSubcategoryChange} 
+                                        onChange={handleSubcategoryChange}
                                         id={styles.subcategory}
                                         required/>
                                     <span>{subcat}</span>
