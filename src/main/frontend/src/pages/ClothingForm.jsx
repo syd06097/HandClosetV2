@@ -56,28 +56,33 @@ const ClothingForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let season_str = season ? season.join():'';
-        // 여기서 백엔드로 데이터를 보내는 로직을 구현해야 합니다.
-        console.log({ imgurl, category, subcategory, season_str, description });
-        const formData = new FormData();
-        formData.append('imgurl', imgurl);
-        formData.append('category', category);
-        formData.append('subcategory', subcategory);
-        formData.append('season', season_str)
-        formData.append('description', description);
-        for (let key of formData.keys()) {
-            console.log(key, ":", formData.get(key));
+        if (season.length === 0) {
+            alert('적어도 하나의 계절을 선택해주세요.');
+        } else{
+            let season_str = season ? season.join():'';
+            console.log({ imgurl, category, subcategory, season_str, description });
+            const formData = new FormData();
+            formData.append('imgurl', imgurl);
+            formData.append('category', category);
+            formData.append('subcategory', subcategory);
+            formData.append('season', season_str)
+            formData.append('description', description);
+            for (let key of formData.keys()) {
+                console.log(key, ":", formData.get(key));
+            }
+            try {
+                const response = await fetch('/api/clothing', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
         }
-        try {
-            const response = await fetch('/api/clothing', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error(error);
-        }
+
+
     };
 
     const categories = [
