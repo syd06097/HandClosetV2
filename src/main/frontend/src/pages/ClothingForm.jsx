@@ -3,10 +3,10 @@ import styles from "./ClothingForm.module.css"
 
 
 const ClothingForm = () => {
-    const [image, setImage] = useState(null);
+    const [imgUrl, setImgUrl] = useState(null);
     const [category, setCategory] = useState("");
     const [subcategory, setSubcategory] = useState("");
-    const [seasons, setSeasons] = useState([]);
+    const [season, setSeason] = useState([]);
     const [description, setDescription] = useState("");
 
     const handleImageChange = (e) => {
@@ -14,19 +14,19 @@ const ClothingForm = () => {
         if (selectedFile) {
             const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
             if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                setImage(reader.result);
-              };
-              reader.readAsDataURL(selectedFile);
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImgUrl(reader.result);
+                };
+                reader.readAsDataURL(selectedFile);
             } else {
-              // 이미지 파일이 아닐 경우 처리할 내용
-              alert("이미지 파일만 업로드 가능합니다.");
-              e.target.value = null;
+                // 이미지 파일이 아닐 경우 처리할 내용
+                alert("이미지 파일만 업로드 가능합니다.");
+                e.target.value = null;
             }
-          } else {
-            setImage("");
-          }
+        } else {
+            setImgUrl("");
+        }
     };
 
     const handleCategoryChange = (e) => {
@@ -40,7 +40,7 @@ const ClothingForm = () => {
 
     const handleSeasonChange = (e) => {
         const selectedSeason = e.target.value;
-        setSeasons((prevSeasons) => {
+        setSeason((prevSeasons) => {
             if (prevSeasons.includes(selectedSeason)) {
                 return prevSeasons.filter((season) => season !== selectedSeason);
             } else {
@@ -50,27 +50,27 @@ const ClothingForm = () => {
     };
 
     const handleImageCancel = () => {
-        setImage(null);
+        setImgUrl(null);
     };
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // 여기서 백엔드로 데이터를 보내는 로직을 구현해야 합니다.
-        console.log({ image, category, subcategory, seasons, description });
+        console.log({ imgUrl, category, subcategory, season, description });
         const data = {
-            image,
+            imgUrl,
             category,
             subcategory,
-            seasons,
+            season,
             description,
         };
         localStorage.setItem('clothingData', JSON.stringify(data));
         const formData = new FormData();
-        formData.append('image', image);
+        formData.append('imgUrl', imgUrl);
         formData.append('category', category);
         formData.append('subcategory', subcategory);
-        seasons.forEach((season) => {
+        season.forEach((season) => {
             formData.append('seasons[]', season);
         });
         formData.append('description', description);
@@ -102,31 +102,31 @@ const ClothingForm = () => {
             <div className={styles.formGroup}>
                 <label className={styles.label}>아이템추가</label>
                 <div className={styles.thumbnailContainer}>
-                    {image ? (
+                    {imgUrl ? (
                         <div>
-                        <img src={image} alt="clothing" className={styles.thumbnail} />
-                        <button onClick={handleImageCancel}>취소</button>
+                            <img src={imgUrl} alt="clothing" className={styles.thumbnail} />
+                            <button onClick={handleImageCancel}>취소</button>
                         </div>
                     ) : (
                         <div className={styles.thumbnail} />
                     )}
                 </div>
                 <label for={styles.file}>
-                        <div className={styles.btn_upload}>파일업로드</div>             
-                <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange} required/>
+                    <div className={styles.btn_upload}>파일업로드</div>
+                    <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange} required/>
                 </label>
             </div>
             <div>
-                <label className={styles.label}>카테고리</label>    
-                    <br/>
-                    <select value={category} onChange={handleCategoryChange} className={styles.select} required>
-                        <option value="">없음</option>
-                        {categories.map((category) => (
-                            <option key={category.name} value={category.name}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </select>
+                <label className={styles.label}>카테고리</label>
+                <br/>
+                <select value={category} onChange={handleCategoryChange} className={styles.select} required>
+                    <option value="">없음</option>
+                    {categories.map((category) => (
+                        <option key={category.name} value={category.name}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             {category && (
                 <div style={{marginTop:"1px"}}>
@@ -140,7 +140,7 @@ const ClothingForm = () => {
                                         name="subcategory"
                                         value={subcat}
                                         checked={subcategory === subcat}
-                                        onChange={handleSubcategoryChange} 
+                                        onChange={handleSubcategoryChange}
                                         id={styles.subcategory}
                                         required/>
                                     <span>{subcat}</span>
@@ -152,45 +152,45 @@ const ClothingForm = () => {
             <br/>
             <span className={styles.label}>계절</span>
             <div className={styles.ckbox_group}>
-                    <label className={styles.btn_ckbox}> 
-                        <input
-                            type="checkbox"
-                            value="봄"
-                            checked={seasons.includes("봄")}
-                            onChange={handleSeasonChange}
-                        />
-                        <span>봄</span>
-                    </label>
-                    <br />
-                    <label className={styles.btn_ckbox}>
-                        <input
-                            type="checkbox"
-                            value="여름"
-                            checked={seasons.includes("여름")}
-                            onChange={handleSeasonChange}
-                        />
-                        <span>여름</span>
-                    </label>
-                    <br />
-                    <label className={styles.btn_ckbox}>
-                        <input
-                            type="checkbox"
-                            value="가을"
-                            checked={seasons.includes("가을")}
-                            onChange={handleSeasonChange}
-                        />
-                        <span>가을</span>
-                    </label>
-                    <br />
-                    <label className={styles.btn_ckbox}>
-                        <input
-                            type="checkbox"
-                            value="겨울"
-                            checked={seasons.includes("겨울")}
-                            onChange={handleSeasonChange}
-                        />
-                        <span>겨울</span>
-                    </label>
+                <label className={styles.btn_ckbox}>
+                    <input
+                        type="checkbox"
+                        value="봄"
+                        checked={season.includes("봄")}
+                        onChange={handleSeasonChange}
+                    />
+                    <span>봄</span>
+                </label>
+                <br />
+                <label className={styles.btn_ckbox}>
+                    <input
+                        type="checkbox"
+                        value="여름"
+                        checked={season.includes("여름")}
+                        onChange={handleSeasonChange}
+                    />
+                    <span>여름</span>
+                </label>
+                <br />
+                <label className={styles.btn_ckbox}>
+                    <input
+                        type="checkbox"
+                        value="가을"
+                        checked={season.includes("가을")}
+                        onChange={handleSeasonChange}
+                    />
+                    <span>가을</span>
+                </label>
+                <br />
+                <label className={styles.btn_ckbox}>
+                    <input
+                        type="checkbox"
+                        value="겨울"
+                        checked={season.includes("겨울")}
+                        onChange={handleSeasonChange}
+                    />
+                    <span>겨울</span>
+                </label>
             </div>
             <div>
                 <label>
