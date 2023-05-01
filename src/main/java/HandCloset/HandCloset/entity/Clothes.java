@@ -11,7 +11,7 @@ public class Clothes {
     private Long id;
 
     @Column(nullable = false)
-    private String imgurl;
+    private String imgUrl;
 
     @Column(nullable = false)
     private String category;

@@ -3,10 +3,10 @@ import styles from "./ClothingForm.module.css"
 
 
 const ClothingForm = () => {
-    const [image, setImage] = useState(null);
+    const [imgUrl, setImgUrl] = useState(null);
     const [category, setCategory] = useState("");
     const [subcategory, setSubcategory] = useState("");
-    const [seasons, setSeasons] = useState([]);
+    const [season, setSeason] = useState([]);
     const [description, setDescription] = useState("");
 
     const handleImageChange = (e) => {
@@ -16,7 +16,7 @@ const ClothingForm = () => {
             if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
               const reader = new FileReader();
               reader.onloadend = () => {
-                setImage(reader.result);
+                setImgUrl(reader.result);
               };
               reader.readAsDataURL(selectedFile);
             } else {
@@ -25,7 +25,7 @@ const ClothingForm = () => {
               e.target.value = null;
             }
           } else {
-            setImage("");
+            setImgUrl("");
           }
     };
 
@@ -40,7 +40,7 @@ const ClothingForm = () => {
 
     const handleSeasonChange = (e) => {
         const selectedSeason = e.target.value;
-        setSeasons((prevSeasons) => {
+        setSeason((prevSeasons) => {
             if (prevSeasons.includes(selectedSeason)) {
                 return prevSeasons.filter((season) => season !== selectedSeason);
             } else {
@@ -50,27 +50,27 @@ const ClothingForm = () => {
     };
 
     const handleImageCancel = () => {
-        setImage(null);
+        setImgUrl(null);
     };
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // 여기서 백엔드로 데이터를 보내는 로직을 구현해야 합니다.
-        console.log({ image, category, subcategory, seasons, description });
+        console.log({ imgUrl, category, subcategory, season, description });
         const data = {
-            image,
+            imgUrl,
             category,
             subcategory,
-            seasons,
+            season,
             description,
         };
         localStorage.setItem('clothingData', JSON.stringify(data));
         const formData = new FormData();
-        formData.append('image', image);
+        formData.append('imgUrl', imgUrl);
         formData.append('category', category);
         formData.append('subcategory', subcategory);
-        seasons.forEach((season) => {
+        season.forEach((season) => {
             formData.append('seasons[]', season);
         });
         formData.append('description', description);
@@ -102,9 +102,9 @@ const ClothingForm = () => {
             <div className={styles.formGroup}>
                 <label className={styles.label}>아이템추가</label>
                 <div className={styles.thumbnailContainer}>
-                    {image ? (
+                    {imgUrl ? (
                         <div>
-                        <img src={image} alt="clothing" className={styles.thumbnail} />
+                        <img src={imgUrl} alt="clothing" className={styles.thumbnail} />
                         <button onClick={handleImageCancel}>취소</button>
                         </div>
                     ) : (
@@ -156,7 +156,7 @@ const ClothingForm = () => {
                         <input
                             type="checkbox"
                             value="봄"
-                            checked={seasons.includes("봄")}
+                            checked={season.includes("봄")}
                             onChange={handleSeasonChange}
                         />
                         <span>봄</span>
@@ -166,7 +166,7 @@ const ClothingForm = () => {
                         <input
                             type="checkbox"
                             value="여름"
-                            checked={seasons.includes("여름")}
+                            checked={season.includes("여름")}
                             onChange={handleSeasonChange}
                         />
                         <span>여름</span>
@@ -176,7 +176,7 @@ const ClothingForm = () => {
                         <input
                             type="checkbox"
                             value="가을"
-                            checked={seasons.includes("가을")}
+                            checked={season.includes("가을")}
                             onChange={handleSeasonChange}
                         />
                         <span>가을</span>
@@ -186,7 +186,7 @@ const ClothingForm = () => {
                         <input
                             type="checkbox"
                             value="겨울"
-                            checked={seasons.includes("겨울")}
+                            checked={season.includes("겨울")}
                             onChange={handleSeasonChange}
                         />
                         <span>겨울</span>
