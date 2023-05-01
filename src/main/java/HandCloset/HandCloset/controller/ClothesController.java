@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/clothing")
 public class ClothesController {
-
     private final ClothesService clothesService;
 
     public ClothesController(ClothesService clothesService) {
@@ -19,7 +18,17 @@ public class ClothesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Clothes createClothes(@RequestBody Clothes clothes) {
+    public Clothes saveClothes(@RequestParam String imgUrl,
+                               @RequestParam String category,
+                               @RequestParam String subcategory,
+                               @RequestParam String season,
+                               @RequestParam String description) {
+        Clothes clothes = new Clothes();
+        clothes.setImgUrl(imgUrl);
+        clothes.setCategory(category);
+        clothes.setSubcategory(subcategory);
+        clothes.setSeason(season);
+        clothes.setDescription(description);
         return clothesService.saveClothes(clothes);
     }
 
@@ -34,6 +43,7 @@ public class ClothesController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClothes(@PathVariable Long id) {
         clothesService.deleteClothes(id);
     }

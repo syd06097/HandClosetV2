@@ -1,21 +1,18 @@
 package HandCloset.HandCloset.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "clothes")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class Clothes {
-    public Clothes() {
-
-    }
-    public Clothes(Long id, String imgUrl, String category, String subcategory, String season, String description) {
-        this.id = id;
-        this.imgUrl = imgUrl;
-        this.category = category;
-        this.subcategory = subcategory;
-        this.season = season;
-        this.description = description;
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,9 +31,6 @@ public class Clothes {
 
     @Column(nullable = false)
     private String description;
-
-
-
 
     public Long getId() {
         return id;

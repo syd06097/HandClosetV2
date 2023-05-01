@@ -56,13 +56,14 @@ const ClothingForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let season_str = season.join();
         // 여기서 백엔드로 데이터를 보내는 로직을 구현해야 합니다.
-        console.log({ imgUrl, category, subcategory, season, description });
+        console.log({ imgUrl, category, subcategory, season_str, description });
         const data = {
             imgUrl,
             category,
             subcategory,
-            season,
+            season_str,
             description,
         };
         localStorage.setItem('clothingData', JSON.stringify(data));
@@ -70,14 +71,17 @@ const ClothingForm = () => {
         formData.append('imgUrl', imgUrl);
         formData.append('category', category);
         formData.append('subcategory', subcategory);
-        season.forEach((season) => {
-            formData.append('seasons[]', season);
-        });
+        formData.append('season', season_str)
         formData.append('description', description);
-
+        for (let key of formData.keys()) {
+            console.log(key, ":", formData.get(key));
+        }
         try {
             const response = await fetch('/api/clothing', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: formData,
             });
             const data = await response.json();
