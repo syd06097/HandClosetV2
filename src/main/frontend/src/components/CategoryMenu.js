@@ -1,6 +1,10 @@
-import { useState } from "react";
-// import "../css/Menu.css";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import {
+  getClothesByCategoryAndSubcategory,
+  getAllClothesImages,
+} from "../utils/api";
+
 const categories = [
   {
     name: "전체",
@@ -27,7 +31,7 @@ const categories = [
   },
   {
     name: "원피스",
-    subcategories: [],
+    subcategories: ["미니 원피스", "미디 원피스", "맥시 원피스", "기타"],
   },
   {
     name: "신발",
@@ -53,10 +57,45 @@ const categories = [
     subcategories: ["이너웨어", "잠옷", "수영복"],
   },
 ];
-
-function CategoryMenu() {
+function CategoryMenu({ onClickCategory }) {
   const [activeCategory, setActiveCategory] = useState(categories[0].name);
+  const [activeSubcategory, setActiveSubcategory] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    setIsLoading(true);
+    if (activeCategory === "전체") {
+      getAllClothesImages()
+        .then((clothes) => {
+          onClickCategory(activeCategory, activeSubcategory, clothes);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      getClothesByCategoryAndSubcategory(activeCategory, activeSubcategory)
+        .then((clothesWithImageUrls) => {
+          onClickCategory(
+            activeCategory,
+            activeSubcategory,
+            clothesWithImageUrls
+          );
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [activeCategory, activeSubcategory, onClickCategory]);
+  const handleClickCategory = (categoryName) => {
+    setActiveCategory(categoryName);
+    setActiveSubcategory("");
+  };
+
+  const handleClickSubcategory = (subcategoryName) => {
+    setActiveSubcategory(subcategoryName);
+  };
   return (
     <div>
       <StyledHeader>
@@ -65,7 +104,7 @@ function CategoryMenu() {
             <li
               key={category.name}
               className={activeCategory === category.name ? "active" : ""}
-              onClick={() => setActiveCategory(category.name)}
+              onClick={() => handleClickCategory(category.name)}
             >
               {category.name}
             </li>
@@ -75,13 +114,20 @@ function CategoryMenu() {
           {categories
             .find((category) => category.name === activeCategory)
             .subcategories.map((subcategory) => (
-              <li key={subcategory}>{subcategory}</li>
+              <li
+                key={subcategory}
+                className={activeSubcategory === subcategory ? "active" : ""}
+                onClick={() => handleClickSubcategory(subcategory)}
+              >
+                {subcategory}
+              </li>
             ))}
         </ul>
       </StyledHeader>
     </div>
   );
 }
+
 const StyledHeader = styled.header`
   ul {
     list-style: none;
@@ -101,21 +147,17 @@ const StyledHeader = styled.header`
     overflow: auto;
     white-space: nowrap;
   }
-
   li {
     cursor: pointer;
     margin-left: 11px;
     margin-right: 11px;
   }
-
   li:last-child {
     margin-right: 0;
   }
-
   li.active {
     font-weight: bold;
   }
-
   ul + ul {
     margin-top: 10px;
   }
