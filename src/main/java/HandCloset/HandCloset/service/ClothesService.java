@@ -8,7 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ClothesService {
@@ -59,4 +61,21 @@ public class ClothesService {
             return null;
         }
     }
+
+    ////
+
+    public Map<String, Integer> getCategoryItemCountForClothes() {
+        List<Clothes> allClothes = clothesRepository.findAll();
+        Map<String, Integer> itemCountMap = new HashMap<>();
+
+        for (Clothes clothes : allClothes) {
+            String category = clothes.getCategory();
+            String subcategory = clothes.getSubcategory();
+            String categoryKey = category + "-" + subcategory;
+            itemCountMap.put(categoryKey, itemCountMap.getOrDefault(categoryKey, 0) + 1);
+        }
+
+        return itemCountMap;
+    }
+    ////
 }

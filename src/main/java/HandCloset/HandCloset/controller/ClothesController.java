@@ -6,6 +6,7 @@ import HandCloset.HandCloset.service.ClothesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
+import java.util.Map;
 
 
 @RestController
@@ -102,5 +104,12 @@ public class ClothesController {
 
         return allImages;
     }
+    //
+    @GetMapping("/category-item-count")
+    public ResponseEntity<Map<String, Integer>> getCategoryItemCountForClothes() {
+        Map<String, Integer> itemCountMap = clothesService.getCategoryItemCountForClothes();
+        return ResponseEntity.ok(itemCountMap);
+    }
 
+    //
 }
