@@ -36,3 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 .idea/
+/src/main/resources/static/static/js/
+/src/main/resources/static/static/
