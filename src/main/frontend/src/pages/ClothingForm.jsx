@@ -14,7 +14,7 @@ const ClothingForm = () => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
-            if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
+            if (["jpg", "jpeg", "png", "gif", "jfif"].includes(fileExtension)) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     setImgpath(reader.result);
