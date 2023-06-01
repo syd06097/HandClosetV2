@@ -50,6 +50,7 @@ const ImageGrid = styled.div`
   grid-gap: 20px;
   margin-left: 20px;
   margin-right: 20px;
+  
 `;
 
 const ImageItem = styled.div`
