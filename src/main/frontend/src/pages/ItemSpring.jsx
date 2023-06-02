@@ -97,7 +97,7 @@ const ItemSpring = () => {
             <ul>
                 {sortedSeasons.map((season) => (
                     <li key={season}>
-                        {season}: {calculateSeasonPercentage(season).count} | ({calculateSeasonPercentage(season).percentage}%)
+                        {season}: {calculateSeasonPercentage(season).count} | {calculateSeasonPercentage(season).percentage}%
                     </li>
                 ))}
             </ul>

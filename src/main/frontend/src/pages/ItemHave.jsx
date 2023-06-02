@@ -63,7 +63,7 @@ const ItemHave = () => {
                     const { count, percentage } = calculateCategoryPercentage(category.name);
                     return (
                         <li key={category.name}>
-                            {category.name}: {count} | ({percentage}%)
+                            {category.name}: {count} | {percentage}%
                         </li>
                     );
                 })}
