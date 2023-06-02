@@ -85,7 +85,7 @@ const Main = () => {
   const [longitude, setLongitude] = useState(null);
   const [cityCode, setCityCode] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
-
+  const [koreanCityCode, setKoreanCityCode] = useState(null);
 
 
   useEffect(() => {
@@ -121,6 +121,7 @@ const Main = () => {
               const koreanCityCode = data.documents[0].region_1depth_name;
               const cityCode = convertToEnglishCityCode(koreanCityCode);
               setCityCode(cityCode);
+              setKoreanCityCode(koreanCityCode)
             }
           })
           .catch((error) => {
@@ -174,7 +175,25 @@ const Main = () => {
     return `http://openweathermap.org/img/w/${iconCode}.png`;
   };
 
-
+  const getRecommendedCategory = (temperature) => {
+    if (temperature >= 28) {
+      return "민소매, 반팔, 원피스, 반바지";
+    } else if (temperature >= 23) {
+      return "반팔, 얇은 셔츠, 반바지, 면바지";
+    } else if (temperature >= 20) {
+      return "얇은 가디건, 긴팔, 면바지, 청바지";
+    } else if (temperature >= 17) {
+      return "얇은 니트, 맨투맨, 가디건, 청바지";
+    } else if (temperature >= 12) {
+      return "자켓, 가디건, 후드집업, 스타킹";
+    } else if (temperature >= 9) {
+      return "자켓, 트렌치코트, 야상, 니트";
+    } else if (temperature >= 5) {
+      return "코트, 무스탕, 니트, 레깅스";
+    } else {
+      return "패딩, 두꺼운 코트, 목도리, 기모제품";
+    }
+  };
   return (
       <div>
         <h1>Main</h1>
@@ -185,13 +204,14 @@ const Main = () => {
         )}
         {weatherData && (
             <div>
-              <p>{weatherData.name}, {weatherData.sys.country} 의 날씨</p>
+              <p>{koreanCityCode}의 날씨</p>
               <p>날씨: {weatherData.weather[0].description}</p>
               <p>기온: {Math.round(weatherData.main.temp)}°C</p>
               <p>습도: {weatherData.main.humidity}%</p>
               <p>구름: {weatherData.clouds.all}%</p>
               <p>풍속: {weatherData.wind.speed} m/s</p>
               <img src={getWeatherIconUrl(weatherData.weather[0].icon)} alt="Weather Icon" />
+              <p>옷 추천: {getRecommendedCategory(Math.round(weatherData.main.temp))}</p>
             </div>
         )}
           <div onClick={() => {

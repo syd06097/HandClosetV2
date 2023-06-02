@@ -79,6 +79,11 @@ const ClothingForm = () => {
                 });
                 const data = response.data;
                 console.log(data);
+                setImgpath(null);
+                setCategory("");
+                setSubcategory("");
+                setSeason([]);
+                setDescription("");
             } catch (error) {
                 console.error(error);
             }

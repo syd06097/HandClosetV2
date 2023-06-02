@@ -37,8 +37,8 @@
 
 .thumbnail {
     display: flex;
-    width: 100%;
-    height: 100%;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
     margin: auto;
 }
@@ -76,7 +76,7 @@
     appearance: none;
     width: 150px;
     height: 35px;
-    background: url('../../public/arrow-down-3101.png') calc(100% - 5px) center no-repeat;
+    background: url('../images/arrow-down-3101.png') calc(100% - 5px) center no-repeat;
     background-size: 20px;
     padding: 5px 30px 5px 10px;
     border-radius: 4px;
