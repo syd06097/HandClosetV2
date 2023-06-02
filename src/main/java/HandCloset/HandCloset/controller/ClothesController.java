@@ -104,12 +104,19 @@ public class ClothesController {
 
         return allImages;
     }
-    //
+
     @GetMapping("/category-item-count")
     public ResponseEntity<Map<String, Integer>> getCategoryItemCountForClothes() {
         Map<String, Integer> itemCountMap = clothesService.getCategoryItemCountForClothes();
         return ResponseEntity.ok(itemCountMap);
     }
 
+
+
+    //
+    @GetMapping("/statistics")
+    public Map<String, Integer> getSeasonStatistics() {
+        return clothesService.getSeasonStatistics();
+    }
     //
 }

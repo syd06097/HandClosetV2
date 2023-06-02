@@ -8,7 +8,8 @@ import Closet from "./pages/Closet";
 import ClothingForm from "./pages/ClothingForm";
 import BottomNav from "./BottomNav";
 import ClothesDetail from "./pages/ClothesDetail";
-
+import ItemHave from "./pages/ItemHave";
+import ItemSpring from "./pages/ItemSpring";
 function App() {
   return (
     <div className="App">
@@ -21,6 +22,8 @@ function App() {
         <Route path="/Calendar" element={<Calendar />} />
         <Route path="/MyPage" element={<MyPage />} />
         <Route path="/Closet" element={<Closet />} />
+          <Route path="/ItemHave" element={<ItemHave />} />
+          <Route path="/ItemSpring" element={<ItemSpring />} />
         <Route path="/ClothingForm" element={<ClothingForm />} />
         <Route path="/clothes/:id" element={<ClothesDetail />} />
       </Routes>
