@@ -86,6 +86,7 @@ const Main = () => {
   const [cityCode, setCityCode] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
   const [koreanCityCode, setKoreanCityCode] = useState(null);
+  const [recommendedSubcategory, setRecommendedSubcategory] = useState([]);
 
 
   useEffect(() => {
@@ -148,6 +149,16 @@ const Main = () => {
     }
   }, [cityCode]);
 
+  useEffect(() => {
+    // 기온에 따른 추천 서브 카테고리 설정
+    if (weatherData) {
+      const temperature = Math.round(weatherData.main.temp);
+      const strCategory = getRecommendedCategory(temperature);
+      const recommendedCategory = strCategory.split(",")
+      setRecommendedSubcategory(recommendedCategory);
+    }
+  }, [weatherData]);
+
   const convertToEnglishCityCode = (koreanCityCode) => {
     const cityCodeMap = {
       "서울특별시": "Seoul",
@@ -177,21 +188,21 @@ const Main = () => {
 
   const getRecommendedCategory = (temperature) => {
     if (temperature >= 28) {
-      return "민소매, 반팔, 원피스, 반바지";
+      return "민소매,반팔티,미니 원피스,반바지";
     } else if (temperature >= 23) {
-      return "반팔, 얇은 셔츠, 반바지, 면바지";
+      return "반팔티,블라우스/셔츠,반바지,면바지";
     } else if (temperature >= 20) {
-      return "얇은 가디건, 긴팔, 면바지, 청바지";
+      return "가디건/베스트,긴팔티,면바지,청바지";
     } else if (temperature >= 17) {
-      return "얇은 니트, 맨투맨, 가디건, 청바지";
+      return "니트,맨투맨/후디,가디건/베스트,청바지";
     } else if (temperature >= 12) {
-      return "자켓, 가디건, 후드집업, 스타킹";
+      return "자켓/점퍼,가디건/베스트,후드집업,스타킹";
     } else if (temperature >= 9) {
-      return "자켓, 트렌치코트, 야상, 니트";
+      return "자켓/점퍼,트렌치 코드,야상,니트";
     } else if (temperature >= 5) {
-      return "코트, 무스탕, 니트, 레깅스";
+      return "코트,무스탕,니트,슬랙스";
     } else {
-      return "패딩, 두꺼운 코트, 목도리, 기모제품";
+      return "패딩,코트,목도리,기모제품";
     }
   };
   return (
@@ -220,6 +231,9 @@ const Main = () => {
         <div onClick={() => {
           navigate("/ItemSpring");
         }}><h3>계절 별 아이템 개수</h3></div>
+        <div onClick={() => {
+          navigate("/ClothingRecommendation", { state: { subcategories: recommendedSubcategory } });
+        }}><h3>스타일보러가기</h3></div>
 
       </div>
   );

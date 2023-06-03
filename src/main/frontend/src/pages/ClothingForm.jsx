@@ -67,7 +67,7 @@ const ClothingForm = () => {
             formData.append('category', category);
             formData.append('subcategory', subcategory);
             formData.append('season', season_str)
-            formData.append('description', description);
+            formData.append('description', description || '설명없음');
             for (let key of formData.keys()) {
                 console.log(key, ":", formData.get(key));
             }

@@ -94,5 +94,11 @@ public class ClothesService {
     }
 
     ///
+    public List<Clothes> getFilteredClothes(String subcategory) {
+        return clothesRepository.findBySubcategory(subcategory);
+    }
 
+    public List<Clothes> getRecommendedClothes(String subcategory) {
+        return clothesRepository.findTop2BySubcategoryOrderByWearcntDesc(subcategory);
+    }
 }

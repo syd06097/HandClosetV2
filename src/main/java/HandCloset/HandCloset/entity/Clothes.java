@@ -31,6 +31,9 @@ public class Clothes {
 
     private String description;
 
+    @Column(nullable = false)
+    private int wearcnt;
+
     public Long getId() {
         return id;
     }
@@ -77,5 +80,13 @@ public class Clothes {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getWearcnt() {
+        return wearcnt;
+    }
+
+    public void setWearcnt(int wearcnt) {
+        this.wearcnt = wearcnt;
     }
 }

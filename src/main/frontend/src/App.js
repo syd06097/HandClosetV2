@@ -10,6 +10,7 @@ import BottomNav from "./BottomNav";
 import ClothesDetail from "./pages/ClothesDetail";
 import ItemHave from "./pages/ItemHave";
 import ItemSpring from "./pages/ItemSpring";
+import ClothingRecommendation from "./pages/CothingRecommendation";
 function App() {
   return (
     <div className="App">
@@ -26,6 +27,7 @@ function App() {
           <Route path="/ItemSpring" element={<ItemSpring />} />
         <Route path="/ClothingForm" element={<ClothingForm />} />
         <Route path="/clothes/:id" element={<ClothesDetail />} />
+        <Route path="/ClothingRecommendation" element={<ClothingRecommendation />} />
       </Routes>
     </div>
   );

@@ -3,6 +3,7 @@ package HandCloset.HandCloset.controller;
 
 import HandCloset.HandCloset.entity.Clothes;
 import HandCloset.HandCloset.service.ClothesService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.List;
 import java.nio.file.Files;
@@ -21,8 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.util.Map;
-
-
+import java.net.URLDecoder;
 @RestController
 @RequestMapping("/api/clothing")
 public class ClothesController {
@@ -119,4 +120,28 @@ public class ClothesController {
         return clothesService.getSeasonStatistics();
     }
     //
+
+    @GetMapping("/filter")
+    public List<Clothes> getFilteredClothes(@RequestParam String subcategory) {
+        return clothesService.getFilteredClothes(subcategory);
+    }
+
+
+    @GetMapping("/recommendation")
+    public List<Clothes> getRecommendedClothes(@RequestParam("subcategories") List<String> subcategories) {
+        List<Clothes> recommendedClothes = new ArrayList<>();
+
+        for (String subcategory : subcategories) {
+            String decodedSubcategory = null;
+            try {
+                decodedSubcategory = URLDecoder.decode(subcategory, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            List<Clothes> clothes = clothesService.getRecommendedClothes(decodedSubcategory);
+            recommendedClothes.addAll(clothes);
+        }
+
+        return recommendedClothes;
+    }
 }
