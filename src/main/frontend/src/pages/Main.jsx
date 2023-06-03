@@ -232,6 +232,12 @@ const Main = () => {
           navigate("/ItemSpring");
         }}><h3>계절 별 아이템 개수</h3></div>
         <div onClick={() => {
+          navigate("/ItemFrequently");
+        }}><h3>자주 입은 아이템</h3></div>
+        <div onClick={() => {
+          navigate("/ItemNotRecently");
+        }}><h3>최근 입지 않은 아이템</h3></div>
+        <div onClick={() => {
           navigate("/ClothingRecommendation", { state: { subcategories: recommendedSubcategory } });
         }}><h3>스타일보러가기</h3></div>
 

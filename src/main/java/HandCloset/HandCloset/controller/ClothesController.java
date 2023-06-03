@@ -3,7 +3,6 @@ package HandCloset.HandCloset.controller;
 
 import HandCloset.HandCloset.entity.Clothes;
 import HandCloset.HandCloset.service.ClothesService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,9 +19,9 @@ import java.util.ArrayList;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.File;
 import java.util.Map;
 import java.net.URLDecoder;
+import org.springframework.http.HttpHeaders;
 @RestController
 @RequestMapping("/api/clothing")
 public class ClothesController {
@@ -118,6 +116,23 @@ public class ClothesController {
     @GetMapping("/statistics")
     public Map<String, Integer> getSeasonStatistics() {
         return clothesService.getSeasonStatistics();
+    }
+
+    @GetMapping("/top-items")
+    public List<Clothes> getTopItems() {
+        return clothesService.getTopItems();
+    }
+    @GetMapping("/bottom-items")
+    public List<Clothes> getBottomItems() {
+        return clothesService.getBottomItems();
+    }
+
+    @GetMapping(value = "/images-by-path/{imgPath}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getClothesImageByPath(@PathVariable String imgPath) throws IOException {
+        byte[] imageBytes = clothesService.getClothesImageByPath(imgPath);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
     //
 
