@@ -98,10 +98,7 @@ public class ClothesService {
     public List<Clothes> getTopItems() {
         return clothesRepository.findTop5ByOrderByWearcntDesc();
     }
-    public byte[] getClothesImageByPath(String imgPath) throws IOException {
-        Path imagePath = Paths.get(imgPath);
-        return Files.readAllBytes(imagePath);
-    }
+
 
     public List<Clothes> getBottomItems() {
         return clothesRepository.findTop5ByOrderByCreatedateAsc();

@@ -57,12 +57,13 @@ public class Clothes {
         this.id = id;
     }
 
-    public String getImgPath() {
+
+    public String getImgpath() {
         return imgpath;
     }
 
-    public void setImgPath(String imgPath) {
-        this.imgpath = imgPath;
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
     }
 
     public String getCategory() {

@@ -44,7 +44,7 @@ public class ClothesController {
         Clothes clothes = new Clothes();
         // 파일을 저장하고 저장된 경로를 DB에 저장합니다.
         String imagePath = clothesService.saveImage(file);
-        clothes.setImgPath(imagePath);
+        clothes.setImgpath(imagePath);
         clothes.setCategory(category);
         clothes.setSubcategory(subcategory);
         clothes.setSeason(season);
@@ -79,15 +79,15 @@ public class ClothesController {
             return clothesService.getClothesByCategoryAndSubcategory(category, subcategory);
         }
     }
-
+    //CategoryItem
     @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_JPEG_VALUE) //이미지의 경로를 통해 단일 이미지를 가져옴
     public byte[] getClothesImage(@PathVariable Long id) throws IOException {
         Clothes clothes = clothesService.getClothes(id);
-        String imgPath = clothes.getImgPath();
-        Path imagePath = Paths.get(imgPath);
+        String imgpath = clothes.getImgpath();
+        Path imagePath = Paths.get(imgpath);
         return Files.readAllBytes(imagePath);
     }
-
+    //CategoryItem
     @GetMapping("/images/all")
     public List<byte[]> getAllClothesImagePaths() throws IOException {
         List<byte[]> allImages = new ArrayList<>();
@@ -95,7 +95,7 @@ public class ClothesController {
         // 데이터베이스에서 이미지 파일 경로를 가져옴
         List<Clothes> clothesList = clothesService.getAllClothes();
         for (Clothes clothes : clothesList) {
-            String imagePath = clothes.getImgPath();
+            String imagePath = clothes.getImgpath();
             Path imageFilePath = Paths.get(imagePath);
             byte[] imageBytes = Files.readAllBytes(imageFilePath);
             allImages.add(imageBytes);
@@ -103,38 +103,32 @@ public class ClothesController {
 
         return allImages;
     }
-
+    // ItemHave
     @GetMapping("/category-item-count")
     public ResponseEntity<Map<String, Integer>> getCategoryItemCountForClothes() {
         Map<String, Integer> itemCountMap = clothesService.getCategoryItemCountForClothes();
         return ResponseEntity.ok(itemCountMap);
     }
 
-
-
-    //
+    // ItemSpring
     @GetMapping("/statistics")
     public Map<String, Integer> getSeasonStatistics() {
         return clothesService.getSeasonStatistics();
     }
 
+    // ItemFrequently
     @GetMapping("/top-items")
     public List<Clothes> getTopItems() {
         return clothesService.getTopItems();
     }
+
+    // ItemNotRecently
     @GetMapping("/bottom-items")
     public List<Clothes> getBottomItems() {
         return clothesService.getBottomItems();
     }
 
-    @GetMapping(value = "/images-by-path/{imgPath}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getClothesImageByPath(@PathVariable String imgPath) throws IOException {
-        byte[] imageBytes = clothesService.getClothesImageByPath(imgPath);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-    }
-    //
+
 
     @GetMapping("/filter")
     public List<Clothes> getFilteredClothes(@RequestParam String subcategory) {

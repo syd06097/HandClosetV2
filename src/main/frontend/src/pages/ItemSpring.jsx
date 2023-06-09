@@ -67,6 +67,7 @@ const ItemSpring = () => {
         try {
             const response = await axios.get('/api/clothing/statistics');
             const data = response.data;
+
             setStatistics(data);
         } catch (error) {
             console.error(error);
