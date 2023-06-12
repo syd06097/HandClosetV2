@@ -45,7 +45,8 @@ const ItemFrequently = () => {
 
     return (
         <div>
-            <h1>ItemFrequently</h1>
+            <h3 style={{fontSize:"22px"}}>가장 자주 입은 아이템 TOP 5</h3>
+            <hr style={{ height: "1px", marginBottom:"50px",border:"0",backgroundColor:"lightgray" }} />
             <ItemContainer>
                 {topItems.map((item, index) => (
                     <ItemCard key={item.id}>
@@ -57,10 +58,9 @@ const ItemFrequently = () => {
                             </ImageSquareWrapper>
                         </ImageWrapper>
                         <ItemDetails>
-                            <h3 style={{paddingBottom:0}}>Rank: {index + 1}</h3>
-                            <p>{item.description}</p>
-                            <p>{moment(item.createdate).format("YYYY-MM-DD")} 등록 | {item.wearcnt}회 착용</p>
-
+                            <div style={{fontSize:"19px", fontWeight:"bold"}}>{index + 1}위</div>
+                            <div style={{fontSize:"19px", fontWeight:"bold"}}>{item.description}</div>
+                            <div style={{color:"gray"}}>{moment(item.createdate).format("YYYY-MM-DD")} 등록 | {item.wearcnt}회 착용</div>
                         </ItemDetails>
                     </ItemCard>
                 ))}
@@ -77,18 +77,20 @@ const ItemContainer = styled.div`
   align-items: flex-start;
   overflow: scroll;
 `;
-
 const ItemCard = styled.div`
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  padding-bottom:0px;
 `;
 
 const ImageWrapper = styled.div`
-  width: 30%; /* 예시로 가로 크기를 20%로 설정 */
-  padding-bottom: 20%; /* 예시로 세로 크기를 가로 크기의 20%로 설정 */
-  margin-right: 20px;
+  width: 20%; /* 예시로 가로 크기를 20%로 설정 */
+  height: auto;
+  //padding-bottom: 20%; /* 예시로 세로 크기를 가로 크기의 20%로 설정 */
+  margin-right: 30px;
   overflow: hidden;
+  margin-left: 9%;
 `;
 
 const ImageSquareWrapper = styled.div`
@@ -97,6 +99,7 @@ const ImageSquareWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  
 `;
 
 const Image = styled.img`
@@ -109,8 +112,8 @@ const Image = styled.img`
 const ItemDetails = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 `;
-
 export default ItemFrequently;
 
 

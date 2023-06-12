@@ -45,7 +45,8 @@ const ItemNotRecently = () => {
 
     return (
         <div>
-            <h1>ItemNotRecently</h1>
+            <h3 style={{fontSize:"22px"}}>요즘 입지 않은 아이템 TOP 5</h3>
+            <hr style={{ height: "1px", marginBottom:"50px",border:"0",backgroundColor:"lightgray" }} />
             <ItemContainer>
                 {bottomItems.map((item, index) => (
                     <ItemCard key={item.id}>
@@ -57,9 +58,9 @@ const ItemNotRecently = () => {
                             </ImageSquareWrapper>
                         </ImageWrapper>
                         <ItemDetails>
-                            <h3>Rank: {index + 1}</h3>
-                            <p>{item.description}</p>
-                            <p>{moment(item.createdate).format("YYYY-MM-DD")} 등록</p>
+                            <div style={{fontSize:"19px", fontWeight:"bold"}}>{index + 1}위</div>
+                            <div style={{fontSize:"19px", fontWeight:"bold"}}>{item.description}</div>
+                            <div style={{color:"gray"}}>{moment(item.createdate).format("YYYY-MM-DD")} 등록</div>
                         </ItemDetails>
                     </ItemCard>
                 ))}
@@ -70,43 +71,46 @@ const ItemNotRecently = () => {
 
 
 const ItemContainer = styled.div`
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: scroll;
 `;
-
 const ItemCard = styled.div`
-display: flex;
-align-items: center;
-margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  padding-bottom:0px;
 `;
 
 const ImageWrapper = styled.div`
-width: 30%; /* 예시로 가로 크기를 20%로 설정 */
-padding-bottom: 20%; /* 예시로 세로 크기를 가로 크기의 20%로 설정 */
-margin-right: 20px;
-overflow: hidden;
+  width: 20%; /* 예시로 가로 크기를 20%로 설정 */
+  height: auto;
+  //padding-bottom: 20%; /* 예시로 세로 크기를 가로 크기의 20%로 설정 */
+  margin-right: 30px;
+  overflow: hidden;
+  margin-left: 9%;
 `;
 
 const ImageSquareWrapper = styled.div`
-width: 100%;
-height: 100%;
-display: flex;
-align-items: center;
-justify-content: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 `;
 
 const Image = styled.img`
-width: auto;
-height: auto;
-max-width: 100%;
-max-height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 const ItemDetails = styled.div`
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
-
 export default ItemNotRecently;

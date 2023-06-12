@@ -28,10 +28,10 @@ nav {
 
 /* 하단 네비바의 메뉴를 눌렀을 때 색상 변경*/
 .nav-item {
-  color: grey;
+  color: #7A7A7A;
 }
 
 /* 하단 네비바의 메뉴를 눌렀을 때 색상 변경*/
 .active {
-  color: blue;
+  color: #364054;
 }

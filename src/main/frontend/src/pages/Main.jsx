@@ -78,6 +78,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import axios from 'axios';
 const Main = () => {
   const navigate = useNavigate();
@@ -207,7 +208,8 @@ const Main = () => {
   };
   return (
       <div>
-        <h1>Main</h1>
+        <Container>
+
         {latitude && longitude && cityCode && (
             <p>
               현재 도시: {cityCode}
@@ -225,24 +227,55 @@ const Main = () => {
               <p>옷 추천: {getRecommendedCategory(Math.round(weatherData.main.temp))}</p>
             </div>
         )}
-          <div onClick={() => {
-            navigate("/ItemHave");
-          }}><h3>옷장 속 가장 많은 아이템</h3></div>
-        <div onClick={() => {
-          navigate("/ItemSpring");
-        }}><h3>계절 별 아이템 개수</h3></div>
-        <div onClick={() => {
-          navigate("/ItemFrequently");
-        }}><h3>자주 입은 아이템</h3></div>
-        <div onClick={() => {
-          navigate("/ItemNotRecently");
-        }}><h3>최근 입지 않은 아이템</h3></div>
-        <div onClick={() => {
+        <div style={{backgroundColor:"#364054", borderRadius:"3px",width:"75%", padding:"3px", color:"white"}} onClick={() => {
           navigate("/ClothingRecommendation", { state: { subcategories: recommendedSubcategory } });
-        }}><h3>스타일보러가기</h3></div>
+        }}><h4>오늘 입을 스타일을 추천 해줄게요!</h4></div>
 
+          <ButtonContainer>
+            <Button onClick={() => navigate("/ItemHave")}>
+              옷장 속 가장 많은<br/>아이템
+            </Button>
+            <Button onClick={() => navigate("/ItemSeason")}>
+              계절 별 아이템<br/>개수
+            </Button>
+            <Button onClick={() => navigate("/ItemFrequently")}>
+              가장 자주 입은<br/>아이템
+            </Button>
+            <Button onClick={() => navigate("/ItemNotRecently")}>
+              요즘 입지 않은<br/>아이템
+            </Button>
+          </ButtonContainer>
+
+          </Container>
       </div>
   );
 };
+const Container = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`;
+
+const ButtonContainer = styled.div`
+  width:75%;
+  display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-gap: 20px;
+margin-top: 20px;
+`;
+
+const Button = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: 100px;
+background-color: #EFEFEF;
+border-radius: 8px;
+color: black;
+cursor: pointer;
+transition: background-color 0.3s;
+font-size: 15px;  
+`;
 
 export default Main;

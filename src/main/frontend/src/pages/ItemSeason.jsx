@@ -55,8 +55,13 @@
 
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import fall from "../images/fall.png";
+import spring from "../images/spring.png";
+import summer from "../images/summer.png";
+import winter from "../images/winter.png";
+import styled from "styled-components";
 
-const ItemSpring = () => {
+const ItemSeason = () => {
     const [statistics, setStatistics] = useState({});
 
     useEffect(() => {
@@ -92,18 +97,59 @@ const ItemSpring = () => {
 
     return (
         <div>
-            <h1>ItemSpring</h1>
+            <h3 style={{fontSize:"22px"}}>계절 별 상세</h3>
+            <hr style={{ height: "1px", marginBottom:"50px",border:"0",backgroundColor:"lightgray" }} />
 
-            <h2>Season Percentages</h2>
             <ul>
                 {sortedSeasons.map((season) => (
-                    <li key={season}>
-                        {season}: {calculateSeasonPercentage(season).count} | {calculateSeasonPercentage(season).percentage}%
-                    </li>
+                    <ItemListItem key={season}>
+                        {season==="봄"&&<IconImage src={spring} alt="spring"/>}
+                        {season==="여름"&&<IconImage src={summer} alt="summer"/>}
+                        {season==="가을"&&<IconImage src={fall} alt="fall"/>}
+                        {season==="겨울"&&<IconImage src={winter} alt="winter"/>}
+                        <CategoryName>{season}</CategoryName>
+                        <ItemInfo>
+                            <Count>{calculateSeasonPercentage(season).count}개 </Count><Percentage> | {calculateSeasonPercentage(season).percentage}%</Percentage>
+                        </ItemInfo>
+                        </ItemListItem>
                 ))}
             </ul>
         </div>
     );
 };
+const ItemListItem = styled.li`
+  display: flex;
+  margin-bottom: 16px;
+  font-size: 18px;
+  align-items: center;
+`;
 
-export default ItemSpring;
+const IconImage = styled.img`
+  width: 40px;
+  height: 40px;
+  margin-right: 20px;
+  float: left;
+  //margin-left: -1%;
+`;
+
+const CategoryName = styled.span`
+  margin-right: auto;
+  float: left;
+  font-weight: bold;
+`;
+
+const ItemInfo = styled.div`
+  float: right;
+  margin-right: 9%;
+`;
+
+const Percentage = styled.span`
+  float: none;
+  //float: right;
+`;
+
+const Count = styled.span`
+  //float: right;
+  float: none;
+`;
+export default ItemSeason;

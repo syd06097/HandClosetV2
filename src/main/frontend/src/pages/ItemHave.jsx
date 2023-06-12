@@ -2,6 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+// 사용할 아이콘 import
+import top from "../images/top.png";
+import bottom from "../images/bottom.png";
+import outer from "../images/outer.png";
+import shoes from "../images/shoes.png";
+import more from "../images/more.png";
+import dress from "../images/dress.png";
+import bag from "../images/bag.png";
+import accesory from "../images/accesory.png";
+import styled from "styled-components";
 
 const ItemHave = () => {
     const [statistics, setStatistics] = useState([]);
@@ -55,22 +65,65 @@ const ItemHave = () => {
 
     return (
         <div>
-            <h1>ItemHave</h1>
+            <h3 style={{ fontSize: "22px" }}>의류 카테고리 순위</h3>
+            <hr style={{ height: "1px", marginBottom:"50px",border:"0",backgroundColor:"lightgray" }} />
 
-            <h2>Category Percentages</h2>
-            <ul>
                 {sortedCategories.map((category) => {
                     const { count, percentage } = calculateCategoryPercentage(category.name);
                     return (
-                        <li key={category.name}>
-                            {category.name}: {count} | {percentage}%
-                        </li>
+                        <ItemListItem key={category.name}>
+                            {category.name === "상의" && <IconImage src={top} alt="top" />}
+                            {category.name === "하의" && <IconImage src={bottom} alt="bottom" />}
+                            {category.name === "아우터" && <IconImage src={outer} alt="outer" />}
+                            {category.name === "원피스" && <IconImage src={dress} alt="dress" />}
+                            {category.name === "신발" && <IconImage src={shoes} alt="shoes" />}
+                            {category.name === "가방" && <IconImage src={bag} alt="bag" />}
+                            {category.name === "악세사리" && <IconImage src={accesory} alt="accessory" />}
+                            {category.name === "기타" && <IconImage src={more} alt="more" />}
+                            <CategoryName>{category.name}</CategoryName>
+                            <ItemInfo>
+                                <Percentage>{percentage}% </Percentage><Count>| {count}개</Count>
+                            </ItemInfo>
+                        </ItemListItem>
                     );
                 })}
-            </ul>
-            <p>Total Item Count: {totalItemCount}</p>
+
         </div>
     );
 };
+const ItemListItem = styled.li`
+  display: flex;
+  margin-bottom: 16px;
+  font-size: 18px;
+  align-items: center;
+`;
 
+const IconImage = styled.img`
+  width: 40px;
+  height: 40px;
+  margin-right: 20px;
+  float: left;
+  margin-left: 9%;
+`;
+
+const CategoryName = styled.span`
+  margin-right: auto;
+  float: left;
+  font-weight: bold;
+`;
+
+const ItemInfo = styled.div`
+  float: right;
+  margin-right: 9%;
+`;
+
+const Percentage = styled.span`
+  float: none;
+  //float: right;
+`;
+
+const Count = styled.span`
+  //float: right;
+  float: none;
+`;
 export default ItemHave;

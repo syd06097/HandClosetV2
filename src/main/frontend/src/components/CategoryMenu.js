@@ -127,7 +127,7 @@ const StyledHeader = styled.header`
     padding: 0;
     margin-right: 11px;
     display: flex;
-    font-size: 15px;
+    font-size: 18px;
     overflow: auto;
     white-space: nowrap;
   }
@@ -136,20 +136,23 @@ const StyledHeader = styled.header`
     padding: 0;
     margin-right: 11px;
     display: flex;
-    font-size: 23px;
+    font-size: 27px;
     overflow: auto;
     white-space: nowrap;
+    margin-top: 25px;
   }
   li {
     cursor: pointer;
     margin-left: 11px;
     margin-right: 11px;
+    color:#7A7A7A;
   }
   li:last-child {
     margin-right: 0;
   }
   li.active {
     font-weight: bold;
+    color:#364054;
   }
   ul + ul {
     margin-top: 10px;

@@ -48,8 +48,10 @@ const ImageGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 9%;
+  margin-right: 9%;
+  margin-top: 50px;
+  margin-bottom: 100px;
   
 `;
 
