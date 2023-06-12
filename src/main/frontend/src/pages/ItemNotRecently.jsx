@@ -88,7 +88,7 @@ const ItemContainer = styled.div`
 const ItemCard = styled.div`
   display: flex;
   align-items: flex-start;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   padding-bottom:0px;
 `;
 

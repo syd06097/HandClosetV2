@@ -68,7 +68,7 @@ const ItemHave = () => {
 
     return (
         <div>
-            <div style={{position:"absolute"}}>
+
             <div style={{ display: "block",width:"100%", height:"40px"  }}>
                 <div onClick={() => navigate("/Main")} style={{marginTop: "23px", float: "right", paddingRight: "9%", fontSize: "30px", fontWeight: "bold"}}>X</div>
             </div>
@@ -77,7 +77,7 @@ const ItemHave = () => {
                 <div style={{ display: "block", float: "right", marginRight: "9%",  }}><img src={clothes} alt="clothes" style={{width:"90px",height:"90px"}} /></div>
             </div>
             <div><hr style={{ height: "1px",marginTop:"10px", marginBottom: "50px", border: "0", backgroundColor: "lightgray" }} /></div>
-            </div>
+
                 {sortedCategories.map((category) => {
                     const { count, percentage } = calculateCategoryPercentage(category.name);
                     return (
