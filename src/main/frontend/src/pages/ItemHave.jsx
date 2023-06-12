@@ -11,10 +11,13 @@ import more from "../images/more.png";
 import dress from "../images/dress.png";
 import bag from "../images/bag.png";
 import accesory from "../images/accesory.png";
+import clothes from "../images/clothes.png";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const ItemHave = () => {
     const [statistics, setStatistics] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchStatistics = async () => {
@@ -65,9 +68,16 @@ const ItemHave = () => {
 
     return (
         <div>
-            <h3 style={{ fontSize: "22px" }}>의류 카테고리 순위</h3>
-            <hr style={{ height: "1px", marginBottom:"50px",border:"0",backgroundColor:"lightgray" }} />
-
+            <div style={{position:"absolute"}}>
+            <div style={{ display: "block",width:"100%", height:"40px"  }}>
+                <div onClick={() => navigate("/Main")} style={{marginTop: "23px", float: "right", paddingRight: "9%", fontSize: "30px", fontWeight: "bold"}}>X</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop:"40px"}}>
+                <div style={{ display: "block", fontSize: "22px", textAlign: "left", float: "left",marginLeft: "9%" }}><h3>의류<br />카테고리 순위</h3></div>
+                <div style={{ display: "block", float: "right", marginRight: "9%",  }}><img src={clothes} alt="clothes" style={{width:"90px",height:"90px"}} /></div>
+            </div>
+            <div><hr style={{ height: "1px",marginTop:"10px", marginBottom: "50px", border: "0", backgroundColor: "lightgray" }} /></div>
+            </div>
                 {sortedCategories.map((category) => {
                     const { count, percentage } = calculateCategoryPercentage(category.name);
                     return (
