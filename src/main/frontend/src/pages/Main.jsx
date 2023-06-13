@@ -148,17 +148,17 @@ const Main = () => {
 
   const getRecommendedCategory = (temperature) => {
     if (temperature >= 28) {
-      return "민소매,반팔티,미니 원피스,반바지";
+      return "민소매,반팔티,원피스,반바지";
     } else if (temperature >= 23) {
-      return "반팔티,블라우스/셔츠,반바지,면바지";
+      return "반팔티,셔츠,반바지,면바지";
     } else if (temperature >= 20) {
-      return "가디건/베스트,긴팔티,면바지,청바지";
+      return "가디건,긴팔티,면바지,청바지";
     } else if (temperature >= 17) {
-      return "니트,맨투맨/후디,가디건/베스트,청바지";
+      return "니트,맨투맨,가디건,청바지";
     } else if (temperature >= 12) {
-      return "자켓/점퍼,가디건/베스트,후드집업,스타킹";
+      return "자켓,가디건,후드집업,스타킹";
     } else if (temperature >= 9) {
-      return "자켓/점퍼,트렌치 코드,야상,니트";
+      return "자켓,트렌치코드,야상,니트";
     } else if (temperature >= 5) {
       return "코트,무스탕,니트,슬랙스";
     } else {
@@ -181,20 +181,20 @@ const Main = () => {
         case "긴팔티":
           categoryData.push({ subcategory: "긴팔티", image: sleeve });
           break;
-        case "미니 원피스":
-          categoryData.push({ subcategory: "미니 원피스", image: dress });
+        case "원피스":
+          categoryData.push({ subcategory: "원피스", image: dress });
           break;
         case "반바지":
           categoryData.push({ subcategory: "반바지", image: shorts });
           break;
-        case "가디건/베스트":
-          categoryData.push({ subcategory: "가디건/베스트", image: cardigan });
+        case "가디건":
+          categoryData.push({ subcategory: "가디건", image: cardigan });
           break;
         case "니트":
           categoryData.push({ subcategory: "니트", image: neat });
           break;
-        case "자켓/점퍼":
-          categoryData.push({ subcategory: "자켓/점퍼", image: jacket });
+        case "자켓":
+          categoryData.push({ subcategory: "자켓", image: jacket });
           break;
         case "코트":
           categoryData.push({ subcategory: "코트", image: coat });
@@ -205,20 +205,20 @@ const Main = () => {
         case "야상":
           categoryData.push({ subcategory: "야상", image: fieldJacket });
           break;
-        case "맨투맨/후디":
-          categoryData.push({ subcategory: "맨투맨/후디", image: mantoman });
+        case "맨투맨":
+          categoryData.push({ subcategory: "맨투맨", image: mantoman });
           break;
         case "무스탕":
           categoryData.push({ subcategory: "무스탕", image: mustang });
           break;
-        case "블라우스/셔츠":
-          categoryData.push({ subcategory: "블라우스/셔츠", image: shirt });
+        case "셔츠":
+          categoryData.push({ subcategory: "셔츠", image: shirt });
           break;
         case "스타킹":
           categoryData.push({ subcategory: "스타킹", image: stockings });
           break;
-        case "트렌치 코트":
-          categoryData.push({ subcategory: "트렌치 코트", image: trenchCoat });
+        case "트렌치코트":
+          categoryData.push({ subcategory: "트렌치코트", image: trenchCoat });
           break;
         case "슬랙스":
           categoryData.push({ subcategory: "슬랙스", image: slacks });
@@ -267,12 +267,16 @@ const Main = () => {
               <img src={getWeatherIconUrl(weatherData.weather[0].icon)} alt="Weather Icon" />
 
               {recommendedCategoryImages.length > 0 && (
-                  recommendedCategoryImages.map((categoryData, index) => (
-                      <div key={index}>
-                        <img src={categoryData.image} alt="Recommended Clothing" />
-                        <p>{categoryData.subcategory}</p>
-                      </div>
-                  ))
+                  <ImageContainer>
+                    {recommendedCategoryImages.map((categoryData, index) => (
+                        <div key={index}>
+                          <ImageWrapper>
+                          <img src={categoryData.image} alt="Recommended Clothing" />
+                          <p>{categoryData.subcategory}</p>
+                          </ImageWrapper>
+                        </div>
+                    ))}
+                  </ImageContainer>
               )}
             </div>
         )}
@@ -327,4 +331,30 @@ transition: background-color 0.3s;
 font-size: 15px;  
 `;
 
+const ImageContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    margin-top: 20px;
+    
+
+    img {
+      width: 65%;
+      height: auto;
+      opacity: 90%;
+    }
+
+    p {
+      text-align: center;
+      font-size: 15px;
+      padding-bottom: 10px;
+    }
+  `;
+const ImageWrapper=styled.div`
+  
+  border-radius: 5px;
+  padding-top: 10px;
+  box-shadow: 2px 2px 2px 2px #EFEFEF;
+  margin-bottom: 20px;
+`;
 export default Main;

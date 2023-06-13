@@ -4,12 +4,12 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import qs from "qs";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 const ClothingRecommendation = () => {
     const location = useLocation();
     const { subcategories } = location.state;
     const [recommendedClothes, setRecommendedClothes] = useState([]);
-
+    const navigate = useNavigate();
     // 이미지 가져오기
     const fetchImage = async (id) => {
         try {
@@ -71,6 +71,9 @@ const ClothingRecommendation = () => {
 
     return (
         <div>
+            <div style={{ display: "block",width:"100%", height:"40px"  }}>
+                <div onClick={() => navigate("/Main")} style={{marginTop: "23px", float: "right", paddingRight: "9%", fontSize: "30px", fontWeight: "bold"}}>X</div>
+            </div>
             <h3 style={{ fontSize: "22px" }}>이렇게 입어보는 건 어떨까요?</h3>
             <hr
                 style={{
