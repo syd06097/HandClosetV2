@@ -116,7 +116,7 @@ const ClothingRecommendation = () => {
                         ))}
                 </div>
             ) : (
-                <p>No recommended clothes available.</p>
+                <p>추천할 옷이 존재하지 않습니다.</p>
             )}
         </div>
     );

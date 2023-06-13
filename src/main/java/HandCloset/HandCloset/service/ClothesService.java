@@ -111,4 +111,8 @@ public class ClothesService {
     public List<Clothes> getRecommendedClothes(String subcategory) {
         return clothesRepository.findTop2BySubcategoryOrderByWearcntDesc(subcategory);
     }
+
+    public List<Clothes> getRecommendedClothesAsc(String subcategory) {
+        return clothesRepository.findTop2BySubcategoryOrderByWearcnt(subcategory);
+    }
 }

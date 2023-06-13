@@ -50,7 +50,7 @@ const ItemNotRecently = () => {
             <div style={{ display: "block",width:"100%", height:"40px"  }}>
                 <div onClick={() => navigate("/Main")} style={{marginTop: "23px", float: "right", paddingRight: "9%", fontSize: "30px", fontWeight: "bold"}}>X</div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop:"40px"}}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop:"30px"}}>
                 <div style={{ display: "block", fontSize: "22px", textAlign: "left", float: "left",marginLeft: "9%" }}><h3>요즘<br/>입지 않은 옷<br/>TOP 5</h3></div>
                 <div style={{ display: "block", float: "right", marginRight: "9%",  }}><img src={clothes} alt="clothes" style={{width:"90px",height:"90px"}} /></div>
             </div>
