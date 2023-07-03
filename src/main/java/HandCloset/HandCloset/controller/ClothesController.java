@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.net.URLDecoder;
 import org.springframework.http.HttpHeaders;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/clothing")
 public class ClothesController {
@@ -88,21 +90,29 @@ public class ClothesController {
         return Files.readAllBytes(imagePath);
     }
     //CategoryItem
-    @GetMapping("/images/all")
-    public List<byte[]> getAllClothesImagePaths() throws IOException {
-        List<byte[]> allImages = new ArrayList<>();
+//    @GetMapping("/images/all")
+//    public List<byte[]> getAllClothesImagePaths() throws IOException {
+//        List<byte[]> allImages = new ArrayList<>();
+//
+//        // 데이터베이스에서 이미지 파일 경로를 가져옴
+//        List<Clothes> clothesList = clothesService.getAllClothes();
+//        for (Clothes clothes : clothesList) {
+//            String imagePath = clothes.getImgpath();
+//            Path imageFilePath = Paths.get(imagePath);
+//            byte[] imageBytes = Files.readAllBytes(imageFilePath);
+//            allImages.add(imageBytes);
+//        }
+//
+//        return allImages;
+//    }
 
-        // 데이터베이스에서 이미지 파일 경로를 가져옴
-        List<Clothes> clothesList = clothesService.getAllClothes();
-        for (Clothes clothes : clothesList) {
-            String imagePath = clothes.getImgpath();
-            Path imageFilePath = Paths.get(imagePath);
-            byte[] imageBytes = Files.readAllBytes(imageFilePath);
-            allImages.add(imageBytes);
-        }
-
-        return allImages;
+    @GetMapping("/ids")
+    public List<Long> getAllClothesIds() {
+        return clothesService.getAllClothes().stream()
+                .map(Clothes::getId)
+                .collect(Collectors.toList());
     }
+
     // ItemHave
     @GetMapping("/category-item-count")
     public ResponseEntity<Map<String, Integer>> getCategoryItemCountForClothes() {

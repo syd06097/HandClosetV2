@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   getClothesByCategoryAndSubcategory,
-  getAllClothesImages,
+  getAllClothesIds,
 } from "../utils/api";
 
 const categories = [
@@ -12,19 +12,45 @@ const categories = [
   },
   {
     name: "상의",
-    subcategories: ["민소매","반팔티","긴팔티","블라우스/셔츠","맨투맨/후디","니트","기타"],
+    subcategories: [
+      "민소매",
+      "반팔티",
+      "긴팔티",
+      "블라우스/셔츠",
+      "맨투맨/후디",
+      "니트",
+      "기타",
+    ],
   },
   {
     name: "하의",
-    subcategories: ["반바지","치마","면바지","슬랙스","청바지","트레이닝/조거","기타"],
+    subcategories: [
+      "반바지",
+      "치마",
+      "면바지",
+      "슬랙스",
+      "청바지",
+      "트레이닝/조거",
+      "기타",
+    ],
   },
   {
     name: "아우터",
-    subcategories: ["트렌치 코드","코트","자켓/점퍼","야상","무스탕","패딩","후드집업","가디건/베스트","기타"],
+    subcategories: [
+      "트렌치 코드",
+      "코트",
+      "자켓/점퍼",
+      "야상",
+      "무스탕",
+      "패딩",
+      "후드집업",
+      "가디건/베스트",
+      "기타",
+    ],
   },
   {
     name: "원피스",
-    subcategories: ["미니 원피스", "미디 원피스","맥시 원피스","기타"],
+    subcategories: ["미니 원피스", "미디 원피스", "맥시 원피스", "기타"],
   },
   {
     name: "신발",
@@ -58,7 +84,7 @@ function CategoryMenu({ onClickCategory }) {
   useEffect(() => {
     setIsLoading(true);
     if (activeCategory === "전체") {
-      getAllClothesImages()
+      getAllClothesIds()
         .then((clothes) => {
           onClickCategory(activeCategory, activeSubcategory, clothes);
         })
@@ -145,14 +171,14 @@ const StyledHeader = styled.header`
     cursor: pointer;
     margin-left: 11px;
     margin-right: 11px;
-    color:#7A7A7A;
+    color: #7a7a7a;
   }
   li:last-child {
     margin-right: 0;
   }
   li.active {
     font-weight: bold;
-    color:#364054;
+    color: #364054;
   }
   ul + ul {
     margin-top: 10px;
