@@ -61,4 +61,8 @@ const getAllClothesIds = () => {
   });
 };
 
-export { getClothesByCategoryAndSubcategory, getAllClothesIds, getClothes };
+const deleteClothes = (id) => {
+  return axios.delete(`/api/clothing/${id}`);
+};
+
+export { getClothesByCategoryAndSubcategory, getAllClothesIds, getClothes,deleteClothes };

@@ -56,7 +56,7 @@
 // export default ClothesDetail;
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getClothes } from "../utils/api";
+import { getClothes,deleteClothes } from "../utils/api";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import back from "../images/back.png";
@@ -84,6 +84,16 @@ function ClothesDetail() {
   if (!clothes) {
     return <div>Loading...</div>;
   }
+
+  const handleDelete = async () => {
+    try {
+      console.log("삭제할 id:",id);
+      await deleteClothes(id); // 해당 옷 데이터를 삭제하는 API 호출
+      navigate("/Closet"); // 삭제 후에는 Closet 페이지로 이동
+    } catch (error) {
+      console.error("Failed to delete clothes:", error);
+    }
+  };
 
   return (
     <Container>
@@ -113,7 +123,7 @@ function ClothesDetail() {
           <div>{clothes.wearcnt}</div>
         </Square>
       </Details>
-      <TrashWrapper onClick={() => navigate("/Closet")}>
+      <TrashWrapper onClick={handleDelete}>
         <img src={trash} alt="trash" />
       </TrashWrapper>
     </Container>

@@ -3,8 +3,11 @@ package HandCloset.HandCloset.service;
 import org.springframework.beans.factory.annotation.Value;
 import HandCloset.HandCloset.entity.Clothes;
 import HandCloset.HandCloset.repository.ClothesRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.persistence.EntityNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,7 +41,12 @@ public class ClothesService {
     }
 
     public void deleteClothes(Long id) {
-        clothesRepository.deleteById(id);
+        try {
+            clothesRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            // 요청한 id에 해당하는 Clothes 엔티티가 존재하지 않는 경우
+            throw new EntityNotFoundException("Clothes entity with id " + id + " does not exist.");
+        }
     }
 
     public List<Clothes> getClothesByCategory(String category) {
