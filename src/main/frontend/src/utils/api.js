@@ -65,4 +65,15 @@ const deleteClothes = (id) => {
   return axios.delete(`/api/clothing/${id}`);
 };
 
-export { getClothesByCategoryAndSubcategory, getAllClothesIds, getClothes,deleteClothes };
+const updateClothes = async (id, updatedData) => {
+  try {
+    const response = await axios.put(`/api/clothing/${id}`, updatedData);
+    const updatedClothes = response.data;
+    return updatedClothes;
+  } catch (error) {
+    console.error("Failed to update clothes:", error);
+    throw error;
+  }
+};
+
+export { getClothesByCategoryAndSubcategory, getAllClothesIds, getClothes,deleteClothes,updateClothes };

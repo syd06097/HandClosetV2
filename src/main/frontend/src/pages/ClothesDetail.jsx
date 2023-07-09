@@ -94,14 +94,16 @@ function ClothesDetail() {
       console.error("Failed to delete clothes:", error);
     }
   };
-
+  const handleUpdate = () => {
+    navigate(`/ClothingUpdateForm/${id}`);
+  };
   return (
     <Container>
       <Header>
         <BackButton onClick={() => navigate("/Closet")}>
           <img src={back} alt="back" style={{ width: "34px" }} />
         </BackButton>
-        <UpdateButton onClick={() => navigate("/Closet")}>
+        <UpdateButton onClick={handleUpdate}>
           <img src={update} alt="update" />
         </UpdateButton>
       </Header>

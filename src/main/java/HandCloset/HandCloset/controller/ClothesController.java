@@ -24,6 +24,9 @@ import java.net.URLDecoder;
 import org.springframework.http.HttpHeaders;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+
 @RestController
 @RequestMapping("/api/clothing")
 public class ClothesController {
@@ -51,6 +54,54 @@ public class ClothesController {
         clothes.setSubcategory(subcategory);
         clothes.setSeason(season);
         clothes.setDescription(description);
+        return clothesService.saveClothes(clothes);
+    }
+
+    @PutMapping("/{id}")
+    public Clothes updateClothes(@PathVariable Long id,
+                                 @RequestParam(value = "file", required = false) MultipartFile file,
+                                 @RequestParam(value = "category", required = false) String category,
+                                 @RequestParam(value = "subcategory", required = false) String subcategory,
+                                 @RequestParam(value = "season", required = false) String season,
+                                 @RequestParam(value = "description", required = false) String description) {
+        Clothes clothes = clothesService.getClothes(id);
+
+        if (clothes == null) {
+            throw new EntityNotFoundException("Clothes entity with id " + id + " does not exist.");
+        }
+
+        if (file != null) {
+            // 기존 이미지 삭제
+            String imagePath = clothes.getImgpath();
+            String modifiedImagePath = imagePath.replace("\\", "/");
+            Path imageFilePath = Paths.get(modifiedImagePath);
+            try {
+                Files.delete(imageFilePath);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to delete image.");
+            }
+
+            // 새로운 이미지 저장
+            String newImagePath = clothesService.saveImage(file);
+            clothes.setImgpath(newImagePath);
+        }
+
+        if (category != null) {
+            clothes.setCategory(category);
+        }
+
+        if (subcategory != null) {
+            clothes.setSubcategory(subcategory);
+        }
+
+        if (season != null) {
+            clothes.setSeason(season);
+        }
+
+        if (description != null) {
+            clothes.setDescription(description);
+        }
+
         return clothesService.saveClothes(clothes);
     }
 
