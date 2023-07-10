@@ -165,7 +165,7 @@ const ImageWrapper = styled.div`
 `;
 
 const TrashWrapper = styled.div`
-  margin-top: 23px;
+  margin-top: 65px;
   text-align: center;
 `;
 
@@ -184,8 +184,8 @@ const Details = styled.div`
 `;
 
 const Square = styled.div`
-  width: 40%;
-  height: 100px;
+  width: 80px;
+  height: auto;
   margin: 0% 2%;
   border: 1px solid gray;
 `;

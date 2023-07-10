@@ -3,8 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 import { getClothes, updateClothes } from "../utils/api";
+
 import styles from "./ClothingUpdateForm.module.css"
-import styled from "styled-components";
+// import styled from "styled-components";
 
 function ClothingUpdateForm() {
     const { id } = useParams();
@@ -97,196 +98,107 @@ function ClothingUpdateForm() {
     ];
 
     return (
-        <Container>
         <div>
-            <ImageWrapper>
-                <Image src={`/api/clothing/images/${id}`} alt={clothes.description} />
-            </ImageWrapper>
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label className={styles.label}>카테고리</label>
-                <br/>
-                <select value={category} onChange={handleCategoryChange} className={styles.select} required>
-                    <option value="">없음</option>
-                    {categories.map((category) => (
-                        <option key={category.name} value={category.name}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            {category && (
-                <div style={{marginTop:"1px"}}>
-                    <filedset className={styles.subcat}>
-                        {categories
-                            .find((c) => c.name === category)
-                            .subcategories.map((subcat) => (
-                                <label key={subcat} className={styles.subcat_label}>
-                                    <input
-                                        type="radio"
-                                        name="subcategory"
-                                        value={subcat}
-                                        checked={subcategory === subcat}
-                                        onChange={handleSubcategoryChange}
-                                        id={styles.subcategory}
-                                        required/>
-                                    <span>{subcat}</span>
-                                </label>
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <div className={styles.ImageWrapper}>
+                            <img src={`/api/clothing/images/${id}`} alt={clothes.description} className={styles.Image} />
+                        </div>
+                        <label className={styles.label}>카테고리</label>
+                        <br/>
+                        <select value={category} onChange={handleCategoryChange} className={styles.select} required>
+                            <option value="">없음</option>
+                            {categories.map((category) => (
+                                <option key={category.name} value={category.name}>
+                                    {category.name}
+                                </option>
                             ))}
-                    </filedset>
-                </div>
-            )}
-            <br/>
-            <span className={styles.label}>계절</span>
-            <div className={styles.ckbox_group}>
-                <label className={styles.btn_ckbox}>
-                    <input
-                        type="checkbox"
-                        value="봄"
-                        checked={season.includes("봄")}
-                        onChange={handleSeasonChange}
-                    />
-                    <span>봄</span>
-                </label>
-                <br />
-                <label className={styles.btn_ckbox}>
-                    <input
-                        type="checkbox"
-                        value="여름"
-                        checked={season.includes("여름")}
-                        onChange={handleSeasonChange}
-                    />
-                    <span>여름</span>
-                </label>
-                <br />
-                <label className={styles.btn_ckbox}>
-                    <input
-                        type="checkbox"
-                        value="가을"
-                        checked={season.includes("가을")}
-                        onChange={handleSeasonChange}
-                    />
-                    <span>가을</span>
-                </label>
-                <br />
-                <label className={styles.btn_ckbox}>
-                    <input
-                        type="checkbox"
-                        value="겨울"
-                        checked={season.includes("겨울")}
-                        onChange={handleSeasonChange}
-                    />
-                    <span>겨울</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <span className={styles.label}>설명</span>
-                    <br />
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className={styles.area}
-                        placeholder="설명을 입력해주세요"
-                    />
-                </label>
-            </div>
-            <div>
-                <button type="submit" className={styles.btn_submit}>제출</button>
-            </div>
-        </form>
+                        </select>
+                    </div>
+                    {category && (
+                        <div style={{marginTop:"1px"}}>
+                            <filedset className={styles.subcat}>
+                                {categories
+                                    .find((c) => c.name === category)
+                                    .subcategories.map((subcat) => (
+                                        <label key={subcat} className={styles.subcat_label}>
+                                            <input
+                                                type="radio"
+                                                name="subcategory"
+                                                value={subcat}
+                                                checked={subcategory === subcat}
+                                                onChange={handleSubcategoryChange}
+                                                id={styles.subcategory}
+                                                required/>
+                                            <span>{subcat}</span>
+                                        </label>
+                                    ))}
+                            </filedset>
+                        </div>
+                    )}
+                    <br/>
+                    <span className={styles.label}>계절</span>
+                    <div className={styles.ckbox_group}>
+                        <label className={styles.btn_ckbox}>
+                            <input
+                                type="checkbox"
+                                value="봄"
+                                checked={season.includes("봄")}
+                                onChange={handleSeasonChange}
+                            />
+                            <span>봄</span>
+                        </label>
+                        <br />
+                        <label className={styles.btn_ckbox}>
+                            <input
+                                type="checkbox"
+                                value="여름"
+                                checked={season.includes("여름")}
+                                onChange={handleSeasonChange}
+                            />
+                            <span>여름</span>
+                        </label>
+                        <br />
+                        <label className={styles.btn_ckbox}>
+                            <input
+                                type="checkbox"
+                                value="가을"
+                                checked={season.includes("가을")}
+                                onChange={handleSeasonChange}
+                            />
+                            <span>가을</span>
+                        </label>
+                        <br />
+                        <label className={styles.btn_ckbox}>
+                            <input
+                                type="checkbox"
+                                value="겨울"
+                                checked={season.includes("겨울")}
+                                onChange={handleSeasonChange}
+                            />
+                            <span>겨울</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <span className={styles.label}>설명</span>
+                            <br />
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className={styles.area}
+                                placeholder="설명을 입력해주세요"
+                            />
+                        </label>
+                    </div>
+                    <div>
+                        <button type="submit" className={styles.btn_submit}>제출</button>
+                    </div>
+                </form>
         </div>
-        </Container>
     );
 };
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-const ImageWrapper = styled.div`
-  width: 300px;
-  height: 300px;
-  margin-top: 20px;
-`;
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
 
 
-// const Container = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100vh;
-// `;
-//
-// const FormWrapper = styled.div`
-//   width: 400px;
-//   padding: 20px;
-//   background-color: #f5f5f5;
-//   border-radius: 4px;
-// `;
-//
-// const FormTitle = styled.h2`
-//   margin-bottom: 20px;
-//   text-align: center;
-// `;
-//
-// const Form = styled.form``;
-//
-// const FormItem = styled.div`
-//   margin-bottom: 15px;
-// `;
-//
-// const Label = styled.label`
-//   display: block;
-//   margin-bottom: 5px;
-//   font-weight: bold;
-// `;
-//
-// const Input = styled.input`
-//   width: 100%;
-//   padding: 8px;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-// `;
-//
-// const CheckboxGroup = styled.div`
-//   display: flex;
-//   margin-top: 5px;
-// `;
-//
-// const CheckboxItem = styled.div`
-//   display: flex;
-//   align-items: center;
-//   margin-right: 10px;
-// `;
-//
-// const Checkbox = styled.input`
-//   margin-right: 5px;
-// `;
-//
-// const Textarea = styled.textarea`
-//   width: 100%;
-//   height: 80px;
-//   padding: 8px;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-// `;
-//
-// const SubmitButton = styled.button`
-//   display: block;
-//   width: 100%;
-//   padding: 8px;
-//   background-color: #4caf50;
-//   color: #fff;
-//   border: none;
-//   border-radius: 4px;
-//   cursor: pointer;
-// `;
 
 export default ClothingUpdateForm;
