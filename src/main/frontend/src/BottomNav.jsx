@@ -30,7 +30,7 @@ const BottomNav = () => {
           />
         </div>
       </Link>
-      <Link to="/Calendar" className="nav-link" onClick={() => setActiveNav(3)}>
+      <Link to="/Diary" className="nav-link" onClick={() => setActiveNav(3)}>
         <div>
           <FontAwesomeIcon
             icon="calendar"
