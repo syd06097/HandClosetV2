@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { getClothes, updateClothes } from "../utils/api";
 
-import styles from "./ClothingUpdateForm.module.css"
+import styles from "../style/ClothingUpdateForm.module.css"
 // import styled from "styled-components";
 
 function ClothingUpdateForm() {

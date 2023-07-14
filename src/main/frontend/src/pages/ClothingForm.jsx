@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import styles from "./ClothingForm.module.css"
+import styles from "../style/ClothingForm.module.css"
 import axios from 'axios';
 
 const ClothingForm = () => {

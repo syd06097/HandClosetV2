@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./BottomNav.css";
+import "./style/BottomNav.css";
 import { Link } from "react-router-dom";
 
 // 사용할 아이콘 import

@@ -180,12 +180,12 @@ const Details = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 20px;
-  width: 66%;
+  width: 82%;
 `;
 
 const Square = styled.div`
-  width: 80px;
-  height: auto;
+  width: 100px;
+  height:123px;
   margin: 0% 2%;
   border: 1px solid gray;
 `;
