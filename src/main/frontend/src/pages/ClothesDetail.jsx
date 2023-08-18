@@ -56,7 +56,7 @@
 // export default ClothesDetail;
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getClothes,deleteClothes } from "../utils/api";
+import { getClothes, deleteClothes } from "../utils/api";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import back from "../images/back.png";
@@ -87,7 +87,7 @@ function ClothesDetail() {
 
   const handleDelete = async () => {
     try {
-      console.log("삭제할 id:",id);
+      console.log("삭제할 id:", id);
       await deleteClothes(id); // 해당 옷 데이터를 삭제하는 API 호출
       navigate("/Closet"); // 삭제 후에는 Closet 페이지로 이동
     } catch (error) {
@@ -101,7 +101,7 @@ function ClothesDetail() {
     <Container>
       <Header>
         <BackButton onClick={() => navigate("/Closet")}>
-          <img src={back} alt="back" style={{ width: "34px" }} />
+          <img src={back} alt="back" style={{ width: "38px" }} />
         </BackButton>
         <UpdateButton onClick={handleUpdate}>
           <img src={update} alt="update" />
@@ -112,17 +112,17 @@ function ClothesDetail() {
       </ImageWrapper>
       <Details>
         <Square>
-          <p style={{ color: "gray" }}>카테고리</p>
+          <p style={{ color: "gray", fontWeight: "bold" }}>카테고리</p>
           <div>{clothes.category}</div>
           <div>{clothes.subcategory}</div>
         </Square>
         <Square>
-          <p style={{ color: "gray" }}>계절</p>
+          <p style={{ color: "gray", fontWeight: "bold" }}>계절</p>
           <div>{clothes.season}</div>
         </Square>
         <Square>
-          <p style={{ color: "gray" }}>착용횟수</p>
-          <div>{clothes.wearcnt}</div>
+          <p style={{ color: "gray", fontWeight: "bold" }}>착용횟수</p>
+          <div>{clothes.wearcnt}회</div>
         </Square>
       </Details>
       <TrashWrapper onClick={handleDelete}>
@@ -154,7 +154,7 @@ const BackButton = styled.div`
 `;
 
 const UpdateButton = styled.div`
-  margin-top: 23px;
+  margin-top: 25px;
   margin-right: 9%;
 `;
 
@@ -185,9 +185,11 @@ const Details = styled.div`
 
 const Square = styled.div`
   width: 100px;
-  height:123px;
+  height: 123px;
   margin: 0% 2%;
+  padding: 1%;
   border: 1px solid gray;
+  border-radius: 8px;
 `;
 
 export default ClothesDetail;

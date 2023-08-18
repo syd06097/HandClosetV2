@@ -14,6 +14,7 @@ import ClothingRecommendation from "./pages/CothingRecommendation";
 import ItemFrequently from "./pages/ItemFrequently";
 import ItemNotRecently from "./pages/ItemNotRecently";
 import ClothingUpdateForm from "./pages/ClothingUpdateForm";
+import DiaryAdd from "./pages/DiaryAdd";
 function App() {
   return (
     <div className="App">
@@ -34,7 +35,7 @@ function App() {
         <Route path="/clothes/:id" element={<ClothesDetail />} />
         <Route path="/ClothingRecommendation" element={<ClothingRecommendation />} />
         <Route path="/ClothingUpdateForm/:id" element={<ClothingUpdateForm />} />
-
+        <Route path="/DiaryAdd" element={<DiaryAdd />} />
       </Routes>
     </div>
   );

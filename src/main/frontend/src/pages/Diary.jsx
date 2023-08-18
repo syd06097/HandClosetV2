@@ -10,13 +10,12 @@
 //
 // export default Calendar;
 
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import styled from 'styled-components';
-import back from "../images/back.png";
-import update from "../images/update.png";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import styled from "styled-components";
+
+import { useNavigate } from "react-router-dom";
 
 const CustomCalendar = styled(Calendar)`
   margin-top: 25px;
@@ -54,22 +53,39 @@ const Header = styled.div`
 const PlusButton = styled.div`
   margin-top: 23px;
   margin-right: 9%;
-  font-size: 40px;
+  font-size: 45px;
 `;
 
 const Diary = () => {
-    const [value, onChange] = useState(new Date());
-    const navigate = useNavigate();
-    return (
-        <div>
-            <Header>
-                <PlusButton onClick={() => navigate("/Main")}>
-                    +
-                </PlusButton>
-            </Header>
-            <CustomCalendar onChange={onChange} value={value} />
-        </div>
+  const [value, onChange] = useState(new Date());
+  const navigate = useNavigate();
+
+  // const handleAddDiary = () => {
+  //   // 선택한 날짜를 URL 쿼리 매개변수로 전달하여 DiaryAdd 컴포넌트로 이동
+  //   navigate(
+  //     `/DiaryAdd?selectedDate=${encodeURIComponent(value.toISOString())}`
+  //   );
+  // };
+  const handleAddDiary = () => {
+    // 선택한 날짜를 UTC 시간대로 변환하여 URL에 포함시킴
+    const selectedDateUTC = new Date(
+      Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())
     );
+
+    navigate(
+      `/DiaryAdd?selectedDate=${encodeURIComponent(
+        selectedDateUTC.toISOString()
+      )}`
+    );
+  };
+  return (
+    <div>
+      <Header>
+        <PlusButton onClick={handleAddDiary}>+</PlusButton>
+      </Header>
+      <CustomCalendar onChange={onChange} value={value} />
+    </div>
+  );
 };
 
 export default Diary;
