@@ -1,0 +1,194 @@
+.formGroup{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    .formGroup {
+      margin-top: 50px;
+    }
+  }
+  
+  /* 화면 크기가 768px 이상인 경우 */
+@media (min-width: 768px) {
+    .formGroup {
+      margin-top: 100px;
+    }
+}
+
+.label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.thumbnailContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+
+}
+
+
+.thumbnail {
+    display: flex;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: auto;
+}
+
+
+
+.btn_upload{
+    width: 150px;
+    height: 30px;
+    background: #fff;
+    border: 1px solid rgb(77,77,77);
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+.btn_upload:hover {
+        background: rgb(77,77,77);
+        color: #fff;
+    }
+
+
+#file{
+    display: none;
+}
+
+.select {
+    -o-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 150px;
+    height: 35px;
+    background: url('../images/arrow-down-3101.png') calc(100% - 5px) center no-repeat;
+    background-size: 20px;
+    padding: 5px 30px 5px 10px;
+    border-radius: 4px;
+    outline: 0 none;
+    margin-top: 10px;
+    border: none;
+}
+
+.select option {
+    background: black;
+    color: #fff;
+    padding: 3px 0;
+}
+
+
+.subcat{
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+.subcat_label{
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #333;
+    text-align: center;
+    font-weight:bold;
+    font-size:13px;
+    margin: 5px;
+    border-radius: 0.4rem;
+}
+.subcat_label input:checked + span{
+    background-color: #333;
+    color: #fff;
+}
+.subcat_label input[type="radio"] {
+    display: none;
+}
+.subcat_label span{
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+.btn_ckbox{
+    display: inline-block;
+    position: relative;
+    padding: 8px 16px;
+    background-color: #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 2px;
+}
+.btn_ckbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.btn_ckbox span {
+    pointer-events: none;
+}
+
+.btn_ckbox input[type="checkbox"]:checked + span {
+    background-color: #2196f3;
+    color: #fff;
+}
+.ckbox_group{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.area{
+    border: none;
+    resize: none; 
+    margin-top: 5px;
+}
+
+.area:focus{
+    outline: none;
+}
+
+.btn_submit{
+    position: absolute;
+    top: 23px;
+    right: 9%;
+
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size:20px;
+}
+.btn_submit:hover{
+    background-color: #ccc;
+}
+
+input[type="submit"]:disabled {
+    background-color: #ccc;
+    color: #999;
+    border: none;
+    cursor: not-allowed;
+}
+
+input[type="submit"] {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    cursor: pointer;
+}
