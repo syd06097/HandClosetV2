@@ -3,20 +3,21 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import back from "../images/back.png";
 import styled from "styled-components";
-import update from "../images/update.png";
 import axios from "axios";
 import check from "../images/check.png";
+import CategoryMenu from "../components/CategoryMenu";
+import DiaryItem from "../components/DiaryItem";
+
 const DiaryAdd = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  // const selectedDate = searchParams.get("selectedDate");
   const selectedDateUTC = new Date(searchParams.get("selectedDate"));
-
-  // 날짜 출력 시 시간대 변환
   const formattedDate = selectedDateUTC.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식으로 변환
-
   const [season, setSeason] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
   const handleSeasonChange = (e) => {
     const selectedSeason = e.target.value;
     setSeason((prevSeasons) => {
@@ -26,6 +27,12 @@ const DiaryAdd = () => {
         return [...prevSeasons, selectedSeason];
       }
     });
+  };
+
+  const handleClickCategory = (category, subcategory, items) => {
+    setSelectedCategory(category);
+    setSelectedSubcategory(subcategory);
+    setSelectedItems(items);
   };
 
   const handleSubmit = async (e) => {
@@ -59,15 +66,17 @@ const DiaryAdd = () => {
   };
 
   return (
-    <Container>
+    <StyledWrap>
+      {/*<Container>*/}
       <Header>
         <BackButton onClick={() => navigate("/Closet")}>
-          <img src={back} alt="back" style={{ width: "38px" }} />
+          <img src={back} alt="back" style={{ width: "28px" }} />
         </BackButton>
         <SubmitButton onClick={handleSubmit}>
           <img src={check} alt="check" style={{ width: "28px" }} />
         </SubmitButton>
       </Header>
+      {/*</Container>*/}
       {/*<h2>Add Diary Entry for: {selectedDate}</h2>*/}
       <h2>Add Diary Entry for: {formattedDate}</h2>
       {/* Diary 추가 폼 또는 컴포넌트를 표시할 수 있습니다. */}
@@ -109,15 +118,22 @@ const DiaryAdd = () => {
           겨울
         </label>
       </div>
-    </Container>
+
+      <CategoryMenu onClickCategory={handleClickCategory} />
+      <DiaryItem
+        category={selectedCategory}
+        subcategory={selectedSubcategory}
+        items={selectedItems}
+      />
+    </StyledWrap>
   );
 };
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
+// const Container = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
 const Header = styled.div`
   display: flex;
@@ -129,11 +145,24 @@ const Header = styled.div`
 `;
 
 const BackButton = styled.div`
-  margin-top: 23px;
+  margin-top: 25px;
   margin-left: 9%;
 `;
 const SubmitButton = styled.div`
   margin-top: 25px;
   margin-right: 9%;
+`;
+const StyledWrap = styled.div`
+  position: relative;
+
+  .CategoryMenu {
+    position: relative;
+    z-index: 1;
+  }
+
+  .CategoryItem {
+    position: relative;
+    z-index: 1;
+  }
 `;
 export default DiaryAdd;

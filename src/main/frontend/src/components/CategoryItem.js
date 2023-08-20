@@ -155,6 +155,8 @@ const ImageItem = styled.div`
   height: 0;
   padding-bottom: 100%; /* 정사각형 비율을 유지하기 위한 패딩 */
   overflow: hidden;
+  border: 1px solid lightgray;
+  border-radius: 18px;
 `;
 
 const ItemImage = styled.img`

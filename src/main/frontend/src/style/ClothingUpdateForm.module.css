@@ -188,6 +188,9 @@ input[type="submit"] {
     margin-bottom:20px;
     margin-left: auto; /* 가로 중앙 정렬 */
     margin-right: auto; /* 가로 중앙 정렬 */
+    border: 1px solid lightgray;
+    border-radius: 18px;
+    overflow: hidden;
 }
 
 .Image {

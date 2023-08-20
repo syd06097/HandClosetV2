@@ -101,7 +101,7 @@ function ClothesDetail() {
     <Container>
       <Header>
         <BackButton onClick={() => navigate("/Closet")}>
-          <img src={back} alt="back" style={{ width: "38px" }} />
+          <img src={back} alt="back" style={{ width: "28px" }} />
         </BackButton>
         <UpdateButton onClick={handleUpdate}>
           <img src={update} alt="update" />
@@ -149,12 +149,12 @@ const Header = styled.div`
 `;
 
 const BackButton = styled.div`
-  margin-top: 23px;
+  margin-top: 25px;
   margin-left: 9%;
 `;
 
 const UpdateButton = styled.div`
-  margin-top: 25px;
+  margin-top: 23px;
   margin-right: 9%;
 `;
 
@@ -162,6 +162,9 @@ const ImageWrapper = styled.div`
   width: 300px;
   height: 300px;
   margin-top: 20px;
+  border: 1px solid lightgray;
+  border-radius: 18px;
+  overflow: hidden;
 `;
 
 const TrashWrapper = styled.div`
@@ -188,7 +191,7 @@ const Square = styled.div`
   height: 123px;
   margin: 0% 2%;
   padding: 1%;
-  border: 1px solid gray;
+  border: 1px solid lightgray;
   border-radius: 8px;
 `;
 
