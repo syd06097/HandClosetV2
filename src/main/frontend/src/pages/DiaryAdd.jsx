@@ -18,6 +18,8 @@ const DiaryAdd = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedImageIds, setSelectedImageIds] = useState([]); // Add this line
+
   const handleSeasonChange = (e) => {
     const selectedSeason = e.target.value;
     setSeason((prevSeasons) => {
@@ -37,18 +39,22 @@ const DiaryAdd = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (season.length === 0) {
-      alert("적어도 하나의 계절을 선택해주세요.");
+    if (season.length === 0 || selectedImageIds.length === 0) { // Use selectedImageIds here
+      alert("적어도 하나의 계절과 이미지를 선택해주세요.");
+
     } else {
       let season_str = season ? season.join() : "";
       const formData = new FormData();
       formData.append("season", season_str);
       formData.append("date", formattedDate);
+      formData.append("imageIds", selectedImageIds.join()); // Add selected image IDs
 
-      for (let key of formData.keys()) {
-        console.log(key, ":", formData.get(key));
-      }
-      console.log(formattedDate);
+      console.log(selectedImageIds.join());
+
+      //for (let key of formData.keys()) {
+        //console.log(key, ":", formData.get(key));
+      //}
+      //console.log(formattedDate);
       try {
         const response = await axios.post("/api/diary", formData, {
           headers: {
@@ -69,7 +75,7 @@ const DiaryAdd = () => {
     <StyledWrap>
       {/*<Container>*/}
       <Header>
-        <BackButton onClick={() => navigate("/Closet")}>
+        <BackButton onClick={() => navigate("/Diary")}>
           <img src={back} alt="back" style={{ width: "28px" }} />
         </BackButton>
         <SubmitButton onClick={handleSubmit}>
@@ -124,6 +130,8 @@ const DiaryAdd = () => {
         category={selectedCategory}
         subcategory={selectedSubcategory}
         items={selectedItems}
+        selectedImageIds={selectedImageIds} // 이미지 ID 배열을 props로 전달
+        setSelectedImageIds={setSelectedImageIds} // 이미지 ID 선택 상태를 업데이트하는 함수를 props로 전달
       />
     </StyledWrap>
   );

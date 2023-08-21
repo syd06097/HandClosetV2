@@ -12,7 +12,7 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
 
-    @Autowired
+
     public DiaryService(DiaryRepository diaryRepository) {
         this.diaryRepository = diaryRepository;
     }

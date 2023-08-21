@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -122,5 +120,14 @@ public class ClothesService {
 
     public List<Clothes> getRecommendedClothesAsc(String subcategory) {
         return clothesRepository.findTop2BySubcategoryOrderByWearcnt(subcategory);
+    }
+
+    public void updateWearCountAndCreateDate(Long imageId,Date date) {
+        Optional<Clothes> optionalClothes = clothesRepository.findById(imageId);
+        optionalClothes.ifPresent(clothes -> {
+            clothes.setWearcnt(clothes.getWearcnt() + 1); // Increment wearcnt
+            clothes.setCreatedate(date); // Update createdate
+            clothesRepository.save(clothes);
+        });
     }
 }

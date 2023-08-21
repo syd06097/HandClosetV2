@@ -3,9 +3,10 @@ import { getAllClothesIds } from "../utils/api"; // API 호출 함수 추가
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-function DiaryItem({ category, subcategory, items }) {
+function DiaryItem({ category, subcategory, items, selectedImageIds,  setSelectedImageIds }) {
   const [ids, setIds] = useState([]); // ID 목록 상태 추가
   const navigate = useNavigate();
+  // const [selectedImageIds, setSelectedImageIds] = useState([]);
 
   useEffect(() => {
     const fetchIds = async () => {
@@ -20,6 +21,15 @@ function DiaryItem({ category, subcategory, items }) {
 
     fetchIds();
   }, []);
+  const toggleImageSelection = (imageId) => {
+    setSelectedImageIds((prevSelectedImageIds) => {
+      if (prevSelectedImageIds.includes(imageId)) {
+        return prevSelectedImageIds.filter((id) => id !== imageId);
+      } else {
+        return [...prevSelectedImageIds, imageId];
+      }
+    });
+  };
 
   // const handleClickImage = (item, index) => {
   //     let itemId;
@@ -42,6 +52,8 @@ function DiaryItem({ category, subcategory, items }) {
           <ImageItem
             key={item.id}
             // onClick={() => handleClickImage(item, index)}
+            isSelected={selectedImageIds.includes(item.id)}
+            onClick={() => toggleImageSelection(item.id)}
           >
             {category === "전체" ? (
               <ItemImage
@@ -74,7 +86,8 @@ const ImageItem = styled.div`
   height: 0;
   padding-bottom: 100%; /* 정사각형 비율을 유지하기 위한 패딩 */
   overflow: hidden;
-  border: 1px solid lightgray;
+  border: ${({ isSelected }) =>
+      isSelected ? "1px solid red" : "1px solid lightgray"};
   border-radius: 18px;
 `;
 

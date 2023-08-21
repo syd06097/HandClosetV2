@@ -10,24 +10,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/diary")
 public class DiaryController {
 
     private final DiaryService diaryService;
-    public DiaryController(DiaryService diaryService) {
+    private final ClothesService clothesService;
+    public DiaryController(DiaryService diaryService,ClothesService clothesService) {
         this.diaryService = diaryService;
+        this.clothesService = clothesService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Diary saveDiary(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
-                           @RequestParam("season") String season) {
+                           @RequestParam("season") String season,
+                           @RequestParam("imageIds") String imageIds) {
+        List<Long> imageIdList = Arrays.stream(imageIds.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        System.out.println("imageIdList: " + imageIdList);
+
         Diary diary = new Diary();
         diary.setDate(date);
         diary.setSeason(season);
-        return diaryService.saveDiary(diary);
+        diary.setImageIds(imageIdList); // Set image IDs
+
+        Diary savedDiary = diaryService.saveDiary(diary);
+
+        // Update wearcnt and createdate for each selected image
+        for (Long imageId : imageIdList) {
+            clothesService.updateWearCountAndCreateDate(imageId,date);
+        }
+
+        return savedDiary;
     }
 }

@@ -14,5 +14,14 @@ CREATE TABLE diary
 (
      id INT AUTO_INCREMENT PRIMARY KEY,
      season VARCHAR(255) NOT NULL,
-     date DATE NOT NULL
+     `date` DATE NOT NULL
+
+);
+
+CREATE TABLE diary_image_ids    //다이어리 엔티티와 이미지 id들을 관리
+(
+     diary_id INT NOT NULL,
+     image_id LONG NOT NULL,
+     PRIMARY KEY (diary_id, image_id),
+     FOREIGN KEY (diary_id) REFERENCES diary(id)
 );
