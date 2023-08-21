@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import axios from "axios";
 //images
 import blanket from "../images/category/blanket.png";
@@ -141,7 +141,7 @@ const Main = () => {
   };
 
   const getWeatherIconUrl = (iconCode) => {
-    return `http://openweathermap.org/img/w/${iconCode}.png`;
+    return `http://openweathermap.org/img/wn/${iconCode}@4x.png`;
   };
 
   const getRecommendedCategory = (temperature) => {
@@ -246,20 +246,38 @@ const Main = () => {
 
   return (
     <div>
+      <GlobalStyle />
       <Container>
-        {latitude && longitude && cityCode && <p>현재 도시: {cityCode}</p>}
         {weatherData && (
           <div>
-            <p>{koreanCityCode}의 날씨</p>
-            <p>날씨: {weatherData.weather[0].description}</p>
-            <p>기온: {Math.round(weatherData.main.temp)}°C</p>
-            <p>습도: {weatherData.main.humidity}%</p>
-            <p>구름: {weatherData.clouds.all}%</p>
-            <p>풍속: {weatherData.wind.speed} m/s</p>
-            <img
-              src={getWeatherIconUrl(weatherData.weather[0].icon)}
-              alt="Weather Icon"
-            />
+            <>
+            <WeatherWidgetBox>
+              <Widget>
+                <Left>
+                  <Icon
+                      src={getWeatherIconUrl(weatherData.weather[0].icon)}
+                      alt="Weather Icon"
+                  ></Icon>
+                  <WeatherStatus>{weatherData.weather[0].description}</WeatherStatus>
+                </Left>
+                <Right>
+                  <City>{koreanCityCode}</City>
+                  <Degree>{Math.round(weatherData.main.temp)}°C</Degree>
+                </Right>
+                <Bottom>
+                  <Desdiv>
+                    풍속  <span>{weatherData.wind.speed} m/s</span>
+                  </Desdiv>
+                  <Desdiv>
+                    구름 <span>{weatherData.clouds.all}%</span>
+                  </Desdiv>
+                  <Desdiv>
+                    습도 <span>{weatherData.main.humidity}%</span>
+                  </Desdiv>
+                </Bottom>
+              </Widget>
+            </WeatherWidgetBox>
+            </>
 
             {recommendedCategoryImages.length > 0 && (
               <ImageContainer>
@@ -321,6 +339,14 @@ const Main = () => {
     </div>
   );
 };
+
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;600&display=swap');
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -375,5 +401,76 @@ const ImageWrapper = styled.div`
 
   box-shadow: 2px 2px 2px 2px #efefef;
   margin-bottom: 20px;
+`;
+
+const WeatherWidgetBox = styled.div`
+  position: relative;
+  margin-top: 20px;
+`;
+
+const Widget = styled.div`
+  width: 400px;
+  height: 200px;
+  border-radius: 20px;
+  background: rgba(54, 64, 84, 0.7);
+`;
+
+const Left = styled.div`
+  position: absolute;
+  left: 0;
+  width: 200px;
+`;
+const Right=styled.div`
+  position: absolute;
+  right: 0;
+  width: 200px;
+  color: #fff;
+  margin: 50px 0;
+`;
+const Icon = styled.img`
+  width: 75%;
+  margin-bottom: -30px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const WeatherStatus = styled.h5`
+  color: #fff;
+  text-align: center;
+  margin-top: 0;
+`;
+
+const City = styled.h5`
+  font-size: 1em;
+  text-align: center;
+  margin: 0;
+  text-shadow: 1px 1px 5px #707070;
+`;
+
+const Degree=styled.h5`
+  font-size: 3em;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  text-shadow: 1px 1px 5px #707070;
+`;
+
+const Bottom=styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  display: inline-flex;
+  justify-content: center;
+  color: #fff;
+  left: 1px;
+`;
+
+const Desdiv = styled.div`
+  margin: 5px 10px 5px 10px;
+  text-align: center;
+  line-height: 100%;
+  font-size: 0.83em;
+  text-shadow: 1px 1px 5px #707070;
 `;
 export default Main;
