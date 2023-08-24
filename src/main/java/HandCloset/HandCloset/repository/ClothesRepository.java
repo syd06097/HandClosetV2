@@ -20,6 +20,6 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
 
     List<Clothes> findTop2BySubcategoryOrderByWearcntDesc(String subcategory);
 
-    List<Clothes> findTop2BySubcategoryOrderByWearcnt(String subcategory);
+    List<Clothes> findTop2BySubcategoryOrderByWearcntAsc(String subcategory);
 
 }

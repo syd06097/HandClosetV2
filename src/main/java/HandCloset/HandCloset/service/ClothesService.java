@@ -119,7 +119,7 @@ public class ClothesService {
     }
 
     public List<Clothes> getRecommendedClothesAsc(String subcategory) {
-        return clothesRepository.findTop2BySubcategoryOrderByWearcnt(subcategory);
+        return clothesRepository.findTop2BySubcategoryOrderByWearcntAsc(subcategory);
     }
 
     public void updateWearCountAndCreateDate(Long imageId,Date date) {

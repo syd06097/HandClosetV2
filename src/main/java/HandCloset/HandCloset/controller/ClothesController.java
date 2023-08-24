@@ -217,4 +217,22 @@ public class ClothesController {
 
         return recommendedClothes;
     }
+
+    @GetMapping("/recommendation2")
+    public List<Clothes> getRecommendedClothes2(@RequestParam("subcategories") List<String> subcategories) {
+        List<Clothes> recommendedClothes = new ArrayList<>();
+
+        for (String subcategory : subcategories) {
+            String decodedSubcategory = null;
+            try {
+                decodedSubcategory = URLDecoder.decode(subcategory, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            List<Clothes> clothes = clothesService.getRecommendedClothesAsc(decodedSubcategory);
+            recommendedClothes.addAll(clothes);
+        }
+
+        return recommendedClothes;
+    }
 }

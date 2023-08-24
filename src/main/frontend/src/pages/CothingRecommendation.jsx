@@ -9,6 +9,8 @@ const ClothingRecommendation = () => {
     const location = useLocation();
     const { subcategories } = location.state;
     const [recommendedClothes, setRecommendedClothes] = useState([]);
+    const [apiToCall, setApiToCall] = useState('/api/clothing/recommendation'); // Default API
+
     const navigate = useNavigate();
     // 이미지 가져오기
     const fetchImage = async (id) => {
@@ -34,7 +36,7 @@ const ClothingRecommendation = () => {
                     encodeURIComponent(subcategory)
                 );
                 const response = await axios.get(
-                    `/api/clothing/recommendation`,
+                    apiToCall,
                     {
                         params: { subcategories: encodedSubcategories },
                         paramsSerializer: (params) => {
@@ -62,19 +64,38 @@ const ClothingRecommendation = () => {
         };
 
         fetchRecommendedClothes();
-    }, [subcategories]);
+    }, [subcategories, apiToCall]);
 
     const StyledImage = styled.img`
         width: 20%;
         height:auto;
     `;
+    const ButtonContainer = styled.div`
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    `;
+
+    const Button = styled.button`
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        background-color: ${props => props.isActive ? "blue" : "gray"};
+        color: white;
+    `;
 
     return (
         <div>
-            <div style={{ display: "block",width:"100%", height:"40px"  }}>
+            <div style={{ display: "block",width:"100%", height:"40px" ,textAlign:"center"  }}>
                 <div onClick={() => navigate("/Main")} style={{marginTop: "23px", float: "right", paddingRight: "9%", fontSize: "30px", fontWeight: "bold"}}>X</div>
             </div>
             <h3 style={{ fontSize: "22px" }}>이렇게 입어보는 건 어떨까요?</h3>
+            <ButtonContainer>
+            <Button onClick={() => setApiToCall('/api/clothing/recommendation')}>많이 입은</Button>
+            <Button onClick={() => setApiToCall('/api/clothing/recommendation2')}>적게 입은</Button>
+            </ButtonContainer>
             <hr
                 style={{
                     height: "1px",
@@ -96,6 +117,11 @@ const ClothingRecommendation = () => {
                             </div>
 
                         ))}
+                    {recommendedClothes
+                        .filter(clothes => clothes.category === "아우터").length === 0 && (
+                        <p>옷이 없어요 ㅠㅠ</p>
+                    )}
+
                     <p>상의:</p>
                     {recommendedClothes
                         .filter((clothes) => clothes.category === "상의")
@@ -107,6 +133,11 @@ const ClothingRecommendation = () => {
                             </div>
 
                         ))}
+                    {recommendedClothes
+                        .filter(clothes => clothes.category === "상의").length === 0 && (
+                        <p>옷이 없어요 ㅠㅠ</p>
+                    )}
+
                     <p>하의:</p>
                     {recommendedClothes
                         .filter((clothes) => clothes.category === "하의")
@@ -117,6 +148,11 @@ const ClothingRecommendation = () => {
                                 <StyledImage src={clothes.imageUrl} alt={clothes.id} />
                             </div>
                         ))}
+                    {recommendedClothes
+                        .filter(clothes => clothes.category === "하의").length === 0 && (
+                        <p>옷이 없어요 ㅠㅠ</p>
+                    )}
+
                 </div>
             ) : (
                 <p>추천할 옷이 존재하지 않습니다.</p>
