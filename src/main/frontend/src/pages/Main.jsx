@@ -245,98 +245,96 @@ const Main = () => {
   };
 
   return (
-    <div>
-      <GlobalStyle />
-      <Container>
+      <div>
+        <GlobalStyle />
         {weatherData && (
-          <div>
             <>
-            <WeatherWidgetBox>
-              <Widget>
-                <Left>
-                  <Icon
-                      src={getWeatherIconUrl(weatherData.weather[0].icon)}
-                      alt="Weather Icon"
-                  ></Icon>
-                  <WeatherStatus>{weatherData.weather[0].description}</WeatherStatus>
-                </Left>
-                <Right>
-                  <City>{koreanCityCode}</City>
-                  <Degree>{Math.round(weatherData.main.temp)}°C</Degree>
-                </Right>
-                <Bottom>
-                  <Desdiv>
-                    풍속  <span>{weatherData.wind.speed} m/s</span>
-                  </Desdiv>
-                  <Desdiv>
-                    구름 <span>{weatherData.clouds.all}%</span>
-                  </Desdiv>
-                  <Desdiv>
-                    습도 <span>{weatherData.main.humidity}%</span>
-                  </Desdiv>
-                </Bottom>
-              </Widget>
-            </WeatherWidgetBox>
-            </>
+              <WeatherWidgetBox>
+                <Widget>
+                  <Left>
+                    <Icon
+                        src={getWeatherIconUrl(weatherData.weather[0].icon)}
+                        alt="Weather Icon"
+                    ></Icon>
+                    <WeatherStatus>{weatherData.weather[0].description}</WeatherStatus>
+                  </Left>
+                  <Right>
+                    <City>{koreanCityCode}</City>
+                    <Degree>{Math.round(weatherData.main.temp)}°C</Degree>
+                  </Right>
+                  <Bottom>
+                    <Desdiv>
+                      풍속  <span>{weatherData.wind.speed} m/s</span>
+                    </Desdiv>
+                    <Desdiv>
+                      구름 <span>{weatherData.clouds.all}%</span>
+                    </Desdiv>
+                    <Desdiv>
+                      습도 <span>{weatherData.main.humidity}%</span>
+                    </Desdiv>
+                  </Bottom>
+                </Widget>
+              </WeatherWidgetBox>
+            </>)}
 
-            {recommendedCategoryImages.length > 0 && (
+        <Container>
+          {recommendedCategoryImages.length > 0 && (
               <ImageContainer>
                 {recommendedCategoryImages.map((categoryData, index) => (
-                  <div key={index}>
-                    <ImageWrapper>
-                      <img
-                        src={categoryData.image}
-                        alt="Recommended Clothing"
-                      />
-                      <p>{categoryData.subcategory}</p>
-                    </ImageWrapper>
-                  </div>
+                    <div key={index}>
+                      <ImageWrapper>
+                        <img
+                            src={categoryData.image}
+                            alt="Recommended Clothing"
+                        />
+                        <p>{categoryData.subcategory}</p>
+                      </ImageWrapper>
+                    </div>
                 ))}
               </ImageContainer>
-            )}
-          </div>
-        )}
-        <div
-          style={{
-            backgroundColor: "#364054",
-            borderRadius: "3px",
-            width: "81%",
-            padding: "3px",
-            color: "white",
-          }}
-          onClick={() => {
-            navigate("/ClothingRecommendation", {
-              state: { subcategories: recommendedSubcategory },
-            });
-          }}
-        >
-          <h4>오늘 입을 스타일을 추천 해줄게요!</h4>
-        </div>
+          )}
 
-        <ButtonContainer>
-          <Button onClick={() => navigate("/ItemHave")}>
-            옷장 속 가장 많은
-            <br />
-            아이템
-          </Button>
-          <Button onClick={() => navigate("/ItemSeason")}>
-            계절 별 아이템
-            <br />
-            개수
-          </Button>
-          <Button onClick={() => navigate("/ItemFrequently")}>
-            가장 자주 입은
-            <br />
-            아이템
-          </Button>
-          <Button onClick={() => navigate("/ItemNotRecently")}>
-            요즘 입지 않은
-            <br />
-            아이템
-          </Button>
-        </ButtonContainer>
-      </Container>
-    </div>
+          <div
+              style={{
+                backgroundColor: "#364054",
+                borderRadius: "3px",
+                width: "81%",
+                padding: "3px",
+                color: "white",
+              }}
+              onClick={() => {
+                navigate("/ClothingRecommendation", {
+                  state: { subcategories: recommendedSubcategory },
+                });
+              }}
+          >
+            <h4>오늘 입을 스타일을 추천 해줄게요!</h4>
+          </div>
+
+          <ButtonContainer>
+            <Button onClick={() => navigate("/ItemHave")}>
+              옷장 속 가장 많은
+              <br />
+              아이템
+            </Button>
+            <Button onClick={() => navigate("/ItemSeason")}>
+              계절 별 아이템
+              <br />
+              개수
+            </Button>
+            <Button onClick={() => navigate("/ItemFrequently")}>
+              가장 자주 입은
+              <br />
+              아이템
+            </Button>
+            <Button onClick={() => navigate("/ItemNotRecently")}>
+              요즘 입지 않은
+              <br />
+              아이템
+            </Button>
+          </ButtonContainer>
+        </Container>
+      </div>
   );
 };
 
@@ -405,14 +403,11 @@ const ImageWrapper = styled.div`
 
 const WeatherWidgetBox = styled.div`
   position: relative;
-  margin-top: 20px;
 `;
 
 const Widget = styled.div`
-  width: 400px;
+  width: 100%;
   height: 200px;
-  border-radius: 20px;
-  background: rgba(54, 64, 84, 0.7);
 `;
 
 const Left = styled.div`
@@ -424,7 +419,7 @@ const Right=styled.div`
   position: absolute;
   right: 0;
   width: 200px;
-  color: #fff;
+  color: rgb(54,64,84);
   margin: 50px 0;
 `;
 const Icon = styled.img`
@@ -436,7 +431,7 @@ const Icon = styled.img`
 `;
 
 const WeatherStatus = styled.h5`
-  color: #fff;
+  color: rgb(54,64,84);
   text-align: center;
   margin-top: 0;
 `;
@@ -445,7 +440,7 @@ const City = styled.h5`
   font-size: 1em;
   text-align: center;
   margin: 0;
-  text-shadow: 1px 1px 5px #707070;
+
 `;
 
 const Degree=styled.h5`
@@ -453,7 +448,7 @@ const Degree=styled.h5`
   font-weight: bold;
   text-align: center;
   margin: 0;
-  text-shadow: 1px 1px 5px #707070;
+
 `;
 
 const Bottom=styled.div`
@@ -462,7 +457,7 @@ const Bottom=styled.div`
   bottom: 10px;
   display: inline-flex;
   justify-content: center;
-  color: #fff;
+  color: rgb(54,64,84);
   left: 1px;
 `;
 
@@ -471,6 +466,7 @@ const Desdiv = styled.div`
   text-align: center;
   line-height: 100%;
   font-size: 0.83em;
-  text-shadow: 1px 1px 5px #707070;
+  font-weight: bold;
+
 `;
 export default Main;

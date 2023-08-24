@@ -9,6 +9,9 @@ import java.util.List;
 @Table(name = "diary")
 public class Diary {
 
+
+    private String thumbnailpath;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +29,28 @@ public class Diary {
     @Column(name = "image_id")
     private List<Long> imageIds;
 
+    private String note;
+
+
+
     // Getters and setters
+
+
+    public String getThumbnailpath() {
+        return thumbnailpath;
+    }
+
+    public void setThumbnailpath(String thumbnailpath) {
+        this.thumbnailpath = thumbnailpath;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     public Long getId() {
         return id;

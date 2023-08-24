@@ -125,8 +125,11 @@ public class ClothesService {
     public void updateWearCountAndCreateDate(Long imageId,Date date) {
         Optional<Clothes> optionalClothes = clothesRepository.findById(imageId);
         optionalClothes.ifPresent(clothes -> {
-            clothes.setWearcnt(clothes.getWearcnt() + 1); // Increment wearcnt
-            clothes.setCreatedate(date); // Update createdate
+            clothes.setWearcnt(clothes.getWearcnt() + 1);
+            Date existingCreatedate = clothes.getCreatedate();
+            if (date.after(existingCreatedate)) {
+                clothes.setCreatedate(date); // 최근의 날짜인 경우에만 createdate를 업데이트 시킴
+            }
             clothesRepository.save(clothes);
         });
     }
