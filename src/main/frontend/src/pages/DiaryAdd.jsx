@@ -9,6 +9,7 @@ import CategoryMenu from "../components/CategoryMenu";
 import DiaryItem from "../components/DiaryItem";
 import styles from "../style/ClothingForm.module.css";
 import DefaultImage from "../images/default/DefaultImage.png";
+
 const DiaryAdd = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,9 +85,10 @@ const DiaryAdd = () => {
 
       // 파일을 업로드할 때 선택한 파일이 없는 경우
       if (!e.target.file.files[0]) {
-        // 디폴트 이미지 파일을 formData에 추가
-        const defaultImageFile = new File([DefaultImage], 'default.png', { type: 'image/png' });
+
+        const defaultImageFile = new File(DefaultImage);
         formData.append('file', defaultImageFile);
+
       } else {
         formData.append('file', e.target.file.files[0]);
       }

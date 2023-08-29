@@ -217,7 +217,6 @@ public class ClothesController {
 
         return recommendedClothes;
     }
-
     @GetMapping("/recommendation2")
     public List<Clothes> getRecommendedClothes2(@RequestParam("subcategories") List<String> subcategories) {
         List<Clothes> recommendedClothes = new ArrayList<>();

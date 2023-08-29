@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -40,5 +42,13 @@ public class DiaryService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<Diary> getAllDiaryEntries() {
+        return diaryRepository.findAll();
+    }
+
+    public List<Diary> getDiaryEntriesByDate(Date date) {
+        return diaryRepository.findAllByDate(date);
     }
 }
