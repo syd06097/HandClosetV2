@@ -65,11 +65,38 @@ public class DiaryController {
 
         // Update wearcnt and createdate for each selected image
         for (Long imageId : imageIdList) {
-            clothesService.updateWearCountAndCreateDate(imageId,date);
+            clothesService.updateWearCountAndCreateDateOnCreate(imageId,date);
         }
 
         return savedDiary;
     }
+
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDiaryEntry(@PathVariable Long id) {
+        try {
+            // Get the Diary entry by ID
+            Diary diary = diaryService.getDiaryEntryById(id);
+
+            // Get the thumbnail path from the Diary entry
+            String thumbnailPath = diary.getThumbnailpath();
+            // Delete the thumbnail image from the file system
+            Path thumbnailFilePath = Paths.get(thumbnailPath);
+            Files.delete(thumbnailFilePath);
+
+
+            // Delete the Diary entry
+            diaryService.deleteDiary(id);
+
+        } catch (IOException e) {
+            // Handle any IO exceptions if the image deletion fails
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete image and data.");
+        }
+    }
+
 
     @GetMapping("/entries")
     public ResponseEntity<List<Diary>> getAllDiaryEntries() {
@@ -81,26 +108,33 @@ public class DiaryController {
         List<Diary> diaryEntries = diaryService.getDiaryEntriesByDate(date);
         return new ResponseEntity<>(diaryEntries, HttpStatus.OK);
     }
-//    @GetMapping(value = "/images", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public ResponseEntity<byte[]> getDiaryImage(@RequestParam String thumbnailpath) {
-//        try {
-//            Path imagePath = Paths.get(thumbnailpath);
-//            byte[] imageBytes = Files.readAllBytes(imagePath);
-//            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-@GetMapping(value = "/images")
-public ResponseEntity<byte[]> getDiaryImage(@RequestParam String thumbnailpath) {
-    try {
-        Path imagePath = Paths.get(thumbnailpath);
-        byte[] imageBytes = Files.readAllBytes(imagePath);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
-    } catch (IOException e) {
-        e.printStackTrace();
-        return ResponseEntity.notFound().build();
+
+    @GetMapping("/entryData/{id}")
+    public ResponseEntity<Diary> getDiaryEntry(@PathVariable Long id) {
+        Diary diary = diaryService.getDiaryEntryById(id);
+        if (diary == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(diary);
     }
-}
+    @GetMapping(value = "/images")
+    public ResponseEntity<byte[]> getDiaryImage(@RequestParam String thumbnailpath) {
+        try {
+            Path imagePath = Paths.get(thumbnailpath);
+            byte[] imageBytes = Files.readAllBytes(imagePath);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/entryData/{id}/imageIds")
+    public ResponseEntity<List<Long>> getImageIdsByDiaryId(@PathVariable Long id) {
+        List<Long> imageIds = diaryService.getImageIdsByDiaryId(id);
+        return ResponseEntity.ok(imageIds);
+    }
+
+
+
 }

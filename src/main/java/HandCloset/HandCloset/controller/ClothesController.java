@@ -2,7 +2,9 @@
 package HandCloset.HandCloset.controller;
 
 import HandCloset.HandCloset.entity.Clothes;
+import HandCloset.HandCloset.entity.Diary;
 import HandCloset.HandCloset.service.ClothesService;
+import HandCloset.HandCloset.service.DiaryService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,11 +34,14 @@ import javax.persistence.EntityNotFoundException;
 public class ClothesController {
     private final ClothesService clothesService;
 
+    private final DiaryService diaryService;
+
     @Value("${upload.directory}")
     private String uploadDirectory;
 
-    public ClothesController(ClothesService clothesService) {
+    public ClothesController(ClothesService clothesService , DiaryService diaryService) {
         this.clothesService = clothesService;
+        this.diaryService=diaryService;
     }
 
     @PostMapping
@@ -129,6 +134,20 @@ public class ClothesController {
 
             // 파일 시스템에서 이미지 삭제
             Files.delete(imageFilePath);
+
+            // 다이어리 엔트리에서 해당 의류 아이템의 ID를 참조하는 경우 삭제 처리
+
+            List<Diary> referencingDiaries = diaryService.findDiariesByImageId(id);
+            for (Diary diary : referencingDiaries) {
+                diary.getImageIds().remove(id);
+
+                // 이미지 ID 목록이 비어 있다면 다이어리를 삭제
+                if (diary.getImageIds().isEmpty()) {
+                    diaryService.deleteDiary(diary.getId());
+                }
+            }
+
+
 
             // 이미지 삭제가 성공한 경우에만 DB에서 데이터 삭제
             clothesService.deleteClothes(id);
@@ -233,5 +252,10 @@ public class ClothesController {
         }
 
         return recommendedClothes;
+    }
+    @GetMapping("/byImageIds")
+    public ResponseEntity<List<Clothes>> getClothesByImageIds(@RequestParam List<Long> imageIds) {
+        List<Clothes> clothesList = clothesService.getClothesByImageIds(imageIds);
+        return ResponseEntity.ok(clothesList);
     }
 }

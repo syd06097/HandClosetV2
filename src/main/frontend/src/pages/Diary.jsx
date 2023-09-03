@@ -117,9 +117,8 @@ const Diary = () => {
         <PlusButton onClick={handleAddDiary}>+</PlusButton>
       </Header>
       <CustomCalendar onChange={onChange} value={value} tileContent={tileContent}  onClickDay={handleDateClick} />
-      <hr/>
       {selectedDate && <DiaryThumbnail selectedDate={selectedDate} />} {/* Render DiaryEntryDetails if a date is selected */}
-      <hr/>
+
     </div>
   );
 };

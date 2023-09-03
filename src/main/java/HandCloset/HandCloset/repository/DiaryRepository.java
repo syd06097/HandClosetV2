@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findAllByDate(Date date);
+    List<Diary> findAllByImageIdsContaining(Long imageId);
 }
