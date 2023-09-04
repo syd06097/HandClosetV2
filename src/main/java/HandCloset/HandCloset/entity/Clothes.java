@@ -39,17 +39,17 @@ public class Clothes {
     private String color;
 
 
-    @Column(nullable = false)
-    private Date createdate = getRandomDate();
 
+    private Date createdate;
 
+/*
     private Date getRandomDate() {
         long minDay = new Date(123, 4, 15).getTime();
         long maxDay = new Date(123, 4, 31).getTime();
         long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
         return new Date(randomDay);
     }
-
+*/
     public Long getId() {
         return id;
     }
