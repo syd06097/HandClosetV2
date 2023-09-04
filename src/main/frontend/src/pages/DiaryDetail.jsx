@@ -65,6 +65,7 @@ function DiaryDetail() {
     const handleDelete = async () => {
         try {
             await axios.delete(`/api/diary/${id}`);
+            navigate("/Diary");
             // Optionally, navigate the user to a different page or refresh the entries.
         } catch (error) {
             console.error("Failed to delete diary entry:", error);

@@ -6,8 +6,8 @@ CREATE TABLE clothes
    subcategory VARCHAR(255) NOT NULL,
    season VARCHAR(255) NOT NULL,
    description TEXT,
-   wearcnt INT NOT NULL DEFAULT FLOOR(RAND() * 11),
-   createdate DATE NOT NULL DEFAULT DATEADD('DAY', FLOOR(RAND() * 17), DATE '2023-05-15')
+   wearcnt INT ,
+   createdate DATE
 );
 
 CREATE TABLE diary
