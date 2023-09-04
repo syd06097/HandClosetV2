@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 
 import "./App.css";
 import Main from "./pages/Main";
@@ -10,17 +10,17 @@ import BottomNav from "./BottomNav";
 import ClothesDetail from "./pages/ClothesDetail";
 import ItemHave from "./pages/ItemHave";
 import ItemSeason from "./pages/ItemSeason";
-import ClothingRecommendation from "./pages/CothingRecommendation";
+import ClothingRecommendation from "./pages/ClothingRecommendation";
 import ItemFrequently from "./pages/ItemFrequently";
 import ItemNotRecently from "./pages/ItemNotRecently";
 import ClothingUpdateForm from "./pages/ClothingUpdateForm";
 import DiaryAdd from "./pages/DiaryAdd";
 import DiaryDetail from "./pages/DiaryDetail";
 function App() {
-  return (
-    <div className="App">
+    return (
+        <div className="App">
 
-        <BottomNav />
+            <BottomNav/>
 
       <Routes>
         <Route path="/" element={<Main />} />

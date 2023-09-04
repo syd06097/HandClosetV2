@@ -37,6 +37,7 @@ const Main = () => {
   const [recommendedCategoryImages, setRecommendedCategoryImages] = useState(
     []
   );
+  const [recommendDataSubcategory,setRecommendDataSubcategory] =useState([]);
 
   useEffect(() => {
     // 위치 정보 가져오기
@@ -104,9 +105,11 @@ const Main = () => {
       const temperature = Math.round(weatherData.main.temp);
       const strCategory = getRecommendedCategory(temperature);
       const recommendedCategory = strCategory.split(",");
-      //
+      const dataSub = getRecommendedCategorySituation(temperature);
+      const dataSubcategory = dataSub.split(",");
 
-      //
+
+      setRecommendDataSubcategory(dataSubcategory);
       setRecommendedSubcategory(recommendedCategory);
     }
   }, [weatherData]);
@@ -116,6 +119,7 @@ const Main = () => {
     const categoryData = mapSubcategoryToData(recommendedSubcategory);
     setRecommendedCategoryImages(categoryData);
   }, [recommendedSubcategory]);
+
 
   const convertToEnglishCityCode = (koreanCityCode) => {
     const cityCodeMap = {
@@ -161,6 +165,27 @@ const Main = () => {
       return "코트,무스탕,니트,슬랙스";
     } else {
       return "패딩,코트,목도리,기모제품";
+    }
+  };
+
+
+  const getRecommendedCategorySituation = (temperature) => {
+    if (temperature >= 28) {
+      return "민소매,반팔티,반바지,치마,슬랙스,청바지";
+    } else if (temperature >= 23) {
+      return "반팔티,블라우스/셔츠,반바지,면바지,치마,슬랙스,청바지,트레이닝/조거";
+    } else if (temperature >= 20) {
+      return "가디건,블라우스/셔츠,긴팔티,면바지,청바지,치마,슬랙스,청바지,트레이닝/조거";
+    } else if (temperature >= 17) {
+      return "니트,블라우스/셔츠,긴팔티,맨투맨/후디,가디건,청바지,치마,슬랙스,면바지,청바지,트레이닝/조거,가디건/베스트,블레이저";
+    } else if (temperature >= 12) {
+      return "자켓/점퍼,트렌치코드,가디건/베스트,야상,후드집업,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거,블레이저";
+    } else if (temperature >= 9) {
+      return "자켓/점퍼,트렌치코드,후드집업,야상,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거";
+    } else if (temperature >= 5) {
+      return "코트,무스탕,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
+    } else {
+      return "패딩,무스탕,코트,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
     }
   };
 
@@ -304,7 +329,7 @@ const Main = () => {
               }}
               onClick={() => {
                 navigate("/ClothingRecommendation", {
-                  state: { subcategories: recommendedSubcategory },
+                  state: { subcategories: recommendDataSubcategory },
                 });
               }}
           >

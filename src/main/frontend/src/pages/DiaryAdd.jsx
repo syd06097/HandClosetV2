@@ -107,7 +107,7 @@ const DiaryAdd = () => {
       //console.log(selectedImageIds.join());
 
       for (let key of formData.keys()) {
-      console.log(key, ":", formData.get(key));
+        console.log(key, ":", formData.get(key));
       }
       console.log(formattedDate);
       try {
@@ -129,97 +129,97 @@ const DiaryAdd = () => {
   return (
       <StyledWrap>
         <form onSubmit={handleSubmit}>
-        {/*<Container>*/}
-        <Header>
-          <BackButton onClick={() => navigate("/Diary")}>
-            <img src={back} alt="back" style={{ width: "28px" }} />
-          </BackButton>
-          <SubmitButton>
-            <button type="submit" ><img src={check} alt="check" style={{ width: "28px" }} /></button>
-          </SubmitButton>
+          {/*<Container>*/}
+          <Header>
+            <BackButton onClick={() => navigate("/Diary")}>
+              <img src={back} alt="back" style={{ width: "28px" }} />
+            </BackButton>
+            <SubmitButton>
+              <button type="submit" ><img src={check} alt="check" style={{ width: "28px" }} /></button>
+            </SubmitButton>
 
-        </Header>
-        {/*</Container>*/}
-        {/*<h2>Add Diary Entry for: {selectedDate}</h2>*/}
-        <h2>Add Diary Entry for: {formattedDate}</h2>
-        {/* Diary 추가 폼 또는 컴포넌트를 표시할 수 있습니다. */}
+          </Header>
+          {/*</Container>*/}
+          {/*<h2>Add Diary Entry for: {selectedDate}</h2>*/}
+          <h2>Add Diary Entry for: {formattedDate}</h2>
+          {/* Diary 추가 폼 또는 컴포넌트를 표시할 수 있습니다. */}
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>아이템추가</label>
-          <div className={styles.thumbnailContainer}>
-            {thumbnailpath ? (
-                <div>
-                  <img src={thumbnailpath} alt="thumbnail" className={styles.thumbnail}/>
-                  <button onClick={handleImageCancel}>취소</button>
-                </div>
-            ) : (
-                <div className={styles.thumbnail}/>
-            )}
+          <div className={styles.formGroup}>
+            <label className={styles.label}>아이템추가</label>
+            <div className={styles.thumbnailContainer}>
+              {thumbnailpath ? (
+                  <div>
+                    <img src={thumbnailpath} alt="thumbnail" className={styles.thumbnail}/>
+                    <button onClick={handleImageCancel}>취소</button>
+                  </div>
+              ) : (
+                  <div className={styles.thumbnail}/>
+              )}
+            </div>
+            <label htmlFor={styles.file}>
+              <div className={styles.btn_upload}>파일업로드</div>
+              <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange}  />
+            </label>
           </div>
-          <label htmlFor={styles.file}>
-            <div className={styles.btn_upload}>파일업로드</div>
-            <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange}  />
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-                type="checkbox"
-                value="봄"
-                checked={season.includes("봄")}
-                onChange={handleSeasonChange}
-            />
-            봄
-          </label>
-          <label>
-            <input
-                type="checkbox"
-                value="여름"
-                checked={season.includes("여름")}
-                onChange={handleSeasonChange}
-            />
-            여름
-          </label>
-          <label>
-            <input
-                type="checkbox"
-                value="가을"
-                checked={season.includes("가을")}
-                onChange={handleSeasonChange}
-            />
-            가을
-          </label>
-          <label>
-            <input
-                type="checkbox"
-                value="겨울"
-                checked={season.includes("겨울")}
-                onChange={handleSeasonChange}
-            />
-            겨울
-          </label>
-        </div>
-        <div>
-          <label>
-            <span className={styles.label}>설명</span>
-            <br />
-            <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                className={styles.area}
-                placeholder="노트에 기록하세요"
-            />
-          </label>
-        </div>
+          <div>
+            <label>
+              <input
+                  type="checkbox"
+                  value="봄"
+                  checked={season.includes("봄")}
+                  onChange={handleSeasonChange}
+              />
+              봄
+            </label>
+            <label>
+              <input
+                  type="checkbox"
+                  value="여름"
+                  checked={season.includes("여름")}
+                  onChange={handleSeasonChange}
+              />
+              여름
+            </label>
+            <label>
+              <input
+                  type="checkbox"
+                  value="가을"
+                  checked={season.includes("가을")}
+                  onChange={handleSeasonChange}
+              />
+              가을
+            </label>
+            <label>
+              <input
+                  type="checkbox"
+                  value="겨울"
+                  checked={season.includes("겨울")}
+                  onChange={handleSeasonChange}
+              />
+              겨울
+            </label>
+          </div>
+          <div>
+            <label>
+              <span className={styles.label}>설명</span>
+              <br />
+              <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  className={styles.area}
+                  placeholder="노트에 기록하세요"
+              />
+            </label>
+          </div>
 
-        <CategoryMenu onClickCategory={handleClickCategory} />
-        <DiaryItem
-            category={selectedCategory}
-            subcategory={selectedSubcategory}
-            items={selectedItems}
-            selectedImageIds={selectedImageIds} // 이미지 ID 배열을 props로 전달
-            setSelectedImageIds={setSelectedImageIds} // 이미지 ID 선택 상태를 업데이트하는 함수를 props로 전달
-        />
+          <CategoryMenu onClickCategory={handleClickCategory} />
+          <DiaryItem
+              category={selectedCategory}
+              subcategory={selectedSubcategory}
+              items={selectedItems}
+              selectedImageIds={selectedImageIds} // 이미지 ID 배열을 props로 전달
+              setSelectedImageIds={setSelectedImageIds} // 이미지 ID 선택 상태를 업데이트하는 함수를 props로 전달
+          />
         </form>
       </StyledWrap>
   );

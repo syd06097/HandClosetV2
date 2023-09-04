@@ -128,7 +128,7 @@ public class ClothesService {
         optionalClothes.ifPresent(clothes -> {
             clothes.setWearcnt(clothes.getWearcnt() + 1);
             Date existingCreatedate = clothes.getCreatedate();
-            if (date.after(existingCreatedate)) {
+            if (existingCreatedate == null ||date.after(existingCreatedate)) {
                 clothes.setCreatedate(date); // 최근의 날짜인 경우에만 createdate를 업데이트 시킴
             }
             clothesRepository.save(clothes);

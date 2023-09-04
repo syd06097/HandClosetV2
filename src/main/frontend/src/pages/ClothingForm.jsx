@@ -9,6 +9,7 @@ const ClothingForm = () => {
     const [subcategory, setSubcategory] = useState("");
     const [season, setSeason] = useState([]);
     const [description, setDescription] = useState("");
+    const [color, setColor] = useState("");
 
     const handleImageChange = (e) => { //이미지 base64 형태로
         const selectedFile = e.target.files[0];
@@ -50,6 +51,9 @@ const ClothingForm = () => {
         });
     };
 
+    const handleColorChange = (e) => {
+        setColor(e.target.value);
+    }
     const handleImageCancel = () => {
         setImgpath(null);
     };
@@ -61,13 +65,15 @@ const ClothingForm = () => {
             alert('적어도 하나의 계절을 선택해주세요.');
         } else {
             let season_str = season ? season.join() : '';
-            console.log({ category, subcategory, season_str, description });
+            console.log({ category, subcategory, season_str, description, color });
             const formData = new FormData();
             formData.append('file', e.target.file.files[0]); // 이미지 파일 추가
             formData.append('category', category);
             formData.append('subcategory', subcategory);
             formData.append('season', season_str)
             formData.append('description', description || '설명없음');
+            formData.append('color', color);
+
             for (let key of formData.keys()) {
                 console.log(key, ":", formData.get(key));
             }
@@ -84,6 +90,7 @@ const ClothingForm = () => {
                 setSubcategory("");
                 setSeason([]);
                 setDescription("");
+                setColor("");
             } catch (error) {
                 console.error(error);
             }
@@ -93,13 +100,15 @@ const ClothingForm = () => {
     const categories = [
         { name: "상의", subcategories: ["민소매","반팔티","긴팔티","블라우스/셔츠","맨투맨/후디","니트","기타"] },
         { name: "하의", subcategories: ["반바지","치마","면바지","슬랙스","청바지","트레이닝/조거","기타"] },
-        { name: "아우터", subcategories: ["트렌치 코드","코트","자켓/점퍼","야상","무스탕","패딩","후드집업","가디건/베스트","기타"] },
+        { name: "아우터", subcategories: ["트렌치 코드","코트","자켓/점퍼","블레이저","야상","무스탕","패딩","후드집업","가디건/베스트","기타"] },
         { name: "원피스", subcategories: ["미니 원피스", "미디 원피스","맥시 원피스","기타"] },
         { name: "신발", subcategories: ["운동화", "구두","부츠","샌들","기타"] },
         { name: "가방", subcategories: ["백팩", "숄더/토트백","크로스백","클러치","기타"] },
         { name: "악세사리", subcategories: ["모자", "양말","쥬얼리/시계","머플러/스카프","벨트","기타"] },
         { name: "기타", subcategories: ["이너웨어", "잠옷","수영복"] }
     ];
+
+    const availableColors = ["블랙", "네이비", "블루", "그레이", "아이보리"];
 
     return (
         <form onSubmit={handleSubmit}>
@@ -207,6 +216,18 @@ const ClothingForm = () => {
                         placeholder="설명을 입력해주세요"
                     />
                 </label>
+            </div>
+            <div>
+                <label className={styles.label}>색상</label>
+                <br />
+                <select value={color} onChange={handleColorChange} className={styles.select} required>
+                    <option value="">색상 선택</option>
+                    {availableColors.map((colorOption) => (
+                        <option key={colorOption} value={colorOption}>
+                            {colorOption}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div>
                 <button type="submit" className={styles.btn_submit}>제출</button>
