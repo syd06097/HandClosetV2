@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, {useState} from "react";
 import styles from "../style/ClothingForm.module.css"
 import axios from 'axios';
 
@@ -65,7 +64,7 @@ const ClothingForm = () => {
             alert('적어도 하나의 계절을 선택해주세요.');
         } else {
             let season_str = season ? season.join() : '';
-            console.log({ category, subcategory, season_str, description, color });
+            console.log({category, subcategory, season_str, description, color});
             const formData = new FormData();
             formData.append('file', e.target.file.files[0]); // 이미지 파일 추가
             formData.append('category', category);
@@ -98,42 +97,44 @@ const ClothingForm = () => {
     };
 
     const categories = [
-        { name: "상의", subcategories: ["민소매","반팔티","긴팔티","블라우스/셔츠","맨투맨/후디","니트","기타"] },
-        { name: "하의", subcategories: ["반바지","치마","면바지","슬랙스","청바지","트레이닝/조거","기타"] },
-        { name: "아우터", subcategories: ["트렌치 코드","코트","자켓/점퍼","블레이저","야상","무스탕","패딩","후드집업","가디건/베스트","기타"] },
-        { name: "원피스", subcategories: ["미니 원피스", "미디 원피스","맥시 원피스","기타"] },
-        { name: "신발", subcategories: ["운동화", "구두","부츠","샌들","기타"] },
-        { name: "가방", subcategories: ["백팩", "숄더/토트백","크로스백","클러치","기타"] },
-        { name: "악세사리", subcategories: ["모자", "양말","쥬얼리/시계","머플러/스카프","벨트","기타"] },
-        { name: "기타", subcategories: ["이너웨어", "잠옷","수영복"] }
+        {name: "상의", subcategories: ["민소매", "반팔티", "긴팔티", "블라우스/셔츠", "맨투맨/후디", "니트", "기타"]},
+        {name: "하의", subcategories: ["반바지", "치마", "면바지", "슬랙스", "청바지", "트레이닝/조거", "기타"]},
+        {name: "아우터", subcategories: ["트렌치 코드", "코트", "자켓/점퍼", "블레이저", "야상", "무스탕", "패딩", "후드집업", "가디건/베스트", "기타"]},
+        {name: "원피스", subcategories: ["미니 원피스", "미디 원피스", "맥시 원피스", "기타"]},
+        {name: "신발", subcategories: ["운동화", "구두", "부츠", "샌들", "기타"]},
+        {name: "가방", subcategories: ["백팩", "숄더/토트백", "크로스백", "클러치", "기타"]},
+        {name: "악세사리", subcategories: ["모자", "양말", "쥬얼리/시계", "머플러/스카프", "벨트", "기타"]},
+        {name: "기타", subcategories: ["이너웨어", "잠옷", "수영복"]}
     ];
 
-    const availableColors = ["블랙", "네이비", "블루", "그레이", "아이보리"];
+    const availableColors = ["화이트","블랙","네이비", "블루", "그레이", "아이보리","베이지","옐로우","그린","카키","핑크","레드","퍼플","브라운","연청","중청","진청","흑청"];
 
     return (
+
         <form onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
                 <label className={styles.label}>아이템추가</label>
                 <div className={styles.thumbnailContainer}>
                     {imgpath ? (
                         <div>
-                            <img src={imgpath} alt="clothing" className={styles.thumbnail} />
+                            <img src={imgpath} alt="clothing" className={styles.thumbnail}/>
                             <button onClick={handleImageCancel}>취소</button>
                         </div>
                     ) : (
-                        <div className={styles.thumbnail} />
+                        <div className={styles.thumbnail}/>
                     )}
                 </div>
                 <label for={styles.file}>
                     <div className={styles.btn_upload}>파일업로드</div>
-                    <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange} required/>
+                    <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange}
+                           required/>
                 </label>
             </div>
             <div>
                 <label className={styles.label}>카테고리</label>
                 <br/>
                 <select value={category} onChange={handleCategoryChange} className={styles.select} required>
-                    <option value="">없음</option>
+                    <option value="">카테고리 선택</option>
                     {categories.map((category) => (
                         <option key={category.name} value={category.name}>
                             {category.name}
@@ -142,7 +143,7 @@ const ClothingForm = () => {
                 </select>
             </div>
             {category && (
-                <div style={{marginTop:"1px"}}>
+                <div style={{marginTop: "1px"}}>
                     <filedset className={styles.subcat}>
                         {categories
                             .find((c) => c.name === category)
@@ -174,7 +175,7 @@ const ClothingForm = () => {
                     />
                     <span>봄</span>
                 </label>
-                <br />
+                <br/>
                 <label className={styles.btn_ckbox}>
                     <input
                         type="checkbox"
@@ -184,7 +185,7 @@ const ClothingForm = () => {
                     />
                     <span>여름</span>
                 </label>
-                <br />
+                <br/>
                 <label className={styles.btn_ckbox}>
                     <input
                         type="checkbox"
@@ -194,7 +195,7 @@ const ClothingForm = () => {
                     />
                     <span>가을</span>
                 </label>
-                <br />
+                <br/>
                 <label className={styles.btn_ckbox}>
                     <input
                         type="checkbox"
@@ -205,21 +206,10 @@ const ClothingForm = () => {
                     <span>겨울</span>
                 </label>
             </div>
-            <div>
-                <label>
-                    <span className={styles.label}>설명</span>
-                    <br />
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className={styles.area}
-                        placeholder="설명을 입력해주세요"
-                    />
-                </label>
-            </div>
+
             <div>
                 <label className={styles.label}>색상</label>
-                <br />
+                <br/>
                 <select value={color} onChange={handleColorChange} className={styles.select} required>
                     <option value="">색상 선택</option>
                     {availableColors.map((colorOption) => (
@@ -229,9 +219,24 @@ const ClothingForm = () => {
                     ))}
                 </select>
             </div>
+
+            <div>
+                    <label className={styles.label}>설명</label>
+                    <br/>
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className={styles.area}
+                        placeholder="설명을 입력해주세요"
+                    />
+            </div>
             <div>
                 <button type="submit" className={styles.btn_submit}>제출</button>
             </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         </form>
     );
 };

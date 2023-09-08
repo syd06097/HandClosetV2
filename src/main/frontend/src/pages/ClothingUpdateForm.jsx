@@ -2,11 +2,9 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 
-import {getClothes, updateClothes} from "../utils/api";
+import {getClothes} from "../utils/api";
 
 import styles from "../style/ClothingUpdateForm.module.css";
-import update from "../images/update.png";
-// import styled from "styled-components";
 import check from "../images/check.png";
 
 function ClothingUpdateForm() {
@@ -17,7 +15,7 @@ function ClothingUpdateForm() {
     const [subcategory, setSubcategory] = useState("");
     const [season, setSeason] = useState([]);
     const [description, setDescription] = useState("");
-
+    const [color, setColor] = useState("");
     useEffect(() => {
         const fetchClothes = async () => {
             try {
@@ -27,6 +25,7 @@ function ClothingUpdateForm() {
                 setSubcategory(clothesData.subcategory);
                 setSeason(clothesData.season.split(","));
                 setDescription(clothesData.description);
+                setColor(clothesData.color);
             } catch (error) {
                 console.error("Failed to fetch clothes:", error);
             }
@@ -54,19 +53,22 @@ function ClothingUpdateForm() {
             }
         });
     };
-
+    const handleColorChange = (e) => {
+        setColor(e.target.value);
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (season.length === 0) {
             alert("적어도 하나의 계절을 선택해주세요.");
         } else {
             let season_str = season ? season.join() : "";
-            console.log({category, subcategory, season_str, description});
+            console.log({category, subcategory, season_str, description,color});
             const formData = new FormData();
             formData.append("category", category);
             formData.append("subcategory", subcategory);
             formData.append("season", season_str);
             formData.append("description", description || "설명없음");
+            formData.append('color', color);
             for (let key of formData.keys()) {
                 console.log(key, ":", formData.get(key));
             }
@@ -149,6 +151,7 @@ function ClothingUpdateForm() {
         },
         {name: "기타", subcategories: ["이너웨어", "잠옷", "수영복"]},
     ];
+    const availableColors = ["화이트","블랙","네이비", "블루", "그레이", "아이보리","베이지","옐로우","그린","카키","핑크","레드","퍼플","브라운","연청","중청","진청","흑청"];
 
     return (
         <div>
@@ -200,6 +203,18 @@ function ClothingUpdateForm() {
                     </div>
                 )}
                 <br/>
+                <div>
+                    <label className={styles.label}>색상</label>
+                    <br />
+                    <select value={color} onChange={handleColorChange} className={styles.select} required>
+                        <option value="">색상 선택</option>
+                        {availableColors.map((colorOption) => (
+                            <option key={colorOption} value={colorOption} >
+                                {colorOption}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <span className={styles.label}>계절</span>
                 <div className={styles.ckbox_group}>
                     <label className={styles.btn_ckbox}>
