@@ -121,6 +121,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  //align-items: flex-start;
 `;
 const Header = styled.div`
   display: flex;
@@ -150,7 +151,7 @@ const ThumbnailImage = styled.img`
 
 const ClothesItem = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 20px;
 `;
 
@@ -159,6 +160,11 @@ const ItemImage = styled.img`
   height: 100px;
   object-fit: cover;
   margin-right: 20px;
+  //align-items: flex-start;
+  //margin-left: 9%; /* 새로 추가한 부분 */
+  border: 1px solid lightgray;
+  border-radius: 18px;
+  overflow: hidden;
 `;
 
 const Details = styled.div`
