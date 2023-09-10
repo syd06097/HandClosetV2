@@ -24,8 +24,6 @@ const DiaryAdd = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedImageIds, setSelectedImageIds] = useState([]); // Add this line
 
-
-
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
@@ -51,10 +49,9 @@ const DiaryAdd = () => {
     setThumbnailpath(null);
     const fileInput = document.getElementById(styles.file); // ID를 통해 입력 요소 가져오기
     if (fileInput) {
-      fileInput.value = ''; // 입력 요소의 값을 초기화하여 선택한 파일 제거
+      fileInput.value = ""; // 입력 요소의 값을 초기화하여 선택한 파일 제거
     }
   };
-
 
   const handleSeasonChange = (e) => {
     const selectedSeason = e.target.value;
@@ -75,36 +72,30 @@ const DiaryAdd = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log( "봐봐", e.target.file.files[0]);
-    if (season.length === 0 || selectedImageIds.length === 0) { // Use selectedImageIds here
+    console.log("봐봐", e.target.file.files[0]);
+    if (season.length === 0 || selectedImageIds.length === 0) {
+      // Use selectedImageIds here
       alert("적어도 하나의 계절과 아이템을 선택해주세요.");
-
     } else {
       let season_str = season ? season.join() : "";
       const formData = new FormData();
 
       // 파일을 업로드할 때 선택한 파일이 없는 경우
       if (!e.target.file.files[0]) {
-
-        // const defaultImageFile = new File([DefaultImage], 'default.png', { type: 'image/png' });
-        // formData.append('file', defaultImageFile);
         const response = await fetch(DefaultImage);
         const defaultImageBlob = await response.blob();
+        const defaultImageFile = new File([defaultImageBlob], "default.png", {
+          type: "image/png",
+        });
 
-// Blob 객체를 File 객체로 변환
-        const defaultImageFile = new File([defaultImageBlob], "default.png", { type: "image/png" });
-
-// FormData에 추가
         formData.append("file", defaultImageFile);
-
       } else {
-        formData.append('file', e.target.file.files[0]);
+        formData.append("file", e.target.file.files[0]);
       }
       formData.append("season", season_str);
       formData.append("date", formattedDate);
       formData.append("imageIds", selectedImageIds.join()); // Add selected image IDs
-      formData.append('note', note || '');
-      //console.log(selectedImageIds.join());
+      formData.append("note", note || "");
 
       for (let key of formData.keys()) {
         console.log(key, ":", formData.get(key));
@@ -113,8 +104,8 @@ const DiaryAdd = () => {
       try {
         const response = await axios.post("/api/diary", formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
         const data = response.data;
         console.log(data);
@@ -127,76 +118,92 @@ const DiaryAdd = () => {
   };
 
   return (
-      <StyledWrap>
-        <form onSubmit={handleSubmit}>
-          {/*<Container>*/}
-          <Header>
-            <BackButton onClick={() => navigate("/Diary")}>
-              <img src={back} alt="back" style={{ width: "28px" }} />
-            </BackButton>
-            <SubmitButton>
-              <button type="submit" ><img src={check} alt="check" style={{ width: "28px" }} /></button>
-            </SubmitButton>
+    <StyledWrap>
+      <form onSubmit={handleSubmit} style={{ marginTop: "0px" }}>
+        {/*<Container>*/}
+        <Header>
+          <BackButton onClick={() => navigate("/Diary")}>
+            <img src={back} alt="back" style={{ width: "28px" }} />
+          </BackButton>
+          <SubmitButton>
+            <button type="submit">
+              <img src={check} alt="check" style={{ width: "28px" }} />
+            </button>
+          </SubmitButton>
+        </Header>
+        {/*</Container>*/}
+        {/*<h2>Add Diary Entry for: {selectedDate}</h2>*/}
+        {/*<h2>Add Diary Entry for: {formattedDate}</h2>*/}
+        {/* Diary 추가 폼 또는 컴포넌트를 표시할 수 있습니다. */}
 
-          </Header>
-          {/*</Container>*/}
-          {/*<h2>Add Diary Entry for: {selectedDate}</h2>*/}
-          <h2>Add Diary Entry for: {formattedDate}</h2>
-          {/* Diary 추가 폼 또는 컴포넌트를 표시할 수 있습니다. */}
-
-          <div className={styles.formGroup}>
-            <label className={styles.label}>아이템추가</label>
-            <div className={styles.thumbnailContainer}>
-              {thumbnailpath ? (
-                  <div>
-                    <img src={thumbnailpath} alt="thumbnail" className={styles.thumbnail}/>
-                    <button onClick={handleImageCancel}>취소</button>
-                  </div>
-              ) : (
-                  <div className={styles.thumbnail}/>
-              )}
-            </div>
-            <label htmlFor={styles.file}>
-              <div className={styles.btn_upload}>파일업로드</div>
-              <input type="file" name="file" id={styles.file} accept="image/*" onChange={handleImageChange}  />
-            </label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>다이어리 추가</label>
+          <div className={styles.thumbnailContainer}>
+            {thumbnailpath ? (
+              <div>
+                <img
+                  src={thumbnailpath}
+                  alt="thumbnail"
+                  className={styles.thumbnail}
+                />
+                <button onClick={handleImageCancel}>취소</button>
+              </div>
+            ) : (
+              <div className={styles.thumbnail} />
+            )}
           </div>
-          <div>
-            <label>
+          <label htmlFor={styles.file}>
+            <div className={styles.btn_upload}>파일업로드</div>
+            <input
+              type="file"
+              name="file"
+              id={styles.file}
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </label>
+        </div>
+        <div className={styles.formAlign}>
+          <span className={styles.label}>계절</span>
+          <div className={styles.ckbox_group}>
+            <label className={styles.btn_ckbox}>
               <input
-                  type="checkbox"
-                  value="봄"
-                  checked={season.includes("봄")}
-                  onChange={handleSeasonChange}
+                type="checkbox"
+                value="봄"
+                checked={season.includes("봄")}
+                onChange={handleSeasonChange}
               />
-              봄
+              <span>봄</span>
             </label>
-            <label>
+            <br />
+            <label className={styles.btn_ckbox}>
               <input
-                  type="checkbox"
-                  value="여름"
-                  checked={season.includes("여름")}
-                  onChange={handleSeasonChange}
+                type="checkbox"
+                value="여름"
+                checked={season.includes("여름")}
+                onChange={handleSeasonChange}
               />
-              여름
+              <span>여름</span>
             </label>
-            <label>
+            <br />
+            <label className={styles.btn_ckbox}>
               <input
-                  type="checkbox"
-                  value="가을"
-                  checked={season.includes("가을")}
-                  onChange={handleSeasonChange}
+                type="checkbox"
+                value="가을"
+                checked={season.includes("가을")}
+                onChange={handleSeasonChange}
               />
-              가을
+              <span>가을</span>
             </label>
-            <label>
+            <br />
+            <label className={styles.btn_ckbox}>
               <input
-                  type="checkbox"
-                  value="겨울"
-                  checked={season.includes("겨울")}
-                  onChange={handleSeasonChange}
+                type="checkbox"
+                value="겨울"
+                checked={season.includes("겨울")}
+                onChange={handleSeasonChange}
               />
-              겨울
+              <span>겨울</span>
             </label>
           </div>
           <div>
@@ -204,32 +211,27 @@ const DiaryAdd = () => {
               <span className={styles.label}>설명</span>
               <br />
               <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  className={styles.area}
-                  placeholder="노트에 기록하세요"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className={styles.area}
+                placeholder="노트에 기록하세요"
               />
             </label>
           </div>
+        </div>
 
-          <CategoryMenu onClickCategory={handleClickCategory} />
-          <DiaryItem
-              category={selectedCategory}
-              subcategory={selectedSubcategory}
-              items={selectedItems}
-              selectedImageIds={selectedImageIds} // 이미지 ID 배열을 props로 전달
-              setSelectedImageIds={setSelectedImageIds} // 이미지 ID 선택 상태를 업데이트하는 함수를 props로 전달
-          />
-        </form>
-      </StyledWrap>
+        <CategoryMenu onClickCategory={handleClickCategory} />
+        <DiaryItem
+          category={selectedCategory}
+          subcategory={selectedSubcategory}
+          items={selectedItems}
+          selectedImageIds={selectedImageIds} // 이미지 ID 배열을 props로 전달
+          setSelectedImageIds={setSelectedImageIds} // 이미지 ID 선택 상태를 업데이트하는 함수를 props로 전달
+        />
+      </form>
+    </StyledWrap>
   );
 };
-// const Container = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-// `;
 
 const Header = styled.div`
   display: flex;
@@ -247,10 +249,10 @@ const BackButton = styled.div`
 const SubmitButton = styled.div`
   margin-top: 25px;
   margin-right: 9%;
-   
-  button{
-     all:unset;
-   }
+
+  button {
+    all: unset;
+  }
 `;
 const StyledWrap = styled.div`
   position: relative;
@@ -264,58 +266,6 @@ const StyledWrap = styled.div`
     position: relative;
     z-index: 1;
   }
-`;
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-  justify-content: center;
-  align-items: center;
-  @media (max-width: 768px) {
-    margin-top: 50px;
-  }
-  @media (min-width: 768px) {
-    margin-top: 100px;
-  }
-`;
-
-const ThumbnailContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 200px;
-  height: 200px;
-  border: 1px solid #ccc;
-  margin-bottom: 15px;
-`;
-
-const Thumbnail = styled.img`
-  display: flex;
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-  margin: auto;
-`;
-
-const UploadButton = styled.div`
-  width: 150px;
-  height: 30px;
-  background: #fff;
-  border: 1px solid rgb(77, 77, 77);
-  border-radius: 10px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &:hover {
-    background: rgb(77, 77, 77);
-    color: #fff;
-  }
-`;
-
-const FileInput = styled.input`
-  display: none;
 `;
 
 export default DiaryAdd;

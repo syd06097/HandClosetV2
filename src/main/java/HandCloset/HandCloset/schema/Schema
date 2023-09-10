@@ -7,7 +7,8 @@ CREATE TABLE clothes
    season VARCHAR(255) NOT NULL,
    description TEXT,
    wearcnt INT ,
-   createdate DATE
+   createdate DATE,
+   color VARCHAR(255)
 );
 
 CREATE TABLE diary

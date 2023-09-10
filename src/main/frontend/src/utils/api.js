@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 const getClothesByCategoryAndSubcategory = (category, subcategory) => {
@@ -45,16 +44,22 @@ const updateClothes = async (id, updatedData) => {
 
 const getClothesByImageIds = (imageIds) => {
   const imageIdQuery = imageIds.join("&imageIds=");
-  return axios.get(`/api/clothing/byImageIds?imageIds=${imageIdQuery}`).then((response) => {
-    const clothesWithImageUrls = response.data.map((clothes) => ({
-      ...clothes,
-      image: `/api/clothing/images/${clothes.id}`,
-    }));
-    return clothesWithImageUrls;
-  });
+  return axios
+    .get(`/api/clothing/byImageIds?imageIds=${imageIdQuery}`)
+    .then((response) => {
+      const clothesWithImageUrls = response.data.map((clothes) => ({
+        ...clothes,
+        image: `/api/clothing/images/${clothes.id}`,
+      }));
+      return clothesWithImageUrls;
+    });
 };
 
-
-
-
-export { getClothesByCategoryAndSubcategory, getAllClothesIds, getClothes,deleteClothes,updateClothes, getClothesByImageIds, };
+export {
+  getClothesByCategoryAndSubcategory,
+  getAllClothesIds,
+  getClothes,
+  deleteClothes,
+  updateClothes,
+  getClothesByImageIds,
+};

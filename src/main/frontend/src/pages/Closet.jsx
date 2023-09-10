@@ -16,7 +16,6 @@ function Closet() {
 
   return (
     <div>
-
       <StyledWrap>
         <CategoryMenu onClickCategory={handleClickCategory} />
         <CategoryItem

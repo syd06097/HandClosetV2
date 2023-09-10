@@ -1,12 +1,94 @@
-
-
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styled from "styled-components";
 import DiaryThumbnail from "../components/DiaryThumbnail";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+const Diary = () => {
+  const [value, onChange] = useState(new Date());
+  const navigate = useNavigate();
+  const [diaryEntries, setDiaryEntries] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  useEffect(() => {
+    // Fetch diary entries from API and update the state
+    axios.get("/api/diary/entries").then((response) => {
+      setDiaryEntries(response.data);
+    });
+  }, []);
+
+  const tileContent = ({ date, view }) => {
+    // Check if there's a diary entry for the current date
+    const hasDiaryEntry = diaryEntries.some(
+      (entry) =>
+        new Date(entry.date).getDate() === date.getDate() &&
+        new Date(entry.date).getMonth() === date.getMonth() &&
+        new Date(entry.date).getFullYear() === date.getFullYear()
+    );
+
+    if (hasDiaryEntry) {
+      return (
+        <div
+          style={{
+            backgroundColor: "#364054",
+            borderRadius: "50%",
+            width: "6px",
+            height: "6px",
+            top: "5px", // 위치 조정
+            position: "relative", // 위치 조정을 위한 position 설정
+            margin: "auto", // 수평 가운데 정렬
+          }}
+        ></div>
+      );
+    }
+    return (
+      <div
+        style={{
+          width: "6px",
+          height: "6px",
+          top: "5px", // 위치 조정
+          position: "relative", // 위치 조정을 위한 position 설정
+          margin: "auto", // 수평 가운데 정렬
+        }}
+      ></div>
+    );
+  };
+
+  const handleAddDiary = () => {
+    // 선택한 날짜를 UTC 시간대로 변환하여 URL에 포함시킴
+    const selectedDateUTC = new Date(
+      Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())
+    );
+
+    navigate(
+      `/DiaryAdd?selectedDate=${encodeURIComponent(
+        selectedDateUTC.toISOString()
+      )}`
+    );
+  };
+
+  const handleDateClick = (value) => {
+    setSelectedDate(value); // Update selectedDate state when a date is clicked
+  };
+
+  return (
+    <div>
+      <Header>
+        <PlusButton onClick={handleAddDiary}>+</PlusButton>
+      </Header>
+      <CustomCalendar
+        onChange={onChange}
+        value={value}
+        tileContent={tileContent}
+        onClickDay={handleDateClick}
+      />
+      {selectedDate && <DiaryThumbnail selectedDate={selectedDate} />}{" "}
+      {/* Render DiaryEntryDetails if a date is selected */}
+    </div>
+  );
+};
 
 const CustomCalendar = styled(Calendar)`
   margin-top: 25px;
@@ -46,81 +128,5 @@ const PlusButton = styled.div`
   margin-right: 9%;
   font-size: 45px;
 `;
-
-const Diary = () => {
-  const [value, onChange] = useState(new Date());
-  const navigate = useNavigate();
-  const [diaryEntries, setDiaryEntries] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  useEffect(() => {
-    // Fetch diary entries from API and update the state
-    axios.get("/api/diary/entries").then((response) => {
-      setDiaryEntries(response.data);
-    });
-  }, []);
-
-  const tileContent = ({ date, view }) => {
-    // Check if there's a diary entry for the current date
-    const hasDiaryEntry = diaryEntries.some(
-        (entry) =>
-            new Date(entry.date).getDate() === date.getDate() &&
-            new Date(entry.date).getMonth() === date.getMonth() &&
-            new Date(entry.date).getFullYear() === date.getFullYear()
-    );
-
-    if (hasDiaryEntry) {
-      return <div style={{
-        backgroundColor: "#364054",
-        borderRadius: "50%",
-        width: "6px",
-        height: "6px",
-        top: "5px", // 위치 조정
-        position: "relative", // 위치 조정을 위한 position 설정
-        margin: "auto", // 수평 가운데 정렬
-
-
-      }}></div>;
-    }
-    return <div style={{
-
-      width: "6px",
-      height: "6px",
-      top: "5px", // 위치 조정
-      position: "relative", // 위치 조정을 위한 position 설정
-      margin: "auto", // 수평 가운데 정렬
-
-
-    }}></div>;
-  };
-
-  const handleAddDiary = () => {
-    // 선택한 날짜를 UTC 시간대로 변환하여 URL에 포함시킴
-    const selectedDateUTC = new Date(
-      Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())
-    );
-
-    navigate(
-      `/DiaryAdd?selectedDate=${encodeURIComponent(
-        selectedDateUTC.toISOString()
-      )}`
-    );
-  };
-
-  const handleDateClick = (value) => {
-    setSelectedDate(value); // Update selectedDate state when a date is clicked
-  };
-
-  return (
-    <div>
-      <Header>
-        <PlusButton onClick={handleAddDiary}>+</PlusButton>
-      </Header>
-      <CustomCalendar onChange={onChange} value={value} tileContent={tileContent}  onClickDay={handleDateClick} />
-      {selectedDate && <DiaryThumbnail selectedDate={selectedDate} />} {/* Render DiaryEntryDetails if a date is selected */}
-
-    </div>
-  );
-};
 
 export default Diary;

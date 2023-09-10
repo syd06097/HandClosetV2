@@ -3,10 +3,15 @@ import { getAllClothesIds } from "../utils/api"; // API 호출 함수 추가
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-function DiaryItem({ category, subcategory, items, selectedImageIds,  setSelectedImageIds }) {
+function DiaryItem({
+  category,
+  subcategory,
+  items,
+  selectedImageIds,
+  setSelectedImageIds,
+}) {
   const [ids, setIds] = useState([]); // ID 목록 상태 추가
   const navigate = useNavigate();
-  // const [selectedImageIds, setSelectedImageIds] = useState([]);
 
   useEffect(() => {
     const fetchIds = async () => {
@@ -31,20 +36,6 @@ function DiaryItem({ category, subcategory, items, selectedImageIds,  setSelecte
     });
   };
 
-  // const handleClickImage = (item, index) => {
-  //     let itemId;
-  //
-  //     if (category === "전체") {
-  //         // "전체" 카테고리에서는 ids 배열을 사용하여 이미지의 ID를 가져옴
-  //         itemId = ids[index];
-  //     } else {
-  //         // 다른 카테고리에서는 item 객체에 ID가 있음
-  //         itemId = item.id;
-  //     }
-  //
-  //     console.log(itemId);
-  //     navigate(`/clothes/${itemId}`);
-  // };
   return (
     <div>
       <ImageGrid>
@@ -76,7 +67,7 @@ const ImageGrid = styled.div`
   grid-gap: 20px;
   margin-left: 9%;
   margin-right: 9%;
-  margin-top: 50px;
+  //margin-top: 50px;
   margin-bottom: 100px;
 `;
 
@@ -87,7 +78,7 @@ const ImageItem = styled.div`
   padding-bottom: 100%; /* 정사각형 비율을 유지하기 위한 패딩 */
   overflow: hidden;
   border: ${({ isSelected }) =>
-      isSelected ? "1px solid red" : "1px solid lightgray"};
+    isSelected ? "1px solid red" : "1px solid lightgray"};
   border-radius: 18px;
 `;
 

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getClothes, deleteClothes } from "../utils/api";
@@ -104,8 +103,8 @@ const UpdateButton = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 300px;
-  height: 300px;
+  width: 330px;
+  height: 330px;
   margin-top: 20px;
   border: 1px solid lightgray;
   border-radius: 18px;
@@ -128,13 +127,13 @@ const Details = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 20px;
-  width: 82%;
+  width: 85%;
 `;
 
 const Square = styled.div`
   width: 100px;
   height: 123px;
-  margin: 0% 2%;
+  margin: 0% 3%;
   padding: 1%;
   border: 1px solid lightgray;
   border-radius: 8px;
