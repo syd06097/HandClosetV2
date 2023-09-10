@@ -288,7 +288,7 @@ form {
   width: 150px;
   height: 35px;
   background: url("../images/arrow-down-3101.png") calc(100% - 5px) center
-  no-repeat;
+    no-repeat;
   background-size: 20px;
   padding: 5px 30px 5px 10px;
   border-radius: 4px;
@@ -342,19 +342,17 @@ form {
 }
 
 .ckbox_group input[type="checkbox"] {
-    display: none;
-    cursor: pointer;
+  display: none;
+  cursor: pointer;
 }
 
-
-input[type="checkbox"]:checked + .btn_ckbox{
-    background-color: #333;
-    color: #fff;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+input[type="checkbox"]:checked + .btn_ckbox {
+  background-color: #333;
+  color: #fff;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-
-.ckbox_group{
+.ckbox_group {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -383,7 +381,7 @@ input[type="checkbox"]:checked + .btn_ckbox{
 .area:focus {
   outline: none;
 }
-.btn_back{
+.btn_back {
   position: absolute;
   top: 25px;
   left: 9%;
@@ -428,4 +426,5 @@ input[type="submit"] {
   font-weight: bold;
   float: left;
   font-size: 19px;
+  color: #333;
 }

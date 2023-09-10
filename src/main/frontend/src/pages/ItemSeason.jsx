@@ -75,6 +75,7 @@ const ItemSeason = () => {
             textAlign: "left",
             float: "left",
             marginLeft: "9%",
+            color: "#333",
           }}
         >
           <h3>
@@ -128,6 +129,7 @@ const ItemListItem = styled.li`
   margin-bottom: 16px;
   font-size: 18px;
   align-items: center;
+  color: #333;
 `;
 
 const IconImage = styled.img`

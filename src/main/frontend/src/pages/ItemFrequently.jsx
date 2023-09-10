@@ -75,6 +75,7 @@ const ItemFrequently = () => {
             textAlign: "left",
             float: "left",
             marginLeft: "9%",
+            color: "#333",
           }}
         >
           <h3>
@@ -145,6 +146,7 @@ const ItemContainer = styled.div`
   align-items: flex-start;
   overflow: scroll;
   padding-bottom: 100px;
+  color: #333;
 `;
 const ItemCard = styled.div`
   display: flex;
@@ -168,6 +170,7 @@ const ImageSquareWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  
 `;
 
 const Image = styled.img`

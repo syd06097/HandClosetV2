@@ -81,39 +81,41 @@ function DiaryDetail() {
 
   // 다이어리와 의류 데이터를 화면에 출력
   return (
-    <Container>
-      <Header>
-        <BackButton onClick={() => navigate("/Diary")}>
-          <img src={back} alt="back" style={{ width: "28px" }} />
-        </BackButton>
-        <TrashWrapper onClick={handleDelete}>
-          <img src={trash} alt="trash" />
-        </TrashWrapper>
-      </Header>
-      <ThumbnailImage
-        src={`/api/diary/images?thumbnailpath=${encodeURIComponent(
-          diary.thumbnailpath
-        )}`}
-        alt="Thumbnail"
-      />
+      <div>
+      <Container>
+        <Header>
+          <BackButton onClick={() => navigate("/Diary")}>
+            <img src={back} alt="back" style={{ width: "28px" }} />
+          </BackButton>
+          <TrashWrapper onClick={handleDelete}>
+            <img src={trash} alt="trash" />
+          </TrashWrapper>
+        </Header>
+        <ThumbnailImage
+            src={`/api/diary/images?thumbnailpath=${encodeURIComponent(
+                diary.thumbnailpath
+            )}`}
+            alt="Thumbnail"
+        />
+      </Container>
+        {clothesData.map((clothes) => (
+            <div>
+              <ClothesItem key={clothes.id}>
+                <ItemImage
+                    src={`/api/clothing/images/${clothes.id}`}
+                    alt={clothes.description}
+                />
+                <Details>
+                  <Elements>카테고리: {clothes.category}</Elements>
+                  <Elements>계절: {clothes.season}</Elements>
+                  <Elements>착용횟수: {clothes.wearcnt}회</Elements>
+                  <Elements>등록일: {formatDate(clothes.createdate)}</Elements>
+                </Details>
+              </ClothesItem>
+            </div>
+        ))}
 
-      {clothesData.map((clothes) => (
-        <div>
-          <ClothesItem key={clothes.id}>
-            <ItemImage
-              src={`/api/clothing/images/${clothes.id}`}
-              alt={clothes.description}
-            />
-            <Details>
-              <Elements>카테고리: {clothes.category}</Elements>
-              <Elements>계절: {clothes.season}</Elements>
-              <Elements>착용횟수: {clothes.wearcnt}회</Elements>
-              <Elements>등록일: {formatDate(clothes.createdate)}</Elements>
-            </Details>
-          </ClothesItem>
-        </div>
-      ))}
-    </Container>
+      </div>
   );
 }
 
@@ -151,8 +153,9 @@ const ThumbnailImage = styled.img`
 
 const ClothesItem = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* align-items를 flex-start로 변경합니다. */
   margin-top: 20px;
+  margin-left: 9%;
 `;
 
 const ItemImage = styled.img`
@@ -172,7 +175,10 @@ const Details = styled.div`
   flex-direction: column;
 `;
 const Elements = styled.div`
-  float: left;
+  text-align: left;
+  margin-bottom: 3px;
+  font-weight: bold;
+  color:#333;
 `;
 
 export default DiaryDetail;

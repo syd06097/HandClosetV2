@@ -98,7 +98,7 @@ const CustomCalendar = styled(Calendar)`
   .react-calendar__navigation__label {
     font-size: 23px; // 현재 년, 월의 폰트 크기를 조정
     font-weight: bold;
-    color: #364054;
+    color: #333;
   }
   .react-calendar__tile--now {
     background-color: #FFA7A7 !important; // 오늘 날짜의 배경색을 빨간색으로 변경

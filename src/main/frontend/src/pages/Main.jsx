@@ -373,6 +373,7 @@ const Container = styled.div`
   align-items: center;
   overflow: auto;
   margin-bottom: 100px;
+  color: #333;
 `;
 
 const ButtonContainer = styled.div`
@@ -391,7 +392,7 @@ const Button = styled.div`
   height: 80px;
   background-color: #efefef;
   border-radius: 8px;
-  color: black;
+  color: #333;
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 15px;
@@ -413,6 +414,7 @@ const ImageContainer = styled.div`
     text-align: center;
     font-size: 15px;
     padding-bottom: 10px;
+    color: #333;
   }
 `;
 const ImageWrapper = styled.div`
@@ -441,7 +443,8 @@ const Right = styled.div`
   position: absolute;
   right: 0;
   width: 200px;
-  color: rgb(54, 64, 84);
+  /*color: rgb(54, 64, 84);*/
+  color: #333;
   margin: 50px 0;
 `;
 const Icon = styled.img`
@@ -453,7 +456,8 @@ const Icon = styled.img`
 `;
 
 const WeatherStatus = styled.h5`
-  color: rgb(54, 64, 84);
+  /*color: rgb(54, 64, 84);*/
+  color: #333;
   text-align: center;
   margin-top: 0;
 `;
@@ -477,7 +481,8 @@ const Bottom = styled.div`
   bottom: 10px;
   display: inline-flex;
   justify-content: center;
-  color: rgb(54, 64, 84);
+  /*color: rgb(54, 64, 84);*/
+  color: #333;
   left: 1px;
 `;
 
