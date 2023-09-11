@@ -103,8 +103,8 @@ const Main = () => {
     // 기온에 따른 추천 서브 카테고리 설정
     if (weatherData) {
       //임시 지정
-      const temperature = Math.round(10);
-      // const temperature = Math.round(weatherData.main.temp);
+      // const temperature = Math.round(10);
+      const temperature = Math.round(weatherData.main.temp);
       const strCategory = getRecommendedCategory(temperature);
       const recommendedCategory = strCategory.split(",");
       const dataSub = getRecommendedCategorySituation(temperature);
