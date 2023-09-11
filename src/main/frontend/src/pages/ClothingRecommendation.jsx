@@ -75,19 +75,26 @@ const ClothingRecommendation = () => {
 
   const StyledImage = styled.img`
     width: 70px;
-    height: auto;
+    //height: auto;
+    height: 70px;
+    margin-right: 15px;
   `;
   const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
     margin-top: 40px;
+    width:82%;
+    margin-left: 9%;
   `;
 
   const Button = styled.button`
-    padding: 10px 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width:33.33%;
     border: none;
     font-size: 16px;
+    font-weight: bold;
     text-align: center;
     font-family: "paybooc-Light", sans-serif;
     transition: 0.25s;
@@ -115,6 +122,7 @@ const ClothingRecommendation = () => {
             handleButtonClick("/api/clothing/recommendation", "many")
           }
           active={activeButton === "many"}
+          style={{borderRadius:"10px 0px 0px 10px"}}
         >
           많이 입은
         </Button>
@@ -126,92 +134,107 @@ const ClothingRecommendation = () => {
         >
           적게 입은
         </Button>
+        <Button  style={{borderRadius:"0px 10px 10px 0px"}}>TPO별 코디</Button>
       </ButtonContainer>
-      <hr
+
+      {/*<hr*/}
+      {/*  style={{*/}
+      {/*    height: "1px",*/}
+      {/*    marginBottom: "50px",*/}
+      {/*    border: "0",*/}
+      {/*    backgroundColor: "lightgray",*/}
+      {/*  }}*/}
+      {/*/>*/}
+      <div
         style={{
-          height: "1px",
-          marginBottom: "50px",
+          backgroundColor: "#EFEFEF",
           border: "0",
-          backgroundColor: "lightgray",
+          width: "82%",
+          marginLeft: "9%",
+          marginTop:"50px",
+          paddingTop: "30px",
+          paddingBottom: "10px",
+          borderRadius: "18px",
         }}
-      />
-      {recommendedClothes.length > 0 ? (
-        <div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: "40px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ position: "absolute", left: "15%" }}>
-                아우터 :&nbsp;
-              </span>
-              {recommendedClothes
-                .filter((clothes) => clothes.category === "아우터")
-                .slice(0, 2)
-                .map((clothes) => (
-                  <StyledImage src={clothes.imageUrl} alt={clothes.id} />
-                ))}
-              {recommendedClothes.filter(
-                (clothes) => clothes.category === "아우터"
-              ).length === 0 && <span>옷이 없어요</span>}
+      >
+        {recommendedClothes.length > 0 ? (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginBottom: "40px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <span style={{ position: "absolute", left: "15%", fontWeight:"bold",color: "#333" }}>
+                  아우터 :&nbsp;
+                </span>
+                {recommendedClothes
+                  .filter((clothes) => clothes.category === "아우터")
+                  .slice(0, 2)
+                  .map((clothes) => (
+                    <StyledImage src={clothes.imageUrl} alt={clothes.id} />
+                  ))}
+                {recommendedClothes.filter(
+                  (clothes) => clothes.category === "아우터"
+                ).length === 0 && <span>옷이 없어요</span>}
+              </div>
             </div>
-          </div>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: "40px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ position: "absolute", left: "15%" }}>
-                상의 :&nbsp;
-              </span>
-              {recommendedClothes
-                .filter((clothes) => clothes.category === "상의")
-                .slice(0, 2)
-                .map((clothes) => (
-                  <StyledImage src={clothes.imageUrl} alt={clothes.id} />
-                ))}
-              {recommendedClothes.filter(
-                (clothes) => clothes.category === "상의"
-              ).length === 0 && <span> 옷이 없어요</span>}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginBottom: "40px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <span style={{ position: "absolute", left: "15%", fontWeight:"bold", color: "#333" }}>
+                  상의 :&nbsp;
+                </span>
+                {recommendedClothes
+                  .filter((clothes) => clothes.category === "상의")
+                  .slice(0, 2)
+                  .map((clothes) => (
+                    <StyledImage src={clothes.imageUrl} alt={clothes.id} />
+                  ))}
+                {recommendedClothes.filter(
+                  (clothes) => clothes.category === "상의"
+                ).length === 0 && <span> 옷이 없어요</span>}
+              </div>
             </div>
-          </div>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginBottom: "40px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ position: "absolute", left: "15%" }}>
-                하의 :&nbsp;
-              </span>
-              {recommendedClothes
-                .filter((clothes) => clothes.category === "하의")
-                .slice(0, 2)
-                .map((clothes) => (
-                  <StyledImage src={clothes.imageUrl} alt={clothes.id} />
-                ))}
-              {recommendedClothes.filter(
-                (clothes) => clothes.category === "하의"
-              ).length === 0 && <span> 옷이 없어요</span>}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginBottom: "40px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <span style={{ position: "absolute", left: "15%", fontWeight:"bold",color: "#333" }}>
+                  하의 :&nbsp;
+                </span>
+                {recommendedClothes
+                  .filter((clothes) => clothes.category === "하의")
+                  .slice(0, 2)
+                  .map((clothes) => (
+                    <StyledImage src={clothes.imageUrl} alt={clothes.id} />
+                  ))}
+                {recommendedClothes.filter(
+                  (clothes) => clothes.category === "하의"
+                ).length === 0 && <span> 옷이 없어요</span>}
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <p>추천할 옷이 존재하지 않습니다.</p>
-      )}
+        ) : (
+          <p>추천할 옷이 존재하지 않습니다.</p>
+        )}
+      </div>
     </div>
   );
 };

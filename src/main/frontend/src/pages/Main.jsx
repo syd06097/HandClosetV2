@@ -102,7 +102,9 @@ const Main = () => {
   useEffect(() => {
     // 기온에 따른 추천 서브 카테고리 설정
     if (weatherData) {
-      const temperature = Math.round(weatherData.main.temp);
+      //임시 지정
+      const temperature = Math.round(10);
+      // const temperature = Math.round(weatherData.main.temp);
       const strCategory = getRecommendedCategory(temperature);
       const recommendedCategory = strCategory.split(",");
       const dataSub = getRecommendedCategorySituation(temperature);
@@ -158,7 +160,7 @@ const Main = () => {
     } else if (temperature >= 12) {
       return "자켓,가디건,후드집업,스타킹";
     } else if (temperature >= 9) {
-      return "자켓,트렌치코드,야상,니트";
+      return "자켓,트렌치코트,야상,니트";
     } else if (temperature >= 5) {
       return "코트,무스탕,니트,슬랙스";
     } else {
@@ -412,7 +414,7 @@ const ImageContainer = styled.div`
 
   p {
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     padding-bottom: 10px;
     color: #333;
   }
