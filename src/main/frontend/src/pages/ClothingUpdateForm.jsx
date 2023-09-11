@@ -117,7 +117,7 @@ function ClothingUpdateForm() {
     {
       name: "아우터",
       subcategories: [
-        "트렌치 코드",
+        "트렌치 코트",
         "코트",
         "자켓/점퍼",
         "블레이저",
