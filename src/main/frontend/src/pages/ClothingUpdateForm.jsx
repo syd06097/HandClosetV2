@@ -245,43 +245,50 @@ function ClothingUpdateForm() {
           <br />
           <span className={styles.label}>계절</span>
           <div className={styles.ckbox_group}>
-            <label className={styles.btn_ckbox}>
-              <input
+            <input
                 type="checkbox"
                 value="봄"
                 checked={season.includes("봄")}
                 onChange={handleSeasonChange}
-              />
+                id="spring"
+            />
+            <label className={styles.btn_ckbox} htmlFor="spring">
               <span>봄</span>
             </label>
             <br />
-            <label className={styles.btn_ckbox}>
-              <input
+
+            <input
                 type="checkbox"
                 value="여름"
                 checked={season.includes("여름")}
                 onChange={handleSeasonChange}
-              />
+                id="summer"
+            />
+            <label className={styles.btn_ckbox} htmlFor="summer">
               <span>여름</span>
             </label>
             <br />
-            <label className={styles.btn_ckbox}>
-              <input
+
+            <input
                 type="checkbox"
                 value="가을"
                 checked={season.includes("가을")}
                 onChange={handleSeasonChange}
-              />
+                id="autumn"
+            />
+            <label className={styles.btn_ckbox} htmlFor="autumn">
               <span>가을</span>
             </label>
             <br />
-            <label className={styles.btn_ckbox}>
-              <input
+
+            <input
                 type="checkbox"
                 value="겨울"
                 checked={season.includes("겨울")}
                 onChange={handleSeasonChange}
-              />
+                id="winter"
+            />
+            <label className={styles.btn_ckbox} htmlFor="winter">
               <span>겨울</span>
             </label>
           </div>
