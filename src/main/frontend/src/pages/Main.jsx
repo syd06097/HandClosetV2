@@ -102,6 +102,8 @@ const Main = () => {
   useEffect(() => {
     // 기온에 따른 추천 서브 카테고리 설정
     if (weatherData) {
+      //임시 지정
+      // const temperature = Math.round(10);
       const temperature = Math.round(weatherData.main.temp);
       const strCategory = getRecommendedCategory(temperature);
       const recommendedCategory = strCategory.split(",");
@@ -158,7 +160,7 @@ const Main = () => {
     } else if (temperature >= 12) {
       return "자켓,가디건,후드집업,스타킹";
     } else if (temperature >= 9) {
-      return "자켓,트렌치코드,야상,니트";
+      return "자켓,트렌치코트,야상,니트";
     } else if (temperature >= 5) {
       return "코트,무스탕,니트,슬랙스";
     } else {
@@ -176,9 +178,9 @@ const Main = () => {
     } else if (temperature >= 17) {
       return "니트,블라우스/셔츠,긴팔티,맨투맨/후디,가디건,청바지,치마,슬랙스,면바지,청바지,트레이닝/조거,가디건/베스트,블레이저";
     } else if (temperature >= 12) {
-      return "자켓/점퍼,트렌치코드,가디건/베스트,야상,후드집업,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거,블레이저";
+      return "자켓/점퍼,트렌치코트,가디건/베스트,야상,후드집업,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거,블레이저";
     } else if (temperature >= 9) {
-      return "자켓/점퍼,트렌치코드,후드집업,야상,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거";
+      return "자켓/점퍼,트렌치코트,후드집업,야상,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거";
     } else if (temperature >= 5) {
       return "코트,무스탕,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
     } else {
@@ -412,7 +414,7 @@ const ImageContainer = styled.div`
 
   p {
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     padding-bottom: 10px;
     color: #333;
   }
