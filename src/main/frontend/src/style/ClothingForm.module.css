@@ -296,6 +296,28 @@ form {
   margin-top: 10px;
   border: none;
 }
+.select2 {
+  -o-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 150px;
+  background: url("../images/arrow-down-3101.png") calc(100% - 5px) center
+  no-repeat;
+  background-size: 20px;
+  padding: 5px 30px 5px 10px;
+  border-radius: 4px;
+  outline: 0 none;
+  margin-top: 10px;
+  border: none;
+  overflow-y: auto;
+  max-height: 200px;
+}
+.select2 option {
+  background: black;
+  color: #fff;
+  padding: 3px 0;
+}
 
 .select option {
   background: black;

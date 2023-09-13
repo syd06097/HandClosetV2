@@ -55,6 +55,7 @@ const ClothingRecommendation = () => {
         );
 
         setRecommendedClothes(updatedClothes);
+        console.log(recommendedClothes)
       } catch (error) {
         console.error("Error fetching recommended clothes:", error);
       }
@@ -77,6 +78,7 @@ const ClothingRecommendation = () => {
     width: 70px;
     height: auto;
   `;
+
   const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
