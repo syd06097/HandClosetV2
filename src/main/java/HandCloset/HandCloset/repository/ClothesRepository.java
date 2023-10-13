@@ -3,6 +3,8 @@ package HandCloset.HandCloset.repository;
 import HandCloset.HandCloset.entity.Clothes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 @Repository
@@ -21,6 +23,10 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
     List<Clothes> findTop2BySubcategoryOrderByWearcntDesc(String subcategory);
 
     List<Clothes> findTop2BySubcategoryOrderByWearcntAsc(String subcategory);
+
+    @Query(value = "SELECT * FROM clothes WHERE subcategory = :subcategory ORDER BY RAND()", nativeQuery = true)
+    List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory);
+
 
     List<Clothes> findByIdIn(List<Long> ids); //이미지 아이디 목록에 해당하는 의류 아이템들 가져옴
 

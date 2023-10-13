@@ -123,6 +123,12 @@ public class ClothesService {
         return clothesRepository.findTop2BySubcategoryOrderByWearcntAsc(subcategory);
     }
 
+    public List<Clothes> getRandomRecommendedClothes(String subcategory) {
+        return clothesRepository.getRandomRecommendedClothes(subcategory);
+    }
+
+
+
     public void updateWearCountAndCreateDateOnCreate(Long imageId,Date date) {
         Optional<Clothes> optionalClothes = clothesRepository.findById(imageId);
         optionalClothes.ifPresent(clothes -> {

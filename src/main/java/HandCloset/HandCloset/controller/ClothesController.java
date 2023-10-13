@@ -246,7 +246,7 @@ public class ClothesController {
             List<Clothes> clothes = clothesService.getRecommendedClothes(decodedSubcategory);
             recommendedClothes.addAll(clothes);
         }
-
+        System.out.println("많이 입은 함수 호출 ");
         return recommendedClothes;
     }
 
@@ -264,7 +264,25 @@ public class ClothesController {
             List<Clothes> clothes = clothesService.getRecommendedClothesAsc(decodedSubcategory);
             recommendedClothes.addAll(clothes);
         }
+        System.out.println("적게 입은 함수 호출 ");
+        return recommendedClothes;
+    }
 
+    @GetMapping("/RandomRecommendation")
+    public List<Clothes> getRecommendedClothes4(@RequestParam("subcategories") List<String> subcategories) {
+        List<Clothes> recommendedClothes = new ArrayList<>();
+
+        for (String subcategory : subcategories) {
+            String decodedSubcategory = null;
+            try {
+                decodedSubcategory = URLDecoder.decode(subcategory, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+            List<Clothes> clothes = clothesService.getRandomRecommendedClothes(decodedSubcategory);
+            recommendedClothes.addAll(clothes);
+        }
+        System.out.println("랜덤 함수 호출 ");
         return recommendedClothes;
     }
 

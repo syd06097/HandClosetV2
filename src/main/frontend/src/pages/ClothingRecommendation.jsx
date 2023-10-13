@@ -22,7 +22,7 @@ const ClothingRecommendation = () => {
       });
       const imageBytes = new Uint8Array(response.data);
       const base64String = btoa(String.fromCharCode.apply(null, imageBytes));
-      return `data:image/jpeg;base64,${base64String}`;
+        return `data:image/jpeg;base64,${base64String}`;
     } catch (error) {
       console.log(error);
       return null;
@@ -31,6 +31,7 @@ const ClothingRecommendation = () => {
 
   useEffect(() => {
     const fetchRecommendedClothes = async () => {
+        console.log("fetchRecommendedClothes 함수 호출!!")
       try {
         const encodedSubcategories = subcategories.map((subcategory) =>
           encodeURIComponent(subcategory)
@@ -43,7 +44,7 @@ const ClothingRecommendation = () => {
         });
         const data = response.data;
 
-        // 이미지 가져오기
+          // 이미지 가져오기
         const updatedClothes = await Promise.all(
           data.map(async (clothes) => {
             const imageUrl = await fetchImage(clothes.id);
@@ -55,6 +56,7 @@ const ClothingRecommendation = () => {
         );
 
         setRecommendedClothes(updatedClothes);
+          console.log(updatedClothes); // 확인용 로그
         console.log(recommendedClothes)
       } catch (error) {
         console.error("Error fetching recommended clothes:", error);
@@ -65,9 +67,41 @@ const ClothingRecommendation = () => {
   }, [subcategories, apiToCall]);
 
   const handleButtonClick = (apiEndpoint, buttonType) => {
-    setApiToCall(apiEndpoint);
+   console.log("handleButtonClick 함수 호출!!")
+          setApiToCall(apiEndpoint);
     setActiveButton(buttonType);
   };
+    const handleRandomButtonClick = async () => {
+        try {
+            const encodedSubcategories = subcategories.map((subcategory) =>
+                encodeURIComponent(subcategory)
+            );
+            const response = await axios.get(
+                "/api/clothing/RandomRecommendation",
+                {
+                    params: { subcategories: encodedSubcategories },
+                    paramsSerializer: (params) => {
+                        return qs.stringify(params, { arrayFormat: "repeat" });
+                    },
+                }
+            );
+            const data = response.data;
+
+            const updatedClothes = await Promise.all(
+                data.map(async (clothes) => {
+                    const imageUrl = await fetchImage(clothes.id);
+                    return {
+                        ...clothes,
+                        imageUrl: imageUrl,
+                    };
+                })
+            );
+
+            setRecommendedClothes(updatedClothes);
+        } catch (error) {
+            console.error("Error fetching recommended clothes:", error);
+        }
+    };
 
   const GloStyle = createGlobalStyle`
       @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
@@ -136,7 +170,12 @@ const ClothingRecommendation = () => {
         >
           적게 입은
         </Button>
-        <Button  style={{borderRadius:"0px 10px 10px 0px"}}>TPO별 코디</Button>
+        <Button>TPO별 코디</Button>
+          <Button  style={{borderRadius:"0px 10px 10px 0px"}} onClick={() =>
+              handleRandomButtonClick("/api/clothing/RandomRecommendation","random")
+          }
+                   active={activeButton === "random"}
+          >랜덤 추천</Button>
       </ButtonContainer>
 
       {/*<hr*/}
