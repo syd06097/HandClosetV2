@@ -2,32 +2,38 @@ package HandCloset.HandCloset.repository;
 
 import HandCloset.HandCloset.entity.Clothes;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ClothesRepository extends JpaRepository<Clothes, Long> {
-    List<Clothes> findByCategoryAndSubcategory(String category, String subcategory);
+    List<Clothes> findByCategoryAndSubcategoryAndMemberId(String category, String subcategory, Long memberId);
 
-    List<Clothes> findByCategory(String category);
+    List<Clothes> findByCategoryAndMemberId(String category, Long memberId);
 
-    List<Clothes> findBySubcategory(String subcategory);
-    // "전체" 카테고리를 선택할 때 모든 이미지를 반환하는 메서드 추가
-    List<Clothes> findAll();
-    List<Clothes> findTop5ByOrderByWearcntDesc();
+    List<Clothes> findBySubcategoryAndMemberId(String subcategory, Long memberId);
 
-    List<Clothes> findTop5ByOrderByCreatedateAsc();
+    List<Clothes> findAllByMemberId(Long memberId);
+    Optional<Clothes> findByIdAndMemberId(Long id, Long memberId);
 
-    List<Clothes> findTop2BySubcategoryOrderByWearcntDesc(String subcategory);
+    List<Clothes> findByMemberId(Long memberId);
 
-    List<Clothes> findTop2BySubcategoryOrderByWearcntAsc(String subcategory);
+    void deleteByIdAndMemberId(Long id, Long memberId);
 
-    @Query(value = "SELECT * FROM clothes WHERE subcategory = :subcategory ORDER BY RAND()", nativeQuery = true)
-    List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory);
+    List<Clothes> findTop5ByMemberIdOrderByWearcntDesc(Long memberId);
 
+    List<Clothes> findTop5ByMemberIdOrderByCreatedateAsc(Long memberId);
 
-    List<Clothes> findByIdIn(List<Long> ids); //이미지 아이디 목록에 해당하는 의류 아이템들 가져옴
+    List<Clothes> findTop2BySubcategoryAndMemberIdOrderByWearcntDesc(String subcategory, Long memberId);
 
+    List<Clothes> findTop2BySubcategoryAndMemberIdOrderByWearcntAsc(String subcategory, Long memberId);
+
+    List<Clothes> findByIdInAndMemberId(List<Long> ids, Long memberId);
+
+    @Query("SELECT c FROM Clothes c WHERE c.subcategory = :subcategory AND c.memberId = :memberId ORDER BY FUNCTION('RAND')")
+    List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory, @Param("memberId") Long memberId);
 }

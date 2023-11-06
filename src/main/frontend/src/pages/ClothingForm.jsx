@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "../style/ClothingForm.module.css";
 import axios from "axios";
 import check from "../images/check.png";
@@ -12,6 +12,14 @@ const ClothingForm = () => {
   const [description, setDescription] = useState("");
   const [color, setColor] = useState("");
   const navigate = useNavigate();
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
   const handleImageChange = (e) => {
     //이미지 base64 형태로
     const selectedFile = e.target.files[0];
@@ -82,7 +90,9 @@ const ClothingForm = () => {
         const response = await axios.post("/api/clothing", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${loginInfo.accessToken}`,
           },
+          data: { refreshToken: loginInfo.refreshToken },
         });
         const data = response.data;
         console.log(data);

@@ -8,6 +8,7 @@ import HandCloset.HandCloset.repository.DiaryRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -39,10 +40,17 @@ public class DiaryService {
     }
 
 
-    public String saveThumbnail(MultipartFile file) {
+    public String saveThumbnail(MultipartFile file, Long memberId) {
         try {
-            // 이미지를 파일 시스템에 저장하고 저장된 경로를 반환합니다.
-            String filePath = diaryUploadDirectory + File.separator + file.getOriginalFilename();
+            // 사용자별 디렉토리 생성
+            String userDirectory = diaryUploadDirectory + File.separator + "member_" + memberId;
+            File directory = new File(userDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // 이미지 파일 경로 생성
+            String filePath = userDirectory + File.separator + file.getOriginalFilename();
             file.transferTo(new File(filePath));
             return filePath;
         } catch (IOException e) {
@@ -51,51 +59,55 @@ public class DiaryService {
             return null;
         }
     }
-
-    public List<Diary> getAllDiaryEntries() {
-        return diaryRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<Diary> getAllDiaryEntries(Long memberId) {
+        return diaryRepository.findByMemberId(memberId);
     }
-
-    public List<Diary> getDiaryEntriesByDate(Date date) {
-        return diaryRepository.findAllByDate(date);
+    @Transactional(readOnly = true)
+    public List<Diary> getDiaryEntriesByDate(Date date,Long memberId) {
+        return diaryRepository.findAllByDateAndMemberId(date,memberId);
     }
-
-    public Diary getDiaryEntryById(Long id) {
-        return diaryRepository.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public Diary getDiaryEntryById(Long id,Long memberId) {
+        return diaryRepository.findByIdAndMemberId(id, memberId).orElse(null);
     }
-    public List<Long> getImageIdsByDiaryId(Long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId).orElse(null);
+    @Transactional(readOnly = true)
+    public List<Long> getImageIdsByDiaryId(Long diaryId,Long memberId) {
+        Diary diary = diaryRepository.findByIdAndMemberId(diaryId, memberId).orElse(null);
         if (diary == null) {
             return Collections.emptyList();
         }
         return diary.getImageIds();
     }
-    public List<Diary> findDiariesByImageId(Long imageId) {
-        return diaryRepository.findAllByImageIdsContaining(imageId);
+    @Transactional(readOnly = true)
+    public List<Diary> findDiariesByImageId(Long imageId,Long memberId) {
+        return diaryRepository.findAllByImageIdsContainingAndMemberId(imageId,memberId);
     }
 
-    public void deleteDiary(Long id) {
-        Diary diary = diaryRepository.findById(id).orElse(null);
+    public void deleteDiary(Long id,Long memberId) {
+        Diary diary = diaryRepository.findByIdAndMemberId(id,memberId).orElse(null);
         if (diary != null) {
             List<Long> imageIds = diary.getImageIds();
 
             if (!imageIds.isEmpty()) {
                 for (Long imageId : imageIds) {
                     // Delegate the work to clothesService
-                    Date secondLatestDate = findSecondLatestDateByImageId(imageId);
-                    clothesService.updateWearCountAndCreateDateOnDelete(imageId, secondLatestDate);
+                    Date secondLatestDate = findSecondLatestDateByImageId(imageId,memberId);
+                    clothesService.updateWearCountAndCreateDateOnDelete(imageId, secondLatestDate,memberId);
                 }
             }
 
-            diaryRepository.deleteById(id);
+            diaryRepository.deleteByIdAndMemberId(id,memberId);
         }
+    }
+    @Transactional(readOnly = true)
+    public List<Diary> findDiariesByThumbnailpath(String thumbnailpath, Long memberId) {
+        return diaryRepository.findAllByThumbnailpathAndMemberId(thumbnailpath, memberId);
     }
 
 
-
-
-    public Date findSecondLatestDateByImageId(Long imageId) {
-        List<Diary> diaries = diaryRepository.findAllByImageIdsContaining(imageId);
+    public Date findSecondLatestDateByImageId(Long imageId,Long memberId) {
+        List<Diary> diaries = diaryRepository.findAllByImageIdsContainingAndMemberId(imageId,memberId);
         Date latestDate = null;
         Date secondLatestDate = null;
 

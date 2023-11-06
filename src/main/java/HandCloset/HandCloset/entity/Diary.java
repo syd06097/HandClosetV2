@@ -24,6 +24,16 @@ public class Diary {
     private String season;
 
 
+    private Long memberId;
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
     @ElementCollection
     @CollectionTable(name = "diary_image_ids", joinColumns = @JoinColumn(name = "diary_id"))
     @Column(name = "image_id")

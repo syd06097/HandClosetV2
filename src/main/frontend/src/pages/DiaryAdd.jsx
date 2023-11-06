@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import back from "../images/back.png";
@@ -23,7 +23,14 @@ const DiaryAdd = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedImageIds, setSelectedImageIds] = useState([]); // Add this line
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
@@ -105,7 +112,9 @@ const DiaryAdd = () => {
         const response = await axios.post("/api/diary", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${loginInfo.accessToken}`,
           },
+          data: { refreshToken: loginInfo.refreshToken },
         });
         const data = response.data;
         console.log(data);
@@ -167,11 +176,11 @@ const DiaryAdd = () => {
           <span className={styles.label}>계절</span>
           <div className={styles.ckbox_group}>
             <input
-                type="checkbox"
-                value="봄"
-                checked={season.includes("봄")}
-                onChange={handleSeasonChange}
-                id="spring"
+              type="checkbox"
+              value="봄"
+              checked={season.includes("봄")}
+              onChange={handleSeasonChange}
+              id="spring"
             />
             <label className={styles.btn_ckbox} htmlFor="spring">
               <span>봄</span>
@@ -179,11 +188,11 @@ const DiaryAdd = () => {
             <br />
 
             <input
-                type="checkbox"
-                value="여름"
-                checked={season.includes("여름")}
-                onChange={handleSeasonChange}
-                id="summer"
+              type="checkbox"
+              value="여름"
+              checked={season.includes("여름")}
+              onChange={handleSeasonChange}
+              id="summer"
             />
             <label className={styles.btn_ckbox} htmlFor="summer">
               <span>여름</span>
@@ -191,11 +200,11 @@ const DiaryAdd = () => {
             <br />
 
             <input
-                type="checkbox"
-                value="가을"
-                checked={season.includes("가을")}
-                onChange={handleSeasonChange}
-                id="autumn"
+              type="checkbox"
+              value="가을"
+              checked={season.includes("가을")}
+              onChange={handleSeasonChange}
+              id="autumn"
             />
             <label className={styles.btn_ckbox} htmlFor="autumn">
               <span>가을</span>
@@ -203,17 +212,16 @@ const DiaryAdd = () => {
             <br />
 
             <input
-                type="checkbox"
-                value="겨울"
-                checked={season.includes("겨울")}
-                onChange={handleSeasonChange}
-                id="winter"
+              type="checkbox"
+              value="겨울"
+              checked={season.includes("겨울")}
+              onChange={handleSeasonChange}
+              id="winter"
             />
             <label className={styles.btn_ckbox} htmlFor="winter">
               <span>겨울</span>
             </label>
           </div>
-
         </div>
 
         <CategoryMenu onClickCategory={handleClickCategory} />

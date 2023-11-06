@@ -39,6 +39,7 @@ const Main = () => {
   );
   const [recommendDataSubcategory, setRecommendDataSubcategory] = useState([]);
 
+
   useEffect(() => {
     // 위치 정보 가져오기
     if (navigator.geolocation) {

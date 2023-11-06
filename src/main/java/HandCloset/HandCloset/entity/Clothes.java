@@ -38,7 +38,15 @@ public class Clothes {
     @Column(nullable = false)
     private String color;
 
+    private Long memberId;
 
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
 
     private Date createdate;
 

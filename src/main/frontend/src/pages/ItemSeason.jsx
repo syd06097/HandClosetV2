@@ -10,13 +10,31 @@ import { useNavigate } from "react-router-dom";
 const ItemSeason = () => {
   const [statistics, setStatistics] = useState({});
   const navigate = useNavigate();
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+    useEffect(() => {
+
+        if (!loginInfo || !loginInfo.accessToken) {
+            navigate("/LoginForm");
+        }
+    }, [loginInfo, navigate]);
+
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/api/clothing/statistics");
+
+
+
+
+      const response = await axios.get("/api/clothing/statistics", {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        data: { refreshToken: loginInfo.refreshToken },
+      });
+
       const data = response.data;
 
       setStatistics(data);

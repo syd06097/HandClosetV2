@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,39 +31,46 @@ public class ClothesService {
     public Clothes saveClothes(Clothes clothes) {
         return clothesRepository.save(clothes);
     }
-
-    public Clothes getClothes(Long id) {
-        return clothesRepository.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public Clothes getClothes(Long id, Long memberId) {
+        return clothesRepository.findByIdAndMemberId(id, memberId).orElse(null);
+    }
+    @Transactional(readOnly = true)
+    public List<Clothes> getAllClothes( Long memberId) {
+        return clothesRepository.findByMemberId(memberId);
     }
 
-    public List<Clothes> getAllClothes() {
-        return clothesRepository.findAll();
-    }
-
-    public void deleteClothes(Long id) {
+    public void deleteClothes(Long id,Long memberId) {
         try {
-            clothesRepository.deleteById(id);
+            clothesRepository.deleteByIdAndMemberId(id,memberId);
         } catch (EmptyResultDataAccessException e) {
             // 요청한 id에 해당하는 Clothes 엔티티가 존재하지 않는 경우
             throw new EntityNotFoundException("Clothes entity with id " + id + " does not exist.");
         }
     }
-
-    public List<Clothes> getClothesByCategory(String category) {
-        return clothesRepository.findByCategory(category);
+    @Transactional(readOnly = true)
+    public List<Clothes> getClothesByCategory(String category,Long memberId) {
+        return clothesRepository.findByCategoryAndMemberId(category,memberId);
     }
-
-    public List<Clothes> getClothesBySubcategory(String subcategory) {
-        return clothesRepository.findBySubcategory(subcategory);
+    @Transactional(readOnly = true)
+    public List<Clothes> getClothesBySubcategory(String subcategory,Long memberId) {
+        return clothesRepository.findBySubcategoryAndMemberId(subcategory,memberId);
     }
-
-    public List<Clothes> getClothesByCategoryAndSubcategory(String category, String subcategory) {
-        return clothesRepository.findByCategoryAndSubcategory(category, subcategory);
+    @Transactional(readOnly = true)
+    public List<Clothes> getClothesByCategoryAndSubcategory(String category, String subcategory,Long memberId) {
+        return clothesRepository.findByCategoryAndSubcategoryAndMemberId(category, subcategory,memberId);
     }
-    public String saveImage(MultipartFile file) {
+    public String saveImage(MultipartFile file, Long memberId) {
         try {
-            // 이미지를 파일 시스템에 저장하고 저장된 경로를 반환합니다.
-            String filePath = uploadDirectory + File.separator + file.getOriginalFilename();
+            // 사용자별 디렉토리 생성
+            String userDirectory = uploadDirectory + File.separator + "member_" + memberId;
+            File directory = new File(userDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // 이미지 파일 경로 생성
+            String filePath = userDirectory + File.separator + file.getOriginalFilename();
             file.transferTo(new File(filePath));
             return filePath;
         } catch (IOException e) {
@@ -72,9 +80,9 @@ public class ClothesService {
         }
     }
 
-
-    public Map<String, Integer> getCategoryItemCountForClothes() {
-        List<Clothes> allClothes = clothesRepository.findAll();
+    @Transactional(readOnly = true)
+    public Map<String, Integer> getCategoryItemCountForClothes(Long memberId) {
+        List<Clothes> allClothes = clothesRepository.findByMemberId(memberId);
         Map<String, Integer> itemCountMap = new HashMap<>();
 
         for (Clothes clothes : allClothes) {
@@ -88,9 +96,9 @@ public class ClothesService {
     }
 
     ///
-
-    public Map<String, Integer> getSeasonStatistics() {
-        List<Clothes> clothesList = clothesRepository.findAll();
+    @Transactional(readOnly = true)
+    public Map<String, Integer> getSeasonStatistics(Long memberId) {
+        List<Clothes> clothesList = clothesRepository.findByMemberId(memberId);
         Map<String, Integer> statistics = new HashMap<>();
 
         for (Clothes clothes : clothesList) {
@@ -102,47 +110,46 @@ public class ClothesService {
 
         return statistics;
     }
-    public List<Clothes> getTopItems() {
-        return clothesRepository.findTop5ByOrderByWearcntDesc();
+    @Transactional(readOnly = true)
+    public List<Clothes> getTopItems(Long memberId) {
+        return clothesRepository.findTop5ByMemberIdOrderByWearcntDesc(memberId);
     }
 
-
-    public List<Clothes> getBottomItems() {
-        return clothesRepository.findTop5ByOrderByCreatedateAsc();
+    @Transactional(readOnly = true)
+    public List<Clothes> getBottomItems(Long memberId) {
+        return clothesRepository.findTop5ByMemberIdOrderByCreatedateAsc(memberId);
     }
     ///
-    public List<Clothes> getFilteredClothes(String subcategory) {
-        return clothesRepository.findBySubcategory(subcategory);
+    @Transactional(readOnly = true)
+    public List<Clothes> getFilteredClothes(String subcategory, Long memberId) {
+        return clothesRepository.findBySubcategoryAndMemberId(subcategory, memberId);
     }
-
-    public List<Clothes> getRecommendedClothes(String subcategory) {
-        return clothesRepository.findTop2BySubcategoryOrderByWearcntDesc(subcategory);
+    @Transactional(readOnly = true)
+    public List<Clothes> getRecommendedClothes(String subcategory, Long memberId) {
+        return clothesRepository.findTop2BySubcategoryAndMemberIdOrderByWearcntDesc(subcategory, memberId);
     }
-
-    public List<Clothes> getRecommendedClothesAsc(String subcategory) {
-        return clothesRepository.findTop2BySubcategoryOrderByWearcntAsc(subcategory);
+    @Transactional(readOnly = true)
+    public List<Clothes> getRecommendedClothesAsc(String subcategory, Long memberId) {
+        return clothesRepository.findTop2BySubcategoryAndMemberIdOrderByWearcntAsc(subcategory, memberId);
     }
-
-    public List<Clothes> getRandomRecommendedClothes(String subcategory) {
-        return clothesRepository.getRandomRecommendedClothes(subcategory);
+    @Transactional(readOnly = true)
+    public List<Clothes> getRandomRecommendedClothes(String subcategory, Long memberId) {
+        return clothesRepository.getRandomRecommendedClothes(subcategory, memberId);
     }
-
-
-
-    public void updateWearCountAndCreateDateOnCreate(Long imageId,Date date) {
-        Optional<Clothes> optionalClothes = clothesRepository.findById(imageId);
+    public void updateWearCountAndCreateDateOnCreate(Long imageId, Date date, Long memberId) {
+        Optional<Clothes> optionalClothes = clothesRepository.findByIdAndMemberId(imageId, memberId);
         optionalClothes.ifPresent(clothes -> {
             clothes.setWearcnt(clothes.getWearcnt() + 1);
             Date existingCreatedate = clothes.getCreatedate();
-            if (existingCreatedate == null ||date.after(existingCreatedate)) {
+            if (existingCreatedate == null || date.after(existingCreatedate)) {
                 clothes.setCreatedate(date); // 최근의 날짜인 경우에만 createdate를 업데이트 시킴
             }
             clothesRepository.save(clothes);
         });
     }
 
-    public void updateWearCountAndCreateDateOnDelete(Long imageId,Date date) {
-        Optional<Clothes> optionalClothes = clothesRepository.findById(imageId);
+    public void updateWearCountAndCreateDateOnDelete(Long imageId, Date date, Long memberId) {
+        Optional<Clothes> optionalClothes = clothesRepository.findByIdAndMemberId(imageId, memberId);
         optionalClothes.ifPresent(clothes -> {
             clothes.setWearcnt(clothes.getWearcnt() - 1);
             Date existingCreatedate = clothes.getCreatedate();
@@ -151,9 +158,8 @@ public class ClothesService {
             clothesRepository.save(clothes);
         });
     }
-
-
-    public List<Clothes> getClothesByImageIds(List<Long> imageIds) {
-        return clothesRepository.findByIdIn(imageIds);
+    @Transactional(readOnly = true)
+    public List<Clothes> getClothesByImageIds(List<Long> imageIds, Long memberId) {
+        return clothesRepository.findByIdInAndMemberId(imageIds, memberId);
     }
 }

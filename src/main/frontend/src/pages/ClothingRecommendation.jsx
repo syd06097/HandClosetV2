@@ -12,17 +12,27 @@ const ClothingRecommendation = () => {
   const [recommendedClothes, setRecommendedClothes] = useState([]);
   const [apiToCall, setApiToCall] = useState("/api/clothing/recommendation"); // Default API
   const [activeButton, setActiveButton] = useState("many");
-
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
   // 이미지 가져오기
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
   const fetchImage = async (id) => {
     try {
       const response = await axios.get(`/api/clothing/images/${id}`, {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        data: { refreshToken: loginInfo.refreshToken },
         responseType: "arraybuffer",
       });
       const imageBytes = new Uint8Array(response.data);
       const base64String = btoa(String.fromCharCode.apply(null, imageBytes));
-        return `data:image/jpeg;base64,${base64String}`;
+      return `data:image/jpeg;base64,${base64String}`;
     } catch (error) {
       console.log(error);
       return null;
@@ -31,12 +41,16 @@ const ClothingRecommendation = () => {
 
   useEffect(() => {
     const fetchRecommendedClothes = async () => {
-        console.log("fetchRecommendedClothes 함수 호출!!")
+      console.log("fetchRecommendedClothes 함수 호출!!");
       try {
         const encodedSubcategories = subcategories.map((subcategory) =>
           encodeURIComponent(subcategory)
         );
         const response = await axios.get(apiToCall, {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          data: { refreshToken: loginInfo.refreshToken },
           params: { subcategories: encodedSubcategories },
           paramsSerializer: (params) => {
             return qs.stringify(params, { arrayFormat: "repeat" });
@@ -44,7 +58,7 @@ const ClothingRecommendation = () => {
         });
         const data = response.data;
 
-          // 이미지 가져오기
+        // 이미지 가져오기
         const updatedClothes = await Promise.all(
           data.map(async (clothes) => {
             const imageUrl = await fetchImage(clothes.id);
@@ -56,8 +70,8 @@ const ClothingRecommendation = () => {
         );
 
         setRecommendedClothes(updatedClothes);
-          console.log(updatedClothes); // 확인용 로그
-        console.log(recommendedClothes)
+        console.log(updatedClothes); // 확인용 로그
+        console.log(recommendedClothes);
       } catch (error) {
         console.error("Error fetching recommended clothes:", error);
       }
@@ -67,41 +81,44 @@ const ClothingRecommendation = () => {
   }, [subcategories, apiToCall]);
 
   const handleButtonClick = (apiEndpoint, buttonType) => {
-   console.log("handleButtonClick 함수 호출!!")
-          setApiToCall(apiEndpoint);
+    console.log("handleButtonClick 함수 호출!!");
+    setApiToCall(apiEndpoint);
     setActiveButton(buttonType);
   };
-    const handleRandomButtonClick = async () => {
-        try {
-            const encodedSubcategories = subcategories.map((subcategory) =>
-                encodeURIComponent(subcategory)
-            );
-            const response = await axios.get(
-                "/api/clothing/RandomRecommendation",
-                {
-                    params: { subcategories: encodedSubcategories },
-                    paramsSerializer: (params) => {
-                        return qs.stringify(params, { arrayFormat: "repeat" });
-                    },
-                }
-            );
-            const data = response.data;
+  const handleRandomButtonClick = async (apiEndpoint,buttonType) => {
+    try {
+      const encodedSubcategories = subcategories.map((subcategory) =>
+        encodeURIComponent(subcategory)
+      );
+      const response = await axios.get("/api/clothing/RandomRecommendation", {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        params: { subcategories: encodedSubcategories },
 
-            const updatedClothes = await Promise.all(
-                data.map(async (clothes) => {
-                    const imageUrl = await fetchImage(clothes.id);
-                    return {
-                        ...clothes,
-                        imageUrl: imageUrl,
-                    };
-                })
-            );
+        data: { refreshToken: loginInfo.refreshToken },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { arrayFormat: "repeat" });
+        },
+      });
+      const data = response.data;
 
-            setRecommendedClothes(updatedClothes);
-        } catch (error) {
-            console.error("Error fetching recommended clothes:", error);
-        }
-    };
+      const updatedClothes = await Promise.all(
+        data.map(async (clothes) => {
+          const imageUrl = await fetchImage(clothes.id);
+          return {
+            ...clothes,
+            imageUrl: imageUrl,
+          };
+        })
+      );
+
+      setRecommendedClothes(updatedClothes);
+      setActiveButton(buttonType);
+    } catch (error) {
+      console.error("Error fetching recommended clothes:", error);
+    }
+  };
 
   const GloStyle = createGlobalStyle`
       @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
@@ -120,14 +137,14 @@ const ClothingRecommendation = () => {
     justify-content: center;
     margin-bottom: 20px;
     margin-top: 40px;
-    width:82%;
+    width: 82%;
     margin-left: 9%;
   `;
 
   const Button = styled.button`
     padding-top: 10px;
     padding-bottom: 10px;
-    width:33.33%;
+    width: 33.33%;
     border: none;
     font-size: 16px;
     font-weight: bold;
@@ -158,7 +175,7 @@ const ClothingRecommendation = () => {
             handleButtonClick("/api/clothing/recommendation", "many")
           }
           active={activeButton === "many"}
-          style={{borderRadius:"10px 0px 0px 10px"}}
+          style={{ borderRadius: "10px 0px 0px 10px" }}
         >
           많이 입은
         </Button>
@@ -171,11 +188,18 @@ const ClothingRecommendation = () => {
           적게 입은
         </Button>
         <Button>TPO별 코디</Button>
-          <Button  style={{borderRadius:"0px 10px 10px 0px"}} onClick={() =>
-              handleRandomButtonClick("/api/clothing/RandomRecommendation","random")
+        <Button
+          style={{ borderRadius: "0px 10px 10px 0px" }}
+          onClick={() =>
+            handleRandomButtonClick(
+              "/api/clothing/RandomRecommendation",
+              "random"
+            )
           }
-                   active={activeButton === "random"}
-          >랜덤 추천</Button>
+          active={activeButton === "random"}
+        >
+          랜덤 추천
+        </Button>
       </ButtonContainer>
 
       {/*<hr*/}
@@ -192,7 +216,7 @@ const ClothingRecommendation = () => {
           border: "0",
           width: "82%",
           marginLeft: "9%",
-          marginTop:"50px",
+          marginTop: "50px",
           paddingTop: "30px",
           paddingBottom: "10px",
           borderRadius: "18px",
@@ -209,7 +233,14 @@ const ClothingRecommendation = () => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ position: "absolute", left: "15%", fontWeight:"bold",color: "#333" }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "15%",
+                    fontWeight: "bold",
+                    color: "#333",
+                  }}
+                >
                   아우터 :&nbsp;
                 </span>
                 {recommendedClothes
@@ -233,7 +264,14 @@ const ClothingRecommendation = () => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ position: "absolute", left: "15%", fontWeight:"bold", color: "#333" }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "15%",
+                    fontWeight: "bold",
+                    color: "#333",
+                  }}
+                >
                   상의 :&nbsp;
                 </span>
                 {recommendedClothes
@@ -257,7 +295,14 @@ const ClothingRecommendation = () => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ position: "absolute", left: "15%", fontWeight:"bold",color: "#333" }}>
+                <span
+                  style={{
+                    position: "absolute",
+                    left: "15%",
+                    fontWeight: "bold",
+                    color: "#333",
+                  }}
+                >
                   하의 :&nbsp;
                 </span>
                 {recommendedClothes
