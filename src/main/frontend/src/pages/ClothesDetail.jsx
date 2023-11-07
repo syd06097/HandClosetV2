@@ -6,11 +6,21 @@ import { useNavigate } from "react-router-dom";
 import back from "../images/back.png";
 import trash from "../images/trash.png";
 import update from "../images/update.png";
-
+import axios from "axios";
 function ClothesDetail() {
   const { id } = useParams();
   const [clothes, setClothes] = useState(null);
   const navigate = useNavigate();
+  const [imageUrl, setImageUrl] = useState(null);
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
+
 
   useEffect(() => {
     const fetchClothes = async () => {
@@ -19,6 +29,22 @@ function ClothesDetail() {
         setClothes(clothesData);
       } catch (error) {
         console.error("Failed to fetch clothes:", error);
+      }
+      try {
+        const response = await axios.get(`/api/clothing/images/${id}`, {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          responseType: "arraybuffer",
+        });
+
+        console.log("response:", response);
+
+        const arrayBufferView = new Uint8Array(response.data);
+        const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+        setImageUrl(URL.createObjectURL(blob));
+      } catch (error) {
+        console.error("Failed to fetch image:", error);
       }
     };
 
@@ -52,7 +78,7 @@ function ClothesDetail() {
         </UpdateButton>
       </Header>
       <ImageWrapper>
-        <Image src={`/api/clothing/images/${id}`} alt={clothes.description} />
+        <Image src={imageUrl} alt={clothes.description} />
       </ImageWrapper>
       <Details>
         <Square>

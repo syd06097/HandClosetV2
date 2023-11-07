@@ -1,8 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PlusIcon from "../images/PlusIcon.png";
 import { useNavigate } from "react-router-dom";
 function AddClothes() {
   const navigate = useNavigate();
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+    useEffect(() => {
+
+        if (!loginInfo || !loginInfo.accessToken) {
+            navigate("/LoginForm");
+        }
+    }, [loginInfo, navigate]);
 
   const plusIconStyle = {
     width: "15%",

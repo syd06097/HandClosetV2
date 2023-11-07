@@ -1,63 +1,125 @@
+
 import React, { useEffect, useState } from "react";
 import { getAllClothesIds } from "../utils/api"; // API 호출 함수 추가
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function CategoryItem({ category, subcategory, items }) {
-  const [ids, setIds] = useState([]); // ID 목록 상태 추가
+const CategoryItem = ({ category, subcategory, items }) => {
+  const [ids, setIds] = useState([]);
+  const [images, setImages] = useState([]);
   const navigate = useNavigate();
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+
 
   useEffect(() => {
-    const fetchIds = async () => {
-      try {
-        const clothesIds = await getAllClothesIds(); // 모든 의류의 ID 목록 가져오기
-        console.log(clothesIds);
-        setIds(clothesIds);
-      } catch (error) {
-        console.error("Failed to fetch clothes ids:", error);
-      }
-    };
 
-    fetchIds();
-  }, []);
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+    else {
+      // 처음 렌더링될 때와 category가 변경될 때에만 호출
+      const fetchIds = async () => {
+
+        try {
+          const clothesIds = await getAllClothesIds();
+          setIds(clothesIds);
+        } catch (error) {
+          console.error("Failed to fetch clothes ids:", error);
+        }
+
+      };
+      fetchIds();
+    }
+  }, [category]);
 
   const handleClickImage = (item, index) => {
     let itemId;
-
     if (category === "전체") {
-      // "전체" 카테고리에서는 ids 배열을 사용하여 이미지의 ID를 가져옴
+      console.log(ids[index]);
       itemId = ids[index];
     } else {
-      // 다른 카테고리에서는 item 객체에 ID가 있음
       itemId = item.id;
+      console.log(item.image);
     }
-
-    console.log(itemId);
     navigate(`/clothes/${itemId}`);
   };
+
+  const getImageSrc = async (categoryId, ids, item, index) => {
+
+    if (categoryId === "전체") {
+      try {
+        const response = await axios.get(`/api/clothing/images/${ids[index]}`, {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          responseType: "arraybuffer",
+        });
+        const arrayBufferView = new Uint8Array(response.data);
+        const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+        return URL.createObjectURL(blob);
+      } catch (error) {
+        console.error("Failed to fetch image:", error);
+        return null;
+      }
+    } else {
+      try {
+
+        const response = await axios.get(item.image, {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          responseType: "arraybuffer",
+        });
+        const arrayBufferView = new Uint8Array(response.data);
+        const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+        console.log(URL.createObjectURL(blob));
+        return URL.createObjectURL(blob);
+      } catch (error) {
+        console.error("Failed to fetch image:", error);
+        return null;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+    else {
+      const fetchData = async () => {
+        const images = await Promise.all(
+            items.map(async (item, index) => {
+              const imageUrl = await getImageSrc(category, ids, item, index);
+              return {item, index, imageUrl};
+            })
+        );
+        setImages(images);
+      };
+      fetchData();
+    }
+  }, [category, ids, items]);
+
   return (
     <div>
       <ImageGrid>
-        {items.map((item, index) => (
+        {images.map(({ item, index, imageUrl }) => (
           <ImageItem
             key={item.id}
             onClick={() => handleClickImage(item, index)}
           >
-            {category === "전체" ? (
-              <ItemImage
-                src={`/api/clothing/images/${ids[index]}`} // 의류 ID를 사용하여 이미지 가져오기
-                alt={item.name}
-              />
-            ) : (
-              <ItemImage src={item.image} alt={item.name} />
-            )}
+
+              <ItemImage src={imageUrl} alt={item.name} />
+
             <p>{item.name}</p>
           </ImageItem>
         ))}
       </ImageGrid>
     </div>
   );
-}
+};
+
 const ImageGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -86,4 +148,5 @@ const ItemImage = styled.img`
   height: 100%;
   object-fit: cover;
 `;
+
 export default CategoryItem;

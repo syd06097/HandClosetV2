@@ -7,10 +7,28 @@ import { useNavigate } from "react-router-dom";
 const ItemNotRecently = () => {
   const [bottomItems, setBottomItems] = useState([]);
   const navigate = useNavigate();
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+    useEffect(() => {
+
+        if (!loginInfo || !loginInfo.accessToken) {
+            navigate("/LoginForm");
+        }
+    }, [loginInfo, navigate]);
+
   useEffect(() => {
     const fetchBottomItems = async () => {
       try {
-        const response = await axios.get("/api/clothing/bottom-items");
+
+
+
+
+        const response = await axios.get("/api/clothing/bottom-items", {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          data: { refreshToken: loginInfo.refreshToken },
+        });
         const items = response.data;
 
         const updatedItems = await Promise.all(
@@ -36,6 +54,10 @@ const ItemNotRecently = () => {
     try {
       const response = await axios.get(`/api/clothing/images/${id}`, {
         responseType: "arraybuffer",
+          headers: {
+              Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          data: { refreshToken: loginInfo.refreshToken },
       });
       return response.data;
     } catch (error) {

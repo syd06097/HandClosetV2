@@ -11,12 +11,37 @@ const Diary = () => {
   const navigate = useNavigate();
   const [diaryEntries, setDiaryEntries] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+    const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
+    useEffect(() => {
+
+        if (!loginInfo || !loginInfo.accessToken) {
+            navigate("/LoginForm");
+        }
+    }, [loginInfo, navigate]);
   useEffect(() => {
     // Fetch diary entries from API and update the state
-    axios.get("/api/diary/entries").then((response) => {
-      setDiaryEntries(response.data);
-    });
+    const fetchDiaryEntries = async () => {
+
+
+
+
+      try {
+        const response = await axios.get("/api/diary/entries", {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          data: { refreshToken: loginInfo.refreshToken },
+        });
+
+        setDiaryEntries(response.data);
+      } catch (error) {
+        console.error(error);
+        navigate("/LoginForm");
+      }
+    };
+
+    fetchDiaryEntries();
   }, []);
 
   const tileContent = ({ date, view }) => {

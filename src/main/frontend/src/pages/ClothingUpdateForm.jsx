@@ -16,6 +16,16 @@ function ClothingUpdateForm() {
   const [season, setSeason] = useState([]);
   const [description, setDescription] = useState("");
   const [color, setColor] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
+
   useEffect(() => {
     const fetchClothes = async () => {
       try {
@@ -28,6 +38,22 @@ function ClothingUpdateForm() {
         setColor(clothesData.color);
       } catch (error) {
         console.error("Failed to fetch clothes:", error);
+      }
+      try {
+        const response = await axios.get(`/api/clothing/images/${id}`, {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          responseType: "arraybuffer",
+        });
+
+        console.log("response:", response);
+
+        const arrayBufferView = new Uint8Array(response.data);
+        const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+        setImageUrl(URL.createObjectURL(blob));
+      } catch (error) {
+        console.error("Failed to fetch image:", error);
       }
     };
 
@@ -76,7 +102,9 @@ function ClothingUpdateForm() {
         await axios.put(`/api/clothing/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${loginInfo.accessToken}`,
           },
+          data: { refreshToken: loginInfo.refreshToken },
         });
         navigate(`/clothes/${id}`);
       } catch (error) {
@@ -178,7 +206,7 @@ function ClothingUpdateForm() {
         <div className={styles.formGroup}>
           <div className={styles.ImageWrapper}>
             <img
-              src={`/api/clothing/images/${id}`}
+              src={imageUrl}
               alt={clothes.description}
               className={styles.Image}
             />
@@ -246,11 +274,11 @@ function ClothingUpdateForm() {
           <span className={styles.label}>계절</span>
           <div className={styles.ckbox_group}>
             <input
-                type="checkbox"
-                value="봄"
-                checked={season.includes("봄")}
-                onChange={handleSeasonChange}
-                id="spring"
+              type="checkbox"
+              value="봄"
+              checked={season.includes("봄")}
+              onChange={handleSeasonChange}
+              id="spring"
             />
             <label className={styles.btn_ckbox} htmlFor="spring">
               <span>봄</span>
@@ -258,11 +286,11 @@ function ClothingUpdateForm() {
             <br />
 
             <input
-                type="checkbox"
-                value="여름"
-                checked={season.includes("여름")}
-                onChange={handleSeasonChange}
-                id="summer"
+              type="checkbox"
+              value="여름"
+              checked={season.includes("여름")}
+              onChange={handleSeasonChange}
+              id="summer"
             />
             <label className={styles.btn_ckbox} htmlFor="summer">
               <span>여름</span>
@@ -270,11 +298,11 @@ function ClothingUpdateForm() {
             <br />
 
             <input
-                type="checkbox"
-                value="가을"
-                checked={season.includes("가을")}
-                onChange={handleSeasonChange}
-                id="autumn"
+              type="checkbox"
+              value="가을"
+              checked={season.includes("가을")}
+              onChange={handleSeasonChange}
+              id="autumn"
             />
             <label className={styles.btn_ckbox} htmlFor="autumn">
               <span>가을</span>
@@ -282,11 +310,11 @@ function ClothingUpdateForm() {
             <br />
 
             <input
-                type="checkbox"
-                value="겨울"
-                checked={season.includes("겨울")}
-                onChange={handleSeasonChange}
-                id="winter"
+              type="checkbox"
+              value="겨울"
+              checked={season.includes("겨울")}
+              onChange={handleSeasonChange}
+              id="winter"
             />
             <label className={styles.btn_ckbox} htmlFor="winter">
               <span>겨울</span>

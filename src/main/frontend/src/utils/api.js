@@ -1,11 +1,17 @@
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const getClothesByCategoryAndSubcategory = (category, subcategory) => {
   let url = "/api/clothing/category";
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
   url += `?category=${category}&subcategory=${subcategory}`;
 
-  return axios.get(url).then((response) => {
+  return axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${loginInfo.accessToken}`,
+    },
+    data: { refreshToken: loginInfo.refreshToken },
+  }).then((response) => {
     const clothesWithImageUrls = response.data.map((clothes) => ({
       ...clothes,
       image: `/api/clothing/images/${clothes.id}`,
@@ -15,44 +21,58 @@ const getClothesByCategoryAndSubcategory = (category, subcategory) => {
 };
 
 const getClothes = (id) => {
-  return axios.get(`/api/clothing/${id}`).then((response) => {
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  return axios.get(`/api/clothing/${id}`, {
+    headers: {
+      Authorization: `Bearer ${loginInfo.accessToken}`,
+    },
+    data: { refreshToken: loginInfo.refreshToken },
+  }).then((response) => {
     return response.data;
   });
 };
 
-// getAllClothesIds() 함수 추가
 const getAllClothesIds = () => {
-  return axios.get("/api/clothing/ids").then((response) => {
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+
+  return axios.get("/api/clothing/ids", {
+    headers: {
+      Authorization: `Bearer ${loginInfo.accessToken}`,
+    },
+    data: { refreshToken: loginInfo.refreshToken },
+  }).then((response) => {
     return response.data;
   });
 };
 
 const deleteClothes = (id) => {
-  return axios.delete(`/api/clothing/${id}`);
-};
-
-const updateClothes = async (id, updatedData) => {
-  try {
-    const response = await axios.put(`/api/clothing/${id}`, updatedData);
-    const updatedClothes = response.data;
-    return updatedClothes;
-  } catch (error) {
-    console.error("Failed to update clothes:", error);
-    throw error;
-  }
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  return axios.delete(`/api/clothing/${id}`, {
+    headers: {
+      Authorization: `Bearer ${loginInfo.accessToken}`,
+    },
+    data: { refreshToken: loginInfo.refreshToken },
+  });
 };
 
 const getClothesByImageIds = (imageIds) => {
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const imageIdQuery = imageIds.join("&imageIds=");
   return axios
-    .get(`/api/clothing/byImageIds?imageIds=${imageIdQuery}`)
-    .then((response) => {
-      const clothesWithImageUrls = response.data.map((clothes) => ({
-        ...clothes,
-        image: `/api/clothing/images/${clothes.id}`,
-      }));
-      return clothesWithImageUrls;
-    });
+      .get(`/api/clothing/byImageIds?imageIds=${imageIdQuery}`, {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        data: { refreshToken: loginInfo.refreshToken },
+      })
+      .then((response) => {
+        const clothesWithImageUrls = response.data.map((clothes) => ({
+          ...clothes,
+          image: `/api/clothing/images/${clothes.id}`,
+        }));
+        return clothesWithImageUrls;
+      });
 };
 
 export {
@@ -60,6 +80,5 @@ export {
   getAllClothesIds,
   getClothes,
   deleteClothes,
-  updateClothes,
   getClothesByImageIds,
 };

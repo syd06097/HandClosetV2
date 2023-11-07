@@ -7,10 +7,28 @@ import { useNavigate } from "react-router-dom";
 const ItemFrequently = () => {
   const [topItems, setTopItems] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
+    const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+    useEffect(() => {
+        if (!loginInfo || !loginInfo.accessToken) {
+            navigate("/LoginForm");
+        }
+    }, [loginInfo, navigate]);
+
+    useEffect(() => {
     const fetchTopItems = async () => {
       try {
-        const response = await axios.get("/api/clothing/top-items");
+
+
+
+
+        const response = await axios.get("/api/clothing/top-items", {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          data: { refreshToken: loginInfo.refreshToken },
+        });
+
         const items = response.data;
 
         const updatedItems = await Promise.all(
@@ -31,12 +49,20 @@ const ItemFrequently = () => {
 
     fetchTopItems();
   }, []);
-
   const fetchImageBytes = async (id) => {
     try {
+
+
+
+
       const response = await axios.get(`/api/clothing/images/${id}`, {
         responseType: "arraybuffer",
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        data: { refreshToken: loginInfo.refreshToken },
       });
+
       return response.data;
     } catch (error) {
       console.error(error);
@@ -170,7 +196,6 @@ const ImageSquareWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
 `;
 
 const Image = styled.img`

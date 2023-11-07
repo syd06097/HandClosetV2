@@ -8,7 +8,7 @@ CREATE TABLE clothes
    description TEXT,
    wearcnt INT ,
    createdate DATE,
-   color VARCHAR(255)
+   color VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE diary

@@ -5,37 +5,80 @@ import { useNavigate } from "react-router-dom";
 
 const DiaryThumbnail = ({ selectedDate }) => {
   const [entryDataList, setEntryDataList] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    // Fetch diary entry data for the selected date
-    fetchDiaryEntries(selectedDate);
-  }, [selectedDate]);
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-  const fetchDiaryEntries = async (selectedDate) => {
+
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
+
+  const getImageSrc = async (thumbnailpath) => {
     try {
-      const selectedDateUTC = new Date(
-        Date.UTC(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate()
-        )
-      );
-      const formattedDate = selectedDateUTC.toISOString().split("T")[0];
-      const response = await axios.get(`/api/diary/entry`, {
-        params: {
-          date: formattedDate,
+      const response = await axios.get(`/api/diary/images`, {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
         },
+        params: {
+          thumbnailpath: decodeURIComponent(thumbnailpath), // 디코딩 추가
+        },
+        responseType: "arraybuffer",
       });
 
-      if (response.data && response.data.length > 0) {
-        setEntryDataList(response.data);
-      } else {
-        setEntryDataList([]);
-      }
+      const arrayBufferView = new Uint8Array(response.data);
+      const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+      return URL.createObjectURL(blob);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch image:", error);
+      return null;
     }
   };
+
+  useEffect(() => {
+    const fetchDiaryEntries = async (selectedDate) => {
+      try {
+        const selectedDateUTC = new Date(
+          Date.UTC(
+            selectedDate.getFullYear(),
+            selectedDate.getMonth(),
+            selectedDate.getDate()
+          )
+        );
+        const formattedDate = selectedDateUTC.toISOString().split("T")[0];
+        const response = await axios.get(`/api/diary/entry`, {
+          headers: {
+            Authorization: `Bearer ${loginInfo.accessToken}`,
+          },
+          params: {
+            date: formattedDate,
+          },
+          data: { refreshToken: loginInfo.refreshToken },
+        });
+
+        if (response.data && response.data.length > 0) {
+          setEntryDataList(response.data);
+
+          const imageUrls = await Promise.all(
+            response.data.map(async (entryData) => {
+              const imageUrl = await getImageSrc(entryData.thumbnailpath);
+              return imageUrl;
+            })
+          );
+          setImageUrls(imageUrls);
+        } else {
+          setEntryDataList([]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDiaryEntries(selectedDate);
+  }, [selectedDate, loginInfo.accessToken, loginInfo.refreshToken]);
 
   return (
     <StyledDiaryThumbnail>
@@ -43,17 +86,12 @@ const DiaryThumbnail = ({ selectedDate }) => {
         <div>
           <hr /> {/* 위에 줄 */}
           <ThumbnailGrid>
-            {entryDataList.map((entryData) => (
+            {entryDataList.map((entryData, index) => (
               <ThumbnailItem
                 key={entryData.id}
                 onClick={() => navigate(`/DiaryDetail/${entryData.id}`)}
               >
-                <ThumbnailImage
-                  src={`/api/diary/images?thumbnailpath=${encodeURIComponent(
-                    entryData.thumbnailpath
-                  )}`}
-                  alt="Thumbnail"
-                />
+                <ThumbnailImage src={imageUrls[index]} alt="Thumbnail" />
               </ThumbnailItem>
             ))}
           </ThumbnailGrid>

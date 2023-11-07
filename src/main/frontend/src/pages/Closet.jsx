@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import CategoryMenu from "../components/CategoryMenu";
 import CategoryItem from "../components/CategoryItem";
 import AddClothes from "../components/AddClothes";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
 function Closet() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
+  const navigate = useNavigate();
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+
+  useEffect(() => {
+
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+
+    }
+  }, [loginInfo, navigate]);
 
   const handleClickCategory = (category, subcategory, items) => {
     setSelectedCategory(category);

@@ -4,6 +4,7 @@ import {
   getClothesByCategoryAndSubcategory,
   getAllClothesIds,
 } from "../utils/api";
+import {useNavigate} from "react-router-dom";
 
 const categories = [
   {
@@ -82,31 +83,39 @@ function CategoryMenu({ onClickCategory }) {
   const [activeCategory, setActiveCategory] = useState(categories[0].name);
   const [activeSubcategory, setActiveSubcategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  const navigate = useNavigate();
+
 
   useEffect(() => {
-    setIsLoading(true);
-    if (activeCategory === "전체") {
-      getAllClothesIds()
-        .then((clothes) => {
-          onClickCategory(activeCategory, activeSubcategory, clothes);
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => setIsLoading(false));
-    } else {
-      getClothesByCategoryAndSubcategory(activeCategory, activeSubcategory)
-        .then((clothesWithImageUrls) => {
-          onClickCategory(
-            activeCategory,
-            activeSubcategory,
-            clothesWithImageUrls
-          );
-        })
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => setIsLoading(false));
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }else {
+
+      setIsLoading(true);
+      if (activeCategory === "전체") {
+        getAllClothesIds()
+            .then((clothes) => {
+              onClickCategory(activeCategory, activeSubcategory, clothes);
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => setIsLoading(false));
+      } else {
+        getClothesByCategoryAndSubcategory(activeCategory, activeSubcategory)
+            .then((clothesWithImageUrls) => {
+              onClickCategory(
+                  activeCategory,
+                  activeSubcategory,
+                  clothesWithImageUrls
+              );
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => setIsLoading(false));
+      }
     }
   }, [activeCategory, activeSubcategory, onClickCategory]);
   const handleClickCategory = (categoryName) => {
