@@ -39,6 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
+import HandCloset.HandCloset.utils.ImageProcessor;
+
 @RestController
 @RequestMapping("/api/clothing")
 public class ClothesController {
@@ -69,9 +71,15 @@ public class ClothesController {
             throw new UnauthorizedException("로그인이 필요합니다.");
         } else {
             Clothes clothes = new Clothes();
+
+            // 이미지 처리
+            MultipartFile processedImage = ImageProcessor.resizeAndRemoveBackground(file);
+
             // 파일을 저장하고 저장된 경로를 DB에 저장합니다.
-//            String imagePath = clothesService.saveImage(file);
-            String imagePath = clothesService.saveImage(file, loginUserDto.getMemberId());
+            String imagePath = clothesService.saveImage(processedImage, loginUserDto.getMemberId());
+           // String imagePath = clothesService.saveImage(file, loginUserDto.getMemberId());
+
+
             clothes.setImgpath(imagePath);
             clothes.setCategory(category);
             clothes.setSubcategory(subcategory);

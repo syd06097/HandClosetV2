@@ -10,6 +10,7 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -17,6 +18,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.projectlombok:lombok:1.18.26'
@@ -24,6 +26,11 @@ dependencies {
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+//	implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0', classifier: 'natives-windows-x86_64'
+//	implementation 'org.bytedeco:opencv-java:4.8.0:natives-windows-x86_64'
+//	implementation files('build/libs/opencv-480.jar')
+//	implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-1'
+	implementation 'org.openpnp:opencv:4.5.5-1'
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation 'com.auth0:java-jwt:3.10.3'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -46,6 +53,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
 def frontendDir = "$projectDir/src/main/frontend"
 
 sourceSets {
@@ -55,7 +63,10 @@ sourceSets {
 	}
 }
 
-processResources { dependsOn "copyReactBuildFiles" }
+processResources {
+	dependsOn "copyReactBuildFiles"
+
+}
 
 task installReact(type: Exec) {
 	workingDir "$frontendDir"
