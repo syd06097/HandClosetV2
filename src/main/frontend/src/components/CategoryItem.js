@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { getAllClothesIds } from "../utils/api"; // API 호출 함수 추가
 import styled from "styled-components";
@@ -11,24 +10,18 @@ const CategoryItem = ({ category, subcategory, items }) => {
   const navigate = useNavigate();
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-
-
   useEffect(() => {
-
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
-    }
-    else {
+    } else {
       // 처음 렌더링될 때와 category가 변경될 때에만 호출
       const fetchIds = async () => {
-
         try {
           const clothesIds = await getAllClothesIds();
           setIds(clothesIds);
         } catch (error) {
           console.error("Failed to fetch clothes ids:", error);
         }
-
       };
       fetchIds();
     }
@@ -47,25 +40,31 @@ const CategoryItem = ({ category, subcategory, items }) => {
   };
 
   const getImageSrc = async (categoryId, ids, item, index) => {
-
     if (categoryId === "전체") {
       try {
-        const response = await axios.get(`/api/clothing/images/${ids[index]}`, {
-          headers: {
-            Authorization: `Bearer ${loginInfo.accessToken}`,
-          },
-          responseType: "arraybuffer",
-        });
-        const arrayBufferView = new Uint8Array(response.data);
-        const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
-        return URL.createObjectURL(blob);
+        if (ids[index] !== undefined) {
+          const response = await axios.get(
+              `/api/clothing/images/${ids[index]}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${loginInfo.accessToken}`,
+                },
+                responseType: "arraybuffer",
+              }
+          );
+          const arrayBufferView = new Uint8Array(response.data);
+          const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+          return URL.createObjectURL(blob);
+        } else {
+          // index가 undefined일 경우에는 이미지를 가져오지 않음
+          return null;
+        }
       } catch (error) {
         console.error("Failed to fetch image:", error);
         return null;
       }
     } else {
       try {
-
         const response = await axios.get(item.image, {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
@@ -86,14 +85,13 @@ const CategoryItem = ({ category, subcategory, items }) => {
   useEffect(() => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
-    }
-    else {
+    } else {
       const fetchData = async () => {
         const images = await Promise.all(
-            items.map(async (item, index) => {
-              const imageUrl = await getImageSrc(category, ids, item, index);
-              return {item, index, imageUrl};
-            })
+          items.map(async (item, index) => {
+            const imageUrl = await getImageSrc(category, ids, item, index);
+            return { item, index, imageUrl };
+          })
         );
         setImages(images);
       };
@@ -109,8 +107,7 @@ const CategoryItem = ({ category, subcategory, items }) => {
             key={item.id}
             onClick={() => handleClickImage(item, index)}
           >
-
-              <ItemImage src={imageUrl} alt={item.name} />
+            <ItemImage src={imageUrl} alt={item.name} />
 
             <p>{item.name}</p>
           </ImageItem>

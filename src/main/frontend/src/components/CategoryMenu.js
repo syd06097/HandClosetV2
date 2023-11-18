@@ -5,7 +5,7 @@ import {
   getAllClothesIds,
 } from "../utils/api";
 import {useNavigate} from "react-router-dom";
-
+import { useCallback } from "react";
 const categories = [
   {
     name: "전체",
@@ -85,18 +85,18 @@ function CategoryMenu({ onClickCategory }) {
   const [isLoading, setIsLoading] = useState(false);
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
-
+  const memoizedOnClickCategory = useCallback(onClickCategory, []);
 
   useEffect(() => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }else {
-
+      console.log("CategoryMenu의 useEffect문 api 호출 ");
       setIsLoading(true);
       if (activeCategory === "전체") {
         getAllClothesIds()
             .then((clothes) => {
-              onClickCategory(activeCategory, activeSubcategory, clothes);
+              memoizedOnClickCategory(activeCategory, activeSubcategory, clothes);
             })
             .catch((error) => {
               console.error(error);
@@ -105,7 +105,7 @@ function CategoryMenu({ onClickCategory }) {
       } else {
         getClothesByCategoryAndSubcategory(activeCategory, activeSubcategory)
             .then((clothesWithImageUrls) => {
-              onClickCategory(
+              memoizedOnClickCategory(
                   activeCategory,
                   activeSubcategory,
                   clothesWithImageUrls
@@ -117,7 +117,7 @@ function CategoryMenu({ onClickCategory }) {
             .finally(() => setIsLoading(false));
       }
     }
-  }, [activeCategory, activeSubcategory, onClickCategory]);
+  }, [activeCategory, activeSubcategory, memoizedOnClickCategory]);
   const handleClickCategory = (categoryName) => {
     setActiveCategory(categoryName);
     setActiveSubcategory("");

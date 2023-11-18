@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function DiaryItem({
-  category,
-  subcategory,
-  items,
-  selectedImageIds,
-  setSelectedImageIds,
-}) {
+                     category,
+                     subcategory,
+                     items,
+                     selectedImageIds,
+                     setSelectedImageIds,
+                   }) {
   const [ids, setIds] = useState([]); // ID 목록 상태 추가
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
@@ -46,10 +46,10 @@ function DiaryItem({
       }
     });
   };
-
   const getImageSrc = async (id, category, item) => {
-
+    console.log("getImageSrc 호출");
     if (category === "전체") {
+      console.log("getImageSrc 전체 호출");
       try {
         const response = await axios.get(`/api/clothing/images/${id}`, {
           headers: {
@@ -65,10 +65,10 @@ function DiaryItem({
         return null;
       }
     } else {
+      console.log("getImageSrc 다른 카테고리 호출");
       try {
-
         // 여기서도 마찬가지로 헤더에 토큰을 포함하여 요청합니다.
-        const response = await axios.get(item.image, {
+        const response = await axios.get(`/api/clothing/images/${item.id}`, {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
@@ -84,35 +84,91 @@ function DiaryItem({
       }
     }
   };
-
+  // const getImageSrc = async (id, category, item) => {
+  //   console.log("getImageSrc 호출");
+  //   if (category === "전체") {
+  //     console.log("getImageSrc 전체 호출");
+  //     try {
+  //       if(id !== undefined) {
+  //         const response = await axios.get(`/api/clothing/images/${id}`, {
+  //           headers: {
+  //             Authorization: `Bearer ${loginInfo.accessToken}`,
+  //           },
+  //           responseType: "arraybuffer",
+  //         });
+  //         const arrayBufferView = new Uint8Array(response.data);
+  //         const blob = new Blob([arrayBufferView], {type: "image/jpeg"});
+  //         return URL.createObjectURL(blob);
+  //       }else{
+  //           return null;
+  //         }
+  //     } catch (error) {
+  //       console.error("Failed to fetch image:", error);
+  //       return null;
+  //     }
+  //   } else {
+  //     console.log("getImageSrc 다른 카테고리 호출");
+  //     try {
+  //
+  //       // 여기서도 마찬가지로 헤더에 토큰을 포함하여 요청합니다.
+  //       const response = await axios.get(item.image, {
+  //         headers: {
+  //           Authorization: `Bearer ${loginInfo.accessToken}`,
+  //         },
+  //         responseType: "arraybuffer",
+  //       });
+  //       const arrayBufferView = new Uint8Array(response.data);
+  //       const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+  //       console.log(URL.createObjectURL(blob));
+  //       return URL.createObjectURL(blob);
+  //     } catch (error) {
+  //       console.error("Failed to fetch image:", error);
+  //       return null;
+  //     }
+  //   }
+  // };
   useEffect(() => {
+    console.log("useEffect2 호출");
     const fetchData = async () => {
       const images = await Promise.all(
-        items.map(async (item) => {
-          const imageUrl = await getImageSrc(item.id, category, item);
-          return { item, imageUrl };
-        })
+          items.map(async (item) => {
+            const imageUrl = await getImageSrc(item.id, category, item);
+            return { item, imageUrl };
+          })
       );
       setImages(images);
     };
     fetchData();
-  }, [items]);
+  }, [items, category, ids]);
+  // useEffect(() => {
+  //   console.log("useEffect2 호출");
+  //   const fetchData = async () => {
+  //     const images = await Promise.all(
+  //         items.map(async (item) => {
+  //           const imageUrl = await getImageSrc(item.id, category, item);
+  //           return { item, imageUrl };
+  //         })
+  //     );
+  //     setImages(images);
+  //   };
+  //   fetchData();
+  // }, [items]);
 
   return (
-    <div>
-      <ImageGrid>
-        {images.map(({ item, imageUrl, index }) => (
-          <ImageItem
-            key={item.id}
-            isSelected={selectedImageIds.includes(item.id)}
-            onClick={() => toggleImageSelection(item.id)}
-          >
-            <ItemImage src={imageUrl} alt={item.name} />
-            <p>{item.name}</p>
-          </ImageItem>
-        ))}
-      </ImageGrid>
-    </div>
+      <div>
+        <ImageGrid>
+          {images.map(({ item, imageUrl, index }) => (
+              <ImageItem
+                  key={item.id}
+                  isSelected={selectedImageIds.includes(item.id)}
+                  onClick={() => toggleImageSelection(item.id)}
+              >
+                <ItemImage src={imageUrl} alt={item.name} />
+                <p>{item.name}</p>
+              </ImageItem>
+          ))}
+        </ImageGrid>
+      </div>
   );
 }
 
@@ -132,7 +188,7 @@ const ImageItem = styled.div`
   padding-bottom: 100%; /* 정사각형 비율을 유지하기 위한 패딩 */
   overflow: hidden;
   border: ${({ isSelected }) =>
-    isSelected ? "1px solid red" : "1px solid lightgray"};
+      isSelected ? "1px solid red" : "1px solid lightgray"};
   border-radius: 18px;
 `;
 
