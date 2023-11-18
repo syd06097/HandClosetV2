@@ -38,3 +38,4 @@ out/
 .idea/
 /src/main/resources/static/static/js/
 /src/main/resources/static/static/
+src/main/resources/application.properties

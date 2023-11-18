@@ -88,6 +88,7 @@ const ClothingRecommendation = () => {
     setApiToCall(apiEndpoint);
     setActiveButton(buttonType);
   };
+
   const handleRandomButtonClick = async (apiEndpoint,buttonType) => {
     try {
       const encodedSubcategories = subcategories.map((subcategory) =>
@@ -122,6 +123,41 @@ const ClothingRecommendation = () => {
       console.error("Error fetching recommended clothes:", error);
     }
   };
+
+  const handleTpoClick = async () => {
+    try {
+      const encodedSubcategories = tpoSubcategories.map((subcategory) =>
+          encodeURIComponent(subcategory)
+      );
+      const response = await axios.get("/api/clothing/RandomRecommendation", {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        params: { subcategories: encodedSubcategories },
+
+        data: { refreshToken: loginInfo.refreshToken },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { arrayFormat: "repeat" });
+        },
+      });
+      const data = response.data;
+
+      const updatedClothes = await Promise.all(
+          data.map(async (clothes) => {
+            const imageUrl = await fetchImage(clothes.id);
+            return {
+              ...clothes,
+              imageUrl: imageUrl,
+            };
+          })
+      );
+
+      setRecommendedClothes(updatedClothes);
+    } catch (error) {
+      console.error("Error fetching recommended clothes:", error);
+    }
+  };
+
 
   const GloStyle = createGlobalStyle`
       @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
@@ -195,7 +231,7 @@ const ClothingRecommendation = () => {
             setTPOButtonsVisible(true);
             setActiveButton("tpo");
             setActiveButtonBottom("casual");}}
-        active={activeButton === "tpo"}>TPO별 코디</Button>
+        active={activeButton === "tpo"}>TPO 코디</Button>
         <Button
           style={{ borderRadius: "0px 10px 10px 0px" }}
           onClick={() =>
