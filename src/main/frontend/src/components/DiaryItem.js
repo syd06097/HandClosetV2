@@ -38,16 +38,25 @@ function DiaryItem({
     fetchIds();
     }
   }, [category]);
-  const toggleImageSelection = (imageId) => {
+  // const toggleImageSelection = (imageId) => {
+  //   setSelectedImageIds((prevSelectedImageIds) => {
+  //     if (prevSelectedImageIds.includes(imageId)) {
+  //       return prevSelectedImageIds.filter((id) => id !== imageId);
+  //     } else {
+  //       return [...prevSelectedImageIds, imageId];
+  //     }
+  //   });
+  // };
+  const toggleImageSelection = (index) => {
     setSelectedImageIds((prevSelectedImageIds) => {
-      if (prevSelectedImageIds.includes(imageId)) {
-        return prevSelectedImageIds.filter((id) => id !== imageId);
+      const selectedId = category === "전체" ? ids[index] : items[index].id;
+      if (prevSelectedImageIds.includes(selectedId)) {
+        return prevSelectedImageIds.filter((id) => id !== selectedId);
       } else {
-        return [...prevSelectedImageIds, imageId];
+        return [...prevSelectedImageIds, selectedId];
       }
     });
   };
-
   const getImageSrc = async (category, item, index, ids) => {
     console.log("getImageSrc 호출");
     if (category === "전체") {
@@ -112,8 +121,8 @@ function DiaryItem({
           {images.map(({ item, imageUrl, index }) => (
               <ImageItem
                   key={item.id}
-                  isSelected={selectedImageIds.includes(item.id)}
-                  onClick={() => toggleImageSelection(item.id)}
+                  isSelected={selectedImageIds.includes(category === "전체" ? ids[index] : item.id)}
+                  onClick={() => toggleImageSelection(index)}
               >
                 <ItemImage src={imageUrl} alt={item.name} />
                 <p>{item.name}</p>
