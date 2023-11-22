@@ -17,14 +17,14 @@ function DiaryItem({
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
 
-  useEffect(() => {
 
+
+  useEffect(() => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
-    }
-  }, [loginInfo, navigate]);
+    }else{
 
-  useEffect(() => {
+
     const fetchIds = async () => {
       try {
         const clothesIds = await getAllClothesIds(); // 모든 의류의 ID 목록 가져오기
@@ -36,7 +36,8 @@ function DiaryItem({
     };
 
     fetchIds();
-  }, []);
+    }
+  }, [category]);
   const toggleImageSelection = (imageId) => {
     setSelectedImageIds((prevSelectedImageIds) => {
       if (prevSelectedImageIds.includes(imageId)) {
@@ -46,20 +47,25 @@ function DiaryItem({
       }
     });
   };
-  const getImageSrc = async (id, category, item) => {
+
+  const getImageSrc = async (category, item, index, ids) => {
     console.log("getImageSrc 호출");
     if (category === "전체") {
       console.log("getImageSrc 전체 호출");
       try {
-        const response = await axios.get(`/api/clothing/images/${id}`, {
-          headers: {
-            Authorization: `Bearer ${loginInfo.accessToken}`,
-          },
-          responseType: "arraybuffer",
-        });
-        const arrayBufferView = new Uint8Array(response.data);
-        const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
-        return URL.createObjectURL(blob);
+        if(ids[index] !== undefined) {
+          const response = await axios.get(`/api/clothing/images/${ids[index]}`, {
+            headers: {
+              Authorization: `Bearer ${loginInfo.accessToken}`,
+            },
+            responseType: "arraybuffer",
+          });
+          const arrayBufferView = new Uint8Array(response.data);
+          const blob = new Blob([arrayBufferView], {type: "image/jpeg"});
+          return URL.createObjectURL(blob);
+        }else{
+            return null;
+          }
       } catch (error) {
         console.error("Failed to fetch image:", error);
         return null;
@@ -67,8 +73,9 @@ function DiaryItem({
     } else {
       console.log("getImageSrc 다른 카테고리 호출");
       try {
+
         // 여기서도 마찬가지로 헤더에 토큰을 포함하여 요청합니다.
-        const response = await axios.get(`/api/clothing/images/${item.id}`, {
+        const response = await axios.get(item.image, {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
@@ -84,75 +91,20 @@ function DiaryItem({
       }
     }
   };
-  // const getImageSrc = async (id, category, item) => {
-  //   console.log("getImageSrc 호출");
-  //   if (category === "전체") {
-  //     console.log("getImageSrc 전체 호출");
-  //     try {
-  //       if(id !== undefined) {
-  //         const response = await axios.get(`/api/clothing/images/${id}`, {
-  //           headers: {
-  //             Authorization: `Bearer ${loginInfo.accessToken}`,
-  //           },
-  //           responseType: "arraybuffer",
-  //         });
-  //         const arrayBufferView = new Uint8Array(response.data);
-  //         const blob = new Blob([arrayBufferView], {type: "image/jpeg"});
-  //         return URL.createObjectURL(blob);
-  //       }else{
-  //           return null;
-  //         }
-  //     } catch (error) {
-  //       console.error("Failed to fetch image:", error);
-  //       return null;
-  //     }
-  //   } else {
-  //     console.log("getImageSrc 다른 카테고리 호출");
-  //     try {
-  //
-  //       // 여기서도 마찬가지로 헤더에 토큰을 포함하여 요청합니다.
-  //       const response = await axios.get(item.image, {
-  //         headers: {
-  //           Authorization: `Bearer ${loginInfo.accessToken}`,
-  //         },
-  //         responseType: "arraybuffer",
-  //       });
-  //       const arrayBufferView = new Uint8Array(response.data);
-  //       const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
-  //       console.log(URL.createObjectURL(blob));
-  //       return URL.createObjectURL(blob);
-  //     } catch (error) {
-  //       console.error("Failed to fetch image:", error);
-  //       return null;
-  //     }
-  //   }
-  // };
+
   useEffect(() => {
     console.log("useEffect2 호출");
     const fetchData = async () => {
       const images = await Promise.all(
-          items.map(async (item) => {
-            const imageUrl = await getImageSrc(item.id, category, item);
-            return { item, imageUrl };
+          items.map(async (item, index) => {
+            const imageUrl = await getImageSrc(category, item,index,ids);
+            return { item, imageUrl,index };
           })
       );
       setImages(images);
     };
     fetchData();
-  }, [items, category, ids]);
-  // useEffect(() => {
-  //   console.log("useEffect2 호출");
-  //   const fetchData = async () => {
-  //     const images = await Promise.all(
-  //         items.map(async (item) => {
-  //           const imageUrl = await getImageSrc(item.id, category, item);
-  //           return { item, imageUrl };
-  //         })
-  //     );
-  //     setImages(images);
-  //   };
-  //   fetchData();
-  // }, [items]);
+  }, [category, ids, items]);
 
   return (
       <div>
