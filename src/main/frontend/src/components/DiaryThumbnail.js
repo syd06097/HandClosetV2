@@ -98,7 +98,7 @@ const DiaryThumbnail = ({ selectedDate }) => {
           <hr /> {/* 아래 줄 */}
         </div>
       ) : (
-        <p style={{ marginTop: "43%" }}>다이어리를 추가해 주세요!</p>
+        <p style={{ marginTop: "43%", fontWeight:"bold", color:"#7a7a7a" }}>다이어리를 작성해 주세요!</p>
       )}
     </StyledDiaryThumbnail>
   );

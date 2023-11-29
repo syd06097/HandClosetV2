@@ -342,13 +342,13 @@ const ClothingForm = () => {
             onClick={() => navigate("/Closet")}
             className={styles.btn_back}
           >
-            <img src={back} alt="back" style={{ width: "28px" }} />
+            <img src={back} alt="back" style={{ width: "26px" }} />
           </button>
         </div>
         <div>
           <button type="submit" className={styles.btn_submit}>
             {" "}
-            <img src={check} alt="check" style={{ width: "28px" }} />
+            <img src={check} alt="check" style={{ width: "26px" }} />
           </button>
         </div>
         <br />

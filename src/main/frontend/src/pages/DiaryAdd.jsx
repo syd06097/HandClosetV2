@@ -132,7 +132,7 @@ const DiaryAdd = () => {
         {/*<Container>*/}
         <Header>
           <BackButton onClick={() => navigate("/Diary")}>
-            <img src={back} alt="back" style={{ width: "28px" }} />
+            <img src={back} alt="back" style={{ width: "26px" }} />
           </BackButton>
           <SubmitButton>
             <button type="submit">
@@ -247,7 +247,7 @@ const Header = styled.div`
 `;
 
 const BackButton = styled.div`
-  margin-top: 25px;
+  margin-top: 26px;
   margin-left: 9%;
 `;
 const SubmitButton = styled.div`

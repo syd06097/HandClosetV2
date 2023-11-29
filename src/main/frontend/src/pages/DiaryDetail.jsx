@@ -143,7 +143,7 @@ function DiaryDetail() {
       <Container>
         <Header>
           <BackButton onClick={() => navigate("/Diary")}>
-            <img src={back} alt="back" style={{ width: "28px" }} />
+            <img src={back} alt="back" style={{ width: "26px" }} />
           </BackButton>
           <TrashWrapper onClick={handleDelete}>
             <img src={trash} alt="trash" />
@@ -190,7 +190,7 @@ const Header = styled.div`
 `;
 
 const BackButton = styled.div`
-  margin-top: 25px;
+  margin-top: 26px;
   margin-left: 9%;
 `;
 

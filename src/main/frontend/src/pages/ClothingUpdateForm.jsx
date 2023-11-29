@@ -336,7 +336,7 @@ function ClothingUpdateForm() {
           <div>
             <button type="submit" className={styles.btn_submit}>
               {" "}
-              <img src={check} alt="check" style={{ width: "28px" }} />
+              <img src={check} alt="check" style={{ width: "26px" }} />
             </button>
           </div>
         </div>

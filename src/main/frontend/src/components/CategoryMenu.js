@@ -164,7 +164,7 @@ const StyledHeader = styled.header`
     padding: 0;
     margin-right: 11px;
     display: flex;
-    font-size: 18px;
+    font-size: 20px;
     overflow: auto;
     white-space: nowrap;
   }
@@ -174,10 +174,11 @@ const StyledHeader = styled.header`
     padding: 0;
     margin-right: 11px;
     display: flex;
-    font-size: 27px;
+    font-size: 29px;
     overflow: auto;
     white-space: nowrap;
     margin-top: 25px;
+    
   }
 
   li {
