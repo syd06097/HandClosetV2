@@ -20,4 +20,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findAllByImageIdsContaining(Long imageId);
 
     List<Diary> findAllByThumbnailpathAndMemberId(String thumbnailpath, Long memberId);
+
+    void deleteByMemberId(Long memberId);
 }

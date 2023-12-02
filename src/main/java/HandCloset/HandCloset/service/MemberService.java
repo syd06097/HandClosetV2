@@ -34,8 +34,12 @@ public class MemberService {
         return memberRepository.findById(memberId);
     }
 
-    @Transactional(readOnly = true)
-    public Optional<Member> getMember(String email){
-        return memberRepository.findByEmail(email);
+//    @Transactional(readOnly = true)
+//    public Optional<Member> getMember(String email){
+//        return memberRepository.findByEmail(email);
+//    }
+    @Transactional
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
     }
 }

@@ -17,7 +17,7 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
 
     List<Clothes> findBySubcategoryAndMemberId(String subcategory, Long memberId);
 
-    List<Clothes> findAllByMemberId(Long memberId);
+
     Optional<Clothes> findByIdAndMemberId(Long id, Long memberId);
 
     List<Clothes> findByMemberId(Long memberId);
@@ -36,4 +36,6 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
 
     @Query("SELECT c FROM Clothes c WHERE c.subcategory = :subcategory AND c.memberId = :memberId ORDER BY FUNCTION('RAND')")
     List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory, @Param("memberId") Long memberId);
+
+    void deleteByMemberId(Long memberId);
 }
