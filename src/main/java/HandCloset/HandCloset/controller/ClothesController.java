@@ -194,6 +194,8 @@ public class ClothesController {
             throw new UnauthorizedException("로그인이 필요합니다.");
         } else {
 
+
+
         try {
             Clothes clothes = clothesService.getClothes(id, loginUserDto.getMemberId());
             String imagePath = clothes.getImgpath();
@@ -212,7 +214,7 @@ public class ClothesController {
 
                 // 이미지 ID 목록이 비어 있다면 다이어리를 삭제
                 if (diary.getImageIds().isEmpty()) {
-                    diaryService.deleteDiaryAndImage(diary.getId(), loginUserDto.getMemberId());
+                    diaryService.deleteDiary(diary.getId(),loginUserDto.getMemberId());
                 }
             }
 

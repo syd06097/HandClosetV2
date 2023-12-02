@@ -23,6 +23,7 @@ function DiaryItem({
       navigate("/LoginForm");
     }else{
 
+
     const fetchIds = async () => {
       try {
         const clothesIds = await getAllClothesIds(); // 모든 의류의 ID 목록 가져오기

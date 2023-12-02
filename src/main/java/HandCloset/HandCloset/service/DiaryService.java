@@ -13,9 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -103,60 +100,6 @@ public class DiaryService {
             diaryRepository.deleteByIdAndMemberId(id,memberId);
         }
     }
-    //다른 클래스에서 활용하는 메서드
-    public void deleteDiaryAndImage(Long id, Long memberId) {
-        Diary diary = diaryRepository.findByIdAndMemberId(id, memberId).orElse(null);
-        if (diary != null) {
-            List<Long> imageIds = diary.getImageIds();
-
-            if (!imageIds.isEmpty()) {
-                for (Long imageId : imageIds) {
-                    // Delegate the work to clothesService
-                    Date secondLatestDate = findSecondLatestDateByImageId(imageId, memberId);
-                    clothesService.updateWearCountAndCreateDateOnDelete(imageId, secondLatestDate, memberId);
-                }
-            }
-
-            // 이 부분에서 이미지 파일 삭제 로직 추가
-            try {
-                // Check if the thumbnail is used in other diaries
-                List<Diary> diariesUsingThumbnail = diaryRepository.findAllByThumbnailpathAndMemberId(diary.getThumbnailpath(), memberId);
-
-                if (diariesUsingThumbnail.size() == 1 && diariesUsingThumbnail.get(0).getId().equals(id)) {
-                    // If the thumbnail is only used in the current diary, delete the thumbnail
-                    String thumbnailPath = diary.getThumbnailpath();
-                    String modifiedThumbnailPath = thumbnailPath.replace("\\", "/");
-                    Path thumbnailFilePath = Paths.get(modifiedThumbnailPath);
-                    Files.delete(thumbnailFilePath);
-                }
-            } catch (IOException e) {
-                // Handle any IO exceptions if the image deletion fails
-                e.printStackTrace();
-                throw new RuntimeException("Failed to delete image and data.");
-            }
-
-            diaryRepository.deleteByIdAndMemberId(id, memberId);
-        }
-    }
-
-    public void deleteAllDiaries(Long memberId){
-        try {
-            // Check if the thumbnail is used in other diaries
-            List<Diary> diaryList = diaryRepository.findByMemberId(memberId);
-            for (Diary diary : diaryList){
-                String thumbnailPath = diary.getThumbnailpath();
-                String modifiedThumbnailPath = thumbnailPath.replace("\\", "/");
-                Path thumbnailFilePath = Paths.get(modifiedThumbnailPath);
-                Files.delete(thumbnailFilePath);
-            }
-            diaryRepository.deleteByMemberId(memberId);
-        } catch (IOException e) {
-            // Handle any IO exceptions if the image deletion fails
-            e.printStackTrace();
-            throw new RuntimeException("Failed to delete");
-        }
-    }
-
     @Transactional(readOnly = true)
     public List<Diary> findDiariesByThumbnailpath(String thumbnailpath, Long memberId) {
         return diaryRepository.findAllByThumbnailpathAndMemberId(thumbnailpath, memberId);
