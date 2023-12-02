@@ -197,7 +197,7 @@ const ClothingRecommendation = () => {
   `;
 
   const BackButton = styled.div`
-    margin-top: 25px;
+    margin-top: 26px;
     margin-left: 5%;
     display: flex;
   `;
@@ -206,7 +206,7 @@ const ClothingRecommendation = () => {
     <div>
       <GloStyle />
       <BackButton onClick={() => navigate("/Main")}>
-        <img src={back} alt="back" style={{ width: "28px" }} />
+        <img src={back} alt="back" style={{ width: "26px" }} />
       </BackButton>
       <ButtonContainer>
         <Button

@@ -48,6 +48,50 @@ public class ClothesService {
             throw new EntityNotFoundException("Clothes entity with id " + id + " does not exist.");
         }
     }
+    //다른 클래스에서 활용하는 메서드
+    public void deleteClothesAndImage(Long id,Long memberId) {
+        try {
+            try {
+                Clothes clothes = clothesRepository.findByIdAndMemberId(id, memberId).orElse(null);
+                String imagePath = clothes.getImgpath();
+                // 파일 경로 구분자 수정
+                String modifiedImagePath = imagePath.replace("\\", "/");
+                Path imageFilePath = Paths.get(modifiedImagePath);
+
+                // 파일 시스템에서 이미지 삭제
+                Files.delete(imageFilePath);
+
+            } catch (IOException e) {
+                // 파일 삭제 실패 시 예외 처리
+                e.printStackTrace();
+                throw new RuntimeException("Failed to delete image and data.");
+            }
+            clothesRepository.deleteByIdAndMemberId(id,memberId);
+        } catch (EmptyResultDataAccessException e) {
+            // 요청한 id에 해당하는 Clothes 엔티티가 존재하지 않는 경우
+            throw new EntityNotFoundException("Clothes entity with id " + id + " does not exist.");
+        }
+    }
+    public void deleteAllClothes(Long memberId) {
+        try {
+            List<Clothes> clothesList = clothesRepository.findByMemberId(memberId);
+
+            for (Clothes clothes : clothesList) {
+                String imagePath = clothes.getImgpath();
+                // 파일 경로 구분자 수정
+                String modifiedImagePath = imagePath.replace("\\", "/");
+                Path imageFilePath = Paths.get(modifiedImagePath);
+                Files.delete(imageFilePath);
+            }
+
+            clothesRepository.deleteByMemberId(memberId);
+        } catch (IOException e) {
+            // 파일 삭제 실패 시 예외 처리
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete");
+        }
+    }
+
     @Transactional(readOnly = true)
     public List<Clothes> getClothesByCategory(String category,Long memberId) {
         return clothesRepository.findByCategoryAndMemberId(category,memberId);

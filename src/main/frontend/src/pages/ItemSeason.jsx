@@ -25,9 +25,6 @@ const ItemSeason = () => {
   const fetchData = async () => {
     try {
 
-
-
-
       const response = await axios.get("/api/clothing/statistics", {
         headers: {
           Authorization: `Bearer ${loginInfo.accessToken}`,

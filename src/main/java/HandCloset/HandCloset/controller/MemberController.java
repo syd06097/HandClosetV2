@@ -7,16 +7,19 @@ import HandCloset.HandCloset.dto.*;
 import HandCloset.HandCloset.security.jwt.util.IfLogin;
 import HandCloset.HandCloset.security.jwt.util.JwtTokenizer;
 import HandCloset.HandCloset.security.jwt.util.LoginUserDto;
+import HandCloset.HandCloset.service.MemberManagementService;
 import HandCloset.HandCloset.service.MemberService;
 import HandCloset.HandCloset.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,6 +35,8 @@ public class MemberController {
     private final MemberService memberService;
     private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final MemberManagementService memberManagementService;
+
 
 //    public MemberController(JwtTokenizer jwtTokenizer, MemberService memberService, RefreshTokenService refreshTokenService, PasswordEncoder passwordEncoder) {
 //        this.jwtTokenizer = jwtTokenizer;
@@ -139,5 +144,19 @@ public class MemberController {
         Member member = memberService.findByEmail(loginUserDto.getEmail());
         return new ResponseEntity(member, HttpStatus.OK);
     }
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity deleteMember(@PathVariable Long memberId, @RequestBody RefreshTokenDto refreshTokenDto) {
+        try {
+            // Get the member information
+//            Member member = memberService.getMember(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+            // Perform additional security checks if needed
+            refreshTokenService.deleteRefreshToken(refreshTokenDto.getRefreshToken());
+            memberManagementService.deleteMemberAndRelatedData(memberId);
+         
 
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found");
+        }
+    }
 }
