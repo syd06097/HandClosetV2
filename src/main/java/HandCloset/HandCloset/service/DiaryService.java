@@ -156,6 +156,10 @@ public class DiaryService {
             throw new RuntimeException("Failed to delete");
         }
     }
+    @Transactional(readOnly = true)
+    public int getDiaryCount(Long memberId) {
+        return diaryRepository.countByMemberId(memberId);
+    }
 
     @Transactional(readOnly = true)
     public List<Diary> findDiariesByThumbnailpath(String thumbnailpath, Long memberId) {

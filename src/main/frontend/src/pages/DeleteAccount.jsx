@@ -70,11 +70,12 @@ const DeleteAccount = () => {
             </Header>
                 {/*템플릿 문자열을 사용하려면 백틱()을 사용*/}
                 <Text>
-                    <h2>{`${userName}님 회원 탈퇴를 진행하시겠습니까?`}</h2>
-                    <h3>그동안 등록한 정보가 모두 삭제되며 복구할 수 없습니다.</h3>
+                    <h5>{`${userName}님`}
+                     <br/>회원 탈퇴를 진행하시겠어요?</h5>
+                    <h6>그동안 등록한 정보가<br/> 모두 삭제되며 복구할 수 없어요.</h6>
                 </Text>
                 <Button onClick={handleDeleteAccount}>
-                        회원 탈퇴하기
+                        유의사항을 확인했어요
                 </Button>
             </Container>
         </div>
@@ -92,7 +93,7 @@ const Header = styled.div`
   align-items: flex-start;
   width: 100%;
   height: 40px;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 `;
 
 const BackButton = styled.div`

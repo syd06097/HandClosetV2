@@ -22,4 +22,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findAllByThumbnailpathAndMemberId(String thumbnailpath, Long memberId);
 
     void deleteByMemberId(Long memberId);
+
+    int countByMemberId(Long memberId);
+
+
 }

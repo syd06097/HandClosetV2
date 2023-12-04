@@ -171,6 +171,17 @@ public class ClothesController {
 
     }
 
+    @GetMapping("/count")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public ResponseEntity<Integer> getTotalClothesCount(@IfLogin LoginUserDto loginUserDto) {
+        if (loginUserDto == null) {
+            throw new UnauthorizedException("로그인이 필요합니다.");
+        } else {
+            int clothesTotalCount = clothesService.getClothesCount(loginUserDto.getMemberId());
+            return ResponseEntity.ok(clothesTotalCount);
+        }
+    }
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<Clothes> getAllClothes(@IfLogin LoginUserDto loginUserDto) {

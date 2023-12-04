@@ -115,40 +115,17 @@ public class DiaryController {
         }
     }
 
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-//    @Transactional
-//    public void deleteDiaryEntry(@IfLogin LoginUserDto loginUserDto,@PathVariable Long id) {
-//        System.out.println("handleDelete 함수 호출");
-//        if (loginUserDto == null) {
-//            throw new UnauthorizedException("로그인이 필요합니다.");
-//        } else {
-//            try {
-//                // Get the Diary entry by ID
-//                Diary diary = diaryService.getDiaryEntryById(id,loginUserDto.getMemberId());
-//
-//                // Get the thumbnail path from the Diary entry
-//                String thumbnailPath = diary.getThumbnailpath();
-//
-//                String modifiedThumbnailPath = thumbnailPath.replace("\\", "/");
-//
-//                // Delete the thumbnail image from the file system
-//                Path thumbnailFilePath = Paths.get(modifiedThumbnailPath);
-//                Files.delete(thumbnailFilePath);
-//
-//
-//                // Delete the Diary entry
-//                diaryService.deleteDiary(id,loginUserDto.getMemberId());
-//
-//            } catch (IOException e) {
-//                // Handle any IO exceptions if the image deletion fails
-//                e.printStackTrace();
-//                throw new RuntimeException("Failed to delete image and data.");
-//            }
-//        }
-//    }
 
+    @GetMapping("/count")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public ResponseEntity<Integer> getTotalDiariesCount(@IfLogin LoginUserDto loginUserDto) {
+        if (loginUserDto == null) {
+            throw new UnauthorizedException("로그인이 필요합니다.");
+        } else {
+            int DiaryTotalCount = diaryService.getDiaryCount(loginUserDto.getMemberId());
+            return ResponseEntity.ok(DiaryTotalCount);
+        }
+    }
 
     @GetMapping("/entries")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")

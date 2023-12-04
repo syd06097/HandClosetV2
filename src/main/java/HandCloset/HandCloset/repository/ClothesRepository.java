@@ -38,4 +38,6 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
     List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory, @Param("memberId") Long memberId);
 
     void deleteByMemberId(Long memberId);
+
+    int countByMemberId(Long memberId);
 }

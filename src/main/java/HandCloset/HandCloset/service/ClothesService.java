@@ -93,6 +93,11 @@ public class ClothesService {
     }
 
     @Transactional(readOnly = true)
+    public int getClothesCount(Long memberId) {
+        return clothesRepository.countByMemberId(memberId);
+    }
+
+    @Transactional(readOnly = true)
     public List<Clothes> getClothesByCategory(String category,Long memberId) {
         return clothesRepository.findByCategoryAndMemberId(category,memberId);
     }
