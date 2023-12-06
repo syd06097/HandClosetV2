@@ -54,10 +54,7 @@ public class MemberController {
         member.setName(memberSignupDto.getName());
         member.setEmail(memberSignupDto.getEmail());
         member.setPassword(passwordEncoder.encode(memberSignupDto.getPassword()));
-//        member.setBirthYear(Integer.parseInt(memberSignupDto.getBirthYear()));
-//        member.setBirthMonth(Integer.parseInt(memberSignupDto.getBirthMonth()));
-//        member.setBirthDay(Integer.parseInt(memberSignupDto.getBirthDay()));
-//        member.setGender(memberSignupDto.getGender());
+        member.setGender(memberSignupDto.getGender());
 
         Member saveMember = memberService.addMember(member);
 

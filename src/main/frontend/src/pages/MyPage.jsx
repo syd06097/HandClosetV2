@@ -6,7 +6,7 @@ import styled from "styled-components";
 import axios from "axios";
 import useLogout from "../hooks/useLogout";
 import profile from "../images/profile.png";
-import Diary from "./Diary";
+import woman from "../images/woman.png";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const MyPage = () => {
   const [memberId, setMemberId] = useState("");
   const [clothesCount, setClothesCount] = useState(0);
   const [diaryCount, setDiaryCount] = useState(0);
-
+  const [gender, setGender] = useState("M")
   useEffect(() => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
@@ -33,6 +33,7 @@ const MyPage = () => {
 
           setUserName(response.data.name);
           setMemberId(response.data.memberId);
+          setGender(response.data.gender);
         } catch (error) {
           // 에러 처리
           console.error("Failed to fetch user information", error);
@@ -145,7 +146,9 @@ const MyPage = () => {
         {isLoggedIn && (
             <div>
               <UserImage
-                src={profile}  alt="clothes" />
+                  src={gender === "F" ? woman : profile}
+                  alt="clothes"
+              />
               <UserName>{userName}</UserName>
               <UserDetail>
                 <DataContainer1>

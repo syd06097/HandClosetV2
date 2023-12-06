@@ -40,7 +40,7 @@ public class MemberSignupDto {
 //    @Pattern(regexp = "^(0?[1-9]|[12][0-9]|3[01])$", message = "생일은 1부터 31까지의 숫자로 입력해야 합니다")
 //    private String birthDay;
 //
-//    @NotEmpty
-//    @Pattern(regexp = "^[MF]{1}$", message = "성별은 'M' 또는 'F'로 입력해야 합니다")
-//    private String gender;
+    @NotEmpty
+    @Pattern(regexp = "^[MF]{1}$", message = "성별은 'M' 또는 'F'로 입력해야 합니다")
+    private String gender;
 }

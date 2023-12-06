@@ -7,10 +7,13 @@ const JoinForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState(""); // 추가
+  const [gender, setGender] = useState("M");
   const navigate = useNavigate();
 
 
-
+  const handleChange = (event) => {
+    setGender(event.target.value);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,6 +22,7 @@ const JoinForm = () => {
       email,
       password,
       name,
+      gender,
     };
     try {
       const response = await axios.post(
@@ -60,6 +64,7 @@ const JoinForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="email"
+          required
         />
 
         <Input
@@ -68,6 +73,7 @@ const JoinForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="password"
+          required
         />
 
         <Input
@@ -76,8 +82,12 @@ const JoinForm = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="name"
+          required
         />
-
+        <Select value={gender} onChange={handleChange} label="성별">
+          <Option value="M">남성</Option>
+          <Option value="F">여성</Option>
+        </Select>
         <Button type="submit">회원가입하기</Button>
       </Form>
     </Container>
@@ -118,7 +128,20 @@ const Input = styled.input`
   margin-left: 9%;
   margin-right: 9%;
 `;
+const Select=styled.select`
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-left: 9%;
+  margin-right: 9%;
+`;
 
+const Option=styled.option`
+  margin-left: 9%;
+  margin-right: 9%;
+`;
 const Button = styled.button`
   padding: 12px 20px;
   border: none;

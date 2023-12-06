@@ -34,6 +34,9 @@ public class Member {
     @CreationTimestamp // 현재시간이 저장될 때 자동으로 생성.
     private LocalDateTime regdate;
 
+    @Column(length = 10, nullable = false)
+    private String gender;
+
 //    @Column(nullable = false)
 //    private Integer birthYear;
 //
@@ -61,10 +64,7 @@ public class Member {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", regdate=" + regdate +
-//                ", birthYear=" + birthYear +
-//                ", birthMonth=" + birthMonth +
-//                ", birthDay=" + birthDay +
-//                ", gender='" + gender + '\'' +
+                ", gender='" + gender + '\'' +
                 '}';
     }
 
