@@ -17,7 +17,11 @@ const MyPage = () => {
   const [memberId, setMemberId] = useState("");
   const [clothesCount, setClothesCount] = useState(0);
   const [diaryCount, setDiaryCount] = useState(0);
-  const [gender, setGender] = useState("M")
+  const [gender, setGender] = useState("M");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedUserName, setEditedUserName] = useState(""); // 수정된 사용자 이름
+  const [editedGender, setEditedGender] = useState(""); // 수정된 성별
+
   useEffect(() => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
@@ -140,6 +144,30 @@ const MyPage = () => {
     }
   }
 
+  const handleEditProfile = async () => {
+    try {
+      // 서버로 수정된 정보 전송
+      await axios.put("/members/update", {
+        memberId: memberId,
+        editedUserName: editedUserName,
+        editedGender: editedGender,
+      }, {
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
+        data: {refreshToken: loginInfo.refreshToken},
+      });
+
+      // 수정 완료 후 상태 업데이트
+      setUserName(editedUserName);
+      setGender(editedGender);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      // 에러 처리 로직 추가
+    }
+  };
+
   return (
     <div>
       <Container>
@@ -176,12 +204,53 @@ const MyPage = () => {
         </Button>
         {/*회원 탈퇴 로직*/}
         <hr style={{ border: "0", height: "1px", background: "#ccc", marginLeft:"9%", marginRight:"9%"}}/>
+        <Button onClick={() => setIsEditing(true)}>회원 정보 수정</Button>
+        {isEditing && (
+            <>
+              {/* 배경 어둡게 처리 */}
+              <Backdrop />
+
+              {/* 회원 정보 수정 팝업 */}
+              <EditProfilePopup>
+                {/* 사용자 이름 수정 필드 */}
+                <EditField>
+
+                  <input
+                      type="text"
+                      // value={editedUserName}
+                      defaultValue={userName}
+                      onChange={(e) => setEditedUserName(e.target.value)}
+                  />
+                </EditField>
+
+                {/* 성별 수정 필드 */}
+                <EditField>
+
+                  <select
+                      // value={editedGender}
+                      defaultValue={gender}
+                      onChange={(e) => setEditedGender(e.target.value)}
+                  >
+                    <option value="M">남성</option>
+                    <option value="F">여성</option>
+                  </select>
+                </EditField>
+
+                <ButtonRow>
+                  <ButtonLeft onClick={() => handleEditProfile()}>수정 완료</ButtonLeft>
+                  <ButtonRight onClick={() => setIsEditing(false)}>취소</ButtonRight>
+                </ButtonRow>
+              </EditProfilePopup>
+            </>
+        )}
+        <hr style={{ border: "0", height: "1px", background: "#ccc", marginLeft:"9%", marginRight:"9%"}}/>
         <Button
             onClick={handleDeleteAccount}
         >
           탈퇴하기
         </Button>
         <hr style={{ border: "0", height: "1px", background: "#ccc", marginLeft:"9%", marginRight:"9%"}}/>
+
       </Container>
     </div>
   );
@@ -191,11 +260,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-
-
-
-
 
 const UserImage = styled.img`
   width: 140px;
@@ -251,5 +315,83 @@ const Button = styled.button`
   //margin-right: 9%;
   text-align: left;
 `;
+
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 색상 및 투명도 조절 */
+  z-index: 998; /* 모달보다 앞에 나타나게 하기 */
+`;
+
+const EditProfilePopup = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 999;
+  padding: 50px 10px;
+  flex-direction: column;
+`;
+
+const EditField = styled.div`
+  margin-bottom: 10px;
+  input{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 88%;
+    margin-bottom: 10px;
+  }
+  select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+    
+  }
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 20px);
+  text-align: center;
+`;
+
+const ButtonLeft = styled.button`
+  border: none;
+  margin-Top: 3px;
+  margin-Bottom: 3px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+  color: gray;
+  margin-left: 9%;
+  text-align: left;
+`;
+
+const ButtonRight = styled.button`
+  border: none;
+  margin-Top: 3px;
+  margin-Bottom: 3px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+  color: gray;
+  margin-right: 9%;
+  text-align: right;
+`;
+
 
 export default MyPage;

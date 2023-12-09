@@ -156,4 +156,23 @@ public class MemberController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found");
         }
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateProfile(
+            @RequestBody UpdateProfileRequestDto updateProfileRequestDto) {
+        try {
+            // 사용자 정보 업데이트 로직 (예시: 서비스 계층에서 처리)
+            memberService.updateProfile(
+                    updateProfileRequestDto.getMemberId(),
+                    updateProfileRequestDto.getEditedUserName(),
+                    updateProfileRequestDto.getEditedGender()
+            );
+
+            return ResponseEntity.ok("Profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update profile");
+        }
+    }
 }
+

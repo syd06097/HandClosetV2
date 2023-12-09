@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -41,5 +42,18 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
+    }
+
+    @Transactional
+    public void updateProfile(Long memberId, String editedUserName, String editedGender) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+
+        // 수정된 정보 업데이트
+        member.setName(editedUserName);
+        member.setGender(editedGender);
+
+        // 저장
+        memberRepository.save(member);
     }
 }

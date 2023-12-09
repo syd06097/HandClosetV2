@@ -37,18 +37,6 @@ public class Member {
     @Column(length = 10, nullable = false)
     private String gender;
 
-//    @Column(nullable = false)
-//    private Integer birthYear;
-//
-//    @Column(nullable = false)
-//    private Integer birthMonth;
-//
-//    @Column(nullable = false)
-//    private Integer birthDay;
-//
-//    @Column(length = 10, nullable = false)
-//    private String gender;
-
     @ManyToMany
     @JoinTable(name = "member_role",
             joinColumns = @JoinColumn(name = "member_id"),

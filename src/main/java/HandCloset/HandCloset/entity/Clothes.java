@@ -31,14 +31,16 @@ public class Clothes {
     @Column(nullable = false)
     private String season;
 
+    @Column(nullable = false)
+    private String color;
+
     private String description;
 
     private int wearcnt;
 
-    @Column(nullable = false)
-    private String color;
-
     private Long memberId;
+
+    private Date createdate;
 
     public Long getMemberId() {
         return memberId;
@@ -48,16 +50,8 @@ public class Clothes {
         this.memberId = memberId;
     }
 
-    private Date createdate;
 
-/*
-    private Date getRandomDate() {
-        long minDay = new Date(123, 4, 15).getTime();
-        long maxDay = new Date(123, 4, 31).getTime();
-        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-        return new Date(randomDay);
-    }
-*/
+
     public Long getId() {
         return id;
     }

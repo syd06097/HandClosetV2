@@ -10,7 +10,7 @@ import java.util.List;
 public class Diary {
 
 
-    private String thumbnailpath;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +23,21 @@ public class Diary {
     @Column(nullable = false)
     private String season;
 
-
+    private String thumbnailpath;
     private Long memberId;
 
+    private String note;
+
+    @ElementCollection
+    @CollectionTable(name = "diary_image_ids", joinColumns = @JoinColumn(name = "diary_id"))
+    @Column(name = "image_id")
+    private List<Long> imageIds;
+
+
+
+
+
+    // Getters and setters
     public Long getMemberId() {
         return memberId;
     }
@@ -33,18 +45,6 @@ public class Diary {
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
-
-    @ElementCollection
-    @CollectionTable(name = "diary_image_ids", joinColumns = @JoinColumn(name = "diary_id"))
-    @Column(name = "image_id")
-    private List<Long> imageIds;
-
-    private String note;
-
-
-
-    // Getters and setters
-
 
     public String getThumbnailpath() {
         return thumbnailpath;
