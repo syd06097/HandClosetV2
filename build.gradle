@@ -25,16 +25,16 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	implementation 'com.googlecode.jopensurf:jopensurf:1.0.0'
-//	implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0', classifier: 'natives-windows-x86_64'
-//	implementation 'org.bytedeco:opencv-java:4.8.0:natives-windows-x86_64'
-//	implementation files('build/libs/opencv-480.jar')
-//	implementation fileTree(dir: 'libs', include: ['opencv4.8.0.jar'])
-//	implementation 'org.opencv:opencv-java:4.8.0'
-//	implementation 'org.openpnp:opencv:4.5.1-1'
-//	implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0'
-//	implementation group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.9'
-//	implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-1'
+//   implementation 'com.googlecode.jopensurf:jopensurf:1.0.0'
+//   implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0', classifier: 'natives-windows-x86_64'
+//   implementation 'org.bytedeco:opencv-java:4.8.0:natives-windows-x86_64'
+//   implementation files('build/libs/opencv-480.jar')
+//   implementation fileTree(dir: 'libs', include: ['opencv4.8.0.jar'])
+//   implementation 'org.opencv:opencv-java:4.8.0'
+//   implementation 'org.openpnp:opencv:4.5.1-1'
+//   implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0'
+//   implementation group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.9'
+//   implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-1'
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation 'com.auth0:java-jwt:3.10.3'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -103,8 +103,8 @@ task copyReactBuildFiles(type: Copy) {
 }
 //
 //task copyNativeLibs(type: Copy) {
-//	from configurations.runtimeClasspath
-//	into project.buildDir
+//   from configurations.runtimeClasspath
+//   into project.buildDir
 //}
 //
 //tasks.build.dependsOn copyNativeLibs
