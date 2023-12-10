@@ -179,7 +179,7 @@ public class ClothesService {
     }
     @Transactional(readOnly = true)
     public List<Clothes> getRecommendedClothesAsc(String subcategory, Long memberId) {
-        return clothesRepository.findTop2BySubcategoryAndMemberIdOrderByWearcntAsc(subcategory, memberId);
+        return clothesRepository.findTop2BySubcategoryAndMemberIdOrderByCreatedateAsc(subcategory, memberId);
     }
     @Transactional(readOnly = true)
     public List<Clothes> getRandomRecommendedClothes(String subcategory, Long memberId) {

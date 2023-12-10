@@ -30,7 +30,7 @@ public interface ClothesRepository extends JpaRepository<Clothes, Long> {
 
     List<Clothes> findTop2BySubcategoryAndMemberIdOrderByWearcntDesc(String subcategory, Long memberId);
 
-    List<Clothes> findTop2BySubcategoryAndMemberIdOrderByWearcntAsc(String subcategory, Long memberId);
+    List<Clothes> findTop2BySubcategoryAndMemberIdOrderByCreatedateAsc(String subcategory, Long memberId);
 
     List<Clothes> findByIdInAndMemberId(List<Long> ids, Long memberId);
 

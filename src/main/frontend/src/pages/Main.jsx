@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled, { createGlobalStyle } from "styled-components";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import styled, {createGlobalStyle} from "styled-components";
 import axios from "axios";
 //images
 import blanket from "../images/category/blanket.png";
@@ -27,346 +27,351 @@ import jacket from "../images/category/jacket.png";
 import mantoman from "../images/category/mantoman.png";
 
 const Main = () => {
-  const navigate = useNavigate();
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [cityCode, setCityCode] = useState(null);
-  const [weatherData, setWeatherData] = useState(null);
-  const [koreanCityCode, setKoreanCityCode] = useState(null);
-  const [recommendedSubcategory, setRecommendedSubcategory] = useState([]);
-  const [recommendedCategoryImages, setRecommendedCategoryImages] = useState(
-    []
-  );
-  const [recommendDataSubcategory, setRecommendDataSubcategory] = useState([]);
+    const navigate = useNavigate();
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null);
+    const [cityCode, setCityCode] = useState(null);
+    const [weatherData, setWeatherData] = useState(null);
+    const [koreanCityCode, setKoreanCityCode] = useState(null);
+    const [recommendedSubcategory, setRecommendedSubcategory] = useState([]);
+    const [recommendedCategoryImages, setRecommendedCategoryImages] = useState(
+        []
+    );
+    const [recommendDataSubcategory, setRecommendDataSubcategory] = useState([]);
+    const [temp, setTemp] = useState(null);
 
 
-  useEffect(() => {
-    // 위치 정보 가져오기
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error);
+    useEffect(() => {
+        // 위치 정보 가져오기
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setLatitude(position.coords.latitude);
+                    setLongitude(position.coords.longitude);
+                },
+                (error) => {
+                    console.error("Error getting geolocation:", error);
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
         }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, []);
+    }, []);
 
-  useEffect(() => {
-    if (latitude && longitude) {
-      // Reverse Geocoding을 사용하여 도시 코드 가져오기
-      const geocodingUrl = `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
+    useEffect(() => {
+        if (latitude && longitude) {
+            // Reverse Geocoding을 사용하여 도시 코드 가져오기
+            const geocodingUrl = `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
 
-      fetch(geocodingUrl, {
-        headers: {
-          Authorization: process.env.REACT_APP_KAKAO_API_KEY,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.documents.length > 0) {
-            const koreanCityCode = data.documents[0].region_1depth_name;
-            const cityCode = convertToEnglishCityCode(koreanCityCode);
-            setCityCode(cityCode);
-            setKoreanCityCode(koreanCityCode);
-          }
-        })
-        .catch((error) => {
-          console.error("Error reverse geocoding:", error);
-        });
-    }
-  }, [latitude, longitude]);
+            fetch(geocodingUrl, {
+                headers: {
+                    Authorization: process.env.REACT_APP_KAKAO_API_KEY,
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.documents.length > 0) {
+                        const koreanCityCode = data.documents[0].region_1depth_name;
+                        const cityCode = convertToEnglishCityCode(koreanCityCode);
+                        setCityCode(cityCode);
+                        setKoreanCityCode(koreanCityCode);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error reverse geocoding:", error);
+                });
+        }
+    }, [latitude, longitude]);
 
-  useEffect(() => {
-    if (cityCode) {
-      // OpenWeatherMap API를 사용하여 날씨 정보 가져오기
-      const lang = "kr";
-      const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
-      const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityCode}&appid=${apiKey}&units=metric&lang=${lang}`;
+    useEffect(() => {
+        if (cityCode) {
+            // OpenWeatherMap API를 사용하여 날씨 정보 가져오기
+            const lang = "kr";
+            const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
+            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityCode}&appid=${apiKey}&units=metric&lang=${lang}`;
 
-      fetch(weatherUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          setWeatherData(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching weather data:", error);
-        });
-    }
-  }, [cityCode]);
+            fetch(weatherUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    setWeatherData(data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching weather data:", error);
+                });
+        }
+    }, [cityCode]);
 
-  useEffect(() => {
-    // 기온에 따른 추천 서브 카테고리 설정
-    if (weatherData) {
-      //임시 지정
-      // const temperature = Math.round(10);
-      const temperature = Math.round(weatherData.main.temp);
-      const strCategory = getRecommendedCategory(temperature);
-      const recommendedCategory = strCategory.split(",");
-      const dataSub = getRecommendedCategorySituation(temperature);
-      const dataSubcategory = dataSub.split(",");
+    useEffect(() => {
+        // 기온에 따른 추천 서브 카테고리 설정
+        if (weatherData) {
+            //임시 지정
+            // const temperature = Math.round(10);
+            const temperature = Math.round(weatherData.main.temp);
+            const strCategory = getRecommendedCategory(temperature);
+            const recommendedCategory = strCategory.split(",");
+            const dataSub = getRecommendedCategorySituation(temperature);
+            const dataSubcategory = dataSub.split(",");
 
-      setRecommendDataSubcategory(dataSubcategory);
-      setRecommendedSubcategory(recommendedCategory);
-    }
-  }, [weatherData]);
+            setTemp(temperature)
+            setRecommendDataSubcategory(dataSubcategory);
+            setRecommendedSubcategory(recommendedCategory);
+        }
+    }, [weatherData]);
 
-  useEffect(() => {
-    // 서브카테고리에 따른 이미지와 카테고리 이름을 업데이트합니다.
-    const categoryData = mapSubcategoryToData(recommendedSubcategory);
-    setRecommendedCategoryImages(categoryData);
-  }, [recommendedSubcategory]);
+    useEffect(() => {
+        // 서브카테고리에 따른 이미지와 카테고리 이름을 업데이트합니다.
+        const categoryData = mapSubcategoryToData(recommendedSubcategory);
+        setRecommendedCategoryImages(categoryData);
+    }, [recommendedSubcategory]);
 
-  const convertToEnglishCityCode = (koreanCityCode) => {
-    const cityCodeMap = {
-      서울특별시: "Seoul",
-      부산광역시: "Busan",
-      세종특별자치시: "Sejong",
-      인천광역시: "Incheon",
-      광주광역시: "Gwangju",
-      대구광역시: "Daegu",
-      울산광역시: "Ulsan",
-      경기도: "Gyeonggi-do",
-      강원도: "Ganwon-do",
-      충청북도: "Chungcheongbuk-do",
-      충청남도: "Chungcheongnam-do",
-      전라남도: "Jeollanam-do",
-      전라북도: "Jeollabuk-do",
-      경상남도: "Gyeongsangnam-do",
-      경상북도: "Gyeongsangbuk-do",
-      제주특별자치도: "Jeju",
+    const convertToEnglishCityCode = (koreanCityCode) => {
+        const cityCodeMap = {
+            서울특별시: "Seoul",
+            부산광역시: "Busan",
+            세종특별자치시: "Sejong",
+            인천광역시: "Incheon",
+            광주광역시: "Gwangju",
+            대구광역시: "Daegu",
+            울산광역시: "Ulsan",
+            경기도: "Gyeonggi-do",
+            강원도: "Ganwon-do",
+            충청북도: "Chungcheongbuk-do",
+            충청남도: "Chungcheongnam-do",
+            전라남도: "Jeollanam-do",
+            전라북도: "Jeollabuk-do",
+            경상남도: "Gyeongsangnam-do",
+            경상북도: "Gyeongsangbuk-do",
+            제주특별자치도: "Jeju",
+        };
+
+        return cityCodeMap[koreanCityCode] || koreanCityCode;
     };
 
-    return cityCodeMap[koreanCityCode] || koreanCityCode;
-  };
+    const getWeatherIconUrl = (iconCode) => {
+        return `http://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    };
 
-  const getWeatherIconUrl = (iconCode) => {
-    return `http://openweathermap.org/img/wn/${iconCode}@4x.png`;
-  };
+    const getRecommendedCategory = (temperature) => {
+        if (temperature >= 28) {
+            return "민소매,반팔티,원피스,반바지";
+        } else if (temperature >= 23) {
+            return "반팔티,셔츠,반바지,면바지";
+        } else if (temperature >= 20) {
+            return "가디건,긴팔티,면바지,청바지";
+        } else if (temperature >= 17) {
+            return "니트,맨투맨,가디건,청바지";
+        } else if (temperature >= 12) {
+            return "자켓,가디건,후드집업,스타킹";
+        } else if (temperature >= 9) {
+            return "자켓,트렌치코트,야상,니트";
+        } else if (temperature >= 5) {
+            return "코트,무스탕,니트,슬랙스";
+        } else {
+            return "패딩,코트,목도리,기모제품";
+        }
+    };
 
-  const getRecommendedCategory = (temperature) => {
-    if (temperature >= 28) {
-      return "민소매,반팔티,원피스,반바지";
-    } else if (temperature >= 23) {
-      return "반팔티,셔츠,반바지,면바지";
-    } else if (temperature >= 20) {
-      return "가디건,긴팔티,면바지,청바지";
-    } else if (temperature >= 17) {
-      return "니트,맨투맨,가디건,청바지";
-    } else if (temperature >= 12) {
-      return "자켓,가디건,후드집업,스타킹";
-    } else if (temperature >= 9) {
-      return "자켓,트렌치코트,야상,니트";
-    } else if (temperature >= 5) {
-      return "코트,무스탕,니트,슬랙스";
-    } else {
-      return "패딩,코트,목도리,기모제품";
-    }
-  };
+    const getRecommendedCategorySituation = (temperature) => {
+        if (temperature >= 28) {
+            return "민소매,반팔티,반바지,치마,슬랙스,청바지";
+        } else if (temperature >= 23) {
+            return "반팔티,블라우스/셔츠,반바지,면바지,치마,슬랙스,청바지,트레이닝/조거";
+        } else if (temperature >= 20) {
+            return "가디건/베스트,블라우스/셔츠,긴팔티,면바지,청바지,치마,슬랙스,트레이닝/조거";
+        } else if (temperature >= 17) {
+            return "니트,블라우스/셔츠,긴팔티,맨투맨/후디,청바지,치마,슬랙스,면바지,트레이닝/조거,가디건/베스트,블레이저";
+        } else if (temperature >= 12) {
+            return "자켓/점퍼,트렌치코트,가디건/베스트,야상,후드집업,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거,블레이저";
+        } else if (temperature >= 9) {
+            return "자켓/점퍼,트렌치코트,후드집업,야상,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거";
+        } else if (temperature >= 5) {
+            return "코트,무스탕,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
+        } else {
+            return "패딩,무스탕,코트,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
+        }
+    };
 
-  const getRecommendedCategorySituation = (temperature) => {
-    if (temperature >= 28) {
-      return "민소매,반팔티,반바지,치마,슬랙스,청바지";
-    } else if (temperature >= 23) {
-      return "반팔티,블라우스/셔츠,반바지,면바지,치마,슬랙스,청바지,트레이닝/조거";
-    } else if (temperature >= 20) {
-      return "가디건,블라우스/셔츠,긴팔티,면바지,청바지,치마,슬랙스,청바지,트레이닝/조거";
-    } else if (temperature >= 17) {
-      return "니트,블라우스/셔츠,긴팔티,맨투맨/후디,가디건,청바지,치마,슬랙스,면바지,청바지,트레이닝/조거,가디건/베스트,블레이저";
-    } else if (temperature >= 12) {
-      return "자켓/점퍼,트렌치코트,가디건/베스트,야상,후드집업,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거,블레이저";
-    } else if (temperature >= 9) {
-      return "자켓/점퍼,트렌치코트,후드집업,야상,맨투맨/후디,니트,슬랙스,면바지,청바지,트레이닝/조거";
-    } else if (temperature >= 5) {
-      return "코트,무스탕,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
-    } else {
-      return "패딩,무스탕,코트,니트,맨투맨/후디,슬랙스,면바지,청바지,트레이닝/조거";
-    }
-  };
+    const mapSubcategoryToData = (subcategories) => {
+        const categoryData = [];
 
-  const mapSubcategoryToData = (subcategories) => {
-    const categoryData = [];
+        subcategories.forEach((subcategory) => {
+            switch (subcategory.trim()) {
+                case "민소매":
+                    categoryData.push({subcategory: "민소매", image: sleeveless});
+                    break;
+                case "반팔티":
+                    categoryData.push({subcategory: "반팔티", image: shortSleeve});
+                    break;
+                case "긴팔티":
+                    categoryData.push({subcategory: "긴팔티", image: sleeve});
+                    break;
+                case "원피스":
+                    categoryData.push({subcategory: "원피스", image: dress});
+                    break;
+                case "반바지":
+                    categoryData.push({subcategory: "반바지", image: shorts});
+                    break;
+                case "가디건":
+                    categoryData.push({subcategory: "가디건", image: cardigan});
+                    break;
+                case "니트":
+                    categoryData.push({subcategory: "니트", image: neat});
+                    break;
+                case "자켓":
+                    categoryData.push({subcategory: "자켓", image: jacket});
+                    break;
+                case "코트":
+                    categoryData.push({subcategory: "코트", image: coat});
+                    break;
+                case "패딩":
+                    categoryData.push({subcategory: "패딩", image: puffer});
+                    break;
+                case "야상":
+                    categoryData.push({subcategory: "야상", image: fieldJacket});
+                    break;
+                case "맨투맨":
+                    categoryData.push({subcategory: "맨투맨", image: mantoman});
+                    break;
+                case "무스탕":
+                    categoryData.push({subcategory: "무스탕", image: mustang});
+                    break;
+                case "셔츠":
+                    categoryData.push({subcategory: "셔츠", image: shirt});
+                    break;
+                case "스타킹":
+                    categoryData.push({subcategory: "스타킹", image: stockings});
+                    break;
+                case "트렌치코트":
+                    categoryData.push({subcategory: "트렌치코트", image: trenchCoat});
+                    break;
+                case "슬랙스":
+                    categoryData.push({subcategory: "슬랙스", image: slacks});
+                    break;
+                case "목도리":
+                    categoryData.push({subcategory: "목도리", image: muffler});
+                    break;
+                case "후드집업":
+                    categoryData.push({subcategory: "후드집업", image: hoodedJacket});
+                    break;
+                case "면바지":
+                    categoryData.push({subcategory: "면바지", image: cottonPants});
+                    break;
+                case "기모제품":
+                    categoryData.push({subcategory: "기모제품", image: blanket});
+                    break;
+                case "청바지":
+                    categoryData.push({subcategory: "청바지", image: jeans});
+                    break;
+                // 다른 카테고리에 대한 이미지 처리...
+                default:
+                    break;
+            }
+        });
 
-    subcategories.forEach((subcategory) => {
-      switch (subcategory.trim()) {
-        case "민소매":
-          categoryData.push({ subcategory: "민소매", image: sleeveless });
-          break;
-        case "반팔티":
-          categoryData.push({ subcategory: "반팔티", image: shortSleeve });
-          break;
-        case "긴팔티":
-          categoryData.push({ subcategory: "긴팔티", image: sleeve });
-          break;
-        case "원피스":
-          categoryData.push({ subcategory: "원피스", image: dress });
-          break;
-        case "반바지":
-          categoryData.push({ subcategory: "반바지", image: shorts });
-          break;
-        case "가디건":
-          categoryData.push({ subcategory: "가디건", image: cardigan });
-          break;
-        case "니트":
-          categoryData.push({ subcategory: "니트", image: neat });
-          break;
-        case "자켓":
-          categoryData.push({ subcategory: "자켓", image: jacket });
-          break;
-        case "코트":
-          categoryData.push({ subcategory: "코트", image: coat });
-          break;
-        case "패딩":
-          categoryData.push({ subcategory: "패딩", image: puffer });
-          break;
-        case "야상":
-          categoryData.push({ subcategory: "야상", image: fieldJacket });
-          break;
-        case "맨투맨":
-          categoryData.push({ subcategory: "맨투맨", image: mantoman });
-          break;
-        case "무스탕":
-          categoryData.push({ subcategory: "무스탕", image: mustang });
-          break;
-        case "셔츠":
-          categoryData.push({ subcategory: "셔츠", image: shirt });
-          break;
-        case "스타킹":
-          categoryData.push({ subcategory: "스타킹", image: stockings });
-          break;
-        case "트렌치코트":
-          categoryData.push({ subcategory: "트렌치코트", image: trenchCoat });
-          break;
-        case "슬랙스":
-          categoryData.push({ subcategory: "슬랙스", image: slacks });
-          break;
-        case "목도리":
-          categoryData.push({ subcategory: "목도리", image: muffler });
-          break;
-        case "후드집업":
-          categoryData.push({ subcategory: "후드집업", image: hoodedJacket });
-          break;
-        case "면바지":
-          categoryData.push({ subcategory: "면바지", image: cottonPants });
-          break;
-        case "기모제품":
-          categoryData.push({ subcategory: "기모제품", image: blanket });
-          break;
-        case "청바지":
-          categoryData.push({ subcategory: "청바지", image: jeans });
-          break;
-        // 다른 카테고리에 대한 이미지 처리...
-        default:
-          break;
-      }
-    });
+        return categoryData;
+    };
 
-    return categoryData;
-  };
+    return (
+        <div>
+            <GlobalStyle/>
+            {weatherData && (
+                <>
+                    <WeatherWidgetBox>
+                        <Widget>
+                            <Left>
+                                <Icon
+                                    src={getWeatherIconUrl(weatherData.weather[0].icon)}
+                                    alt="Weather Icon"
+                                ></Icon>
+                                <WeatherStatus>
+                                    {weatherData.weather[0].description}
+                                </WeatherStatus>
+                            </Left>
+                            <Right>
+                                <City>{koreanCityCode}</City>
+                                <Degree>{Math.round(weatherData.main.temp)}°C</Degree>
+                                {/*<Degree>{Math.round(10)}°C</Degree>*/}
+                            </Right>
+                            <Bottom>
+                                <Desdiv>
+                                    풍속 <span>{weatherData.wind.speed} m/s</span>
+                                </Desdiv>
+                                <Desdiv>
+                                    구름 <span>{weatherData.clouds.all}%</span>
+                                </Desdiv>
+                                <Desdiv>
+                                    습도 <span>{weatherData.main.humidity}%</span>
+                                </Desdiv>
+                            </Bottom>
+                        </Widget>
+                    </WeatherWidgetBox>
+                </>
+            )}
 
-  return (
-    <div>
-      <GlobalStyle />
-      {weatherData && (
-        <>
-          <WeatherWidgetBox>
-            <Widget>
-              <Left>
-                <Icon
-                  src={getWeatherIconUrl(weatherData.weather[0].icon)}
-                  alt="Weather Icon"
-                ></Icon>
-                <WeatherStatus>
-                  {weatherData.weather[0].description}
-                </WeatherStatus>
-              </Left>
-              <Right>
-                <City>{koreanCityCode}</City>
-                <Degree>{Math.round(weatherData.main.temp)}°C</Degree>
-                {/*<Degree>{Math.round(10)}°C</Degree>*/}
-              </Right>
-              <Bottom>
-                <Desdiv>
-                  풍속 <span>{weatherData.wind.speed} m/s</span>
-                </Desdiv>
-                <Desdiv>
-                  구름 <span>{weatherData.clouds.all}%</span>
-                </Desdiv>
-                <Desdiv>
-                  습도 <span>{weatherData.main.humidity}%</span>
-                </Desdiv>
-              </Bottom>
-            </Widget>
-          </WeatherWidgetBox>
-        </>
-      )}
+            <Container>
+                {recommendedCategoryImages.length > 0 && (
+                    <ImageContainer>
+                        {recommendedCategoryImages.map((categoryData, index) => (
+                            <div key={index}>
+                                <ImageWrapper>
+                                    <img src={categoryData.image} alt="Recommended Clothing"/>
+                                    <p>{categoryData.subcategory}</p>
+                                </ImageWrapper>
+                            </div>
+                        ))}
+                    </ImageContainer>
+                )}
 
-      <Container>
-        {recommendedCategoryImages.length > 0 && (
-          <ImageContainer>
-            {recommendedCategoryImages.map((categoryData, index) => (
-              <div key={index}>
-                <ImageWrapper>
-                  <img src={categoryData.image} alt="Recommended Clothing" />
-                  <p>{categoryData.subcategory}</p>
-                </ImageWrapper>
-              </div>
-            ))}
-          </ImageContainer>
-        )}
+                <div
+                    style={{
+                        backgroundColor: "#364054",
+                        borderRadius: "3px",
+                        width: "81%",
+                        padding: "3px",
+                        color: "white",
+                    }}
+                    onClick={() => {
+                        navigate("/ClothingRecommendation", {
+                            state: {
+                                subcategories: recommendDataSubcategory,
+                                temperature: temp
+                            },
+                        });
+                    }}
+                >
+                    <h4>오늘 입을 스타일을 추천 해줄게요!</h4>
+                </div>
 
-        <div
-          style={{
-            backgroundColor: "#364054",
-            borderRadius: "3px",
-            width: "81%",
-            padding: "3px",
-            color: "white",
-          }}
-          onClick={() => {
-            navigate("/ClothingRecommendation", {
-              state: { subcategories: recommendDataSubcategory },
-            });
-          }}
-        >
-          <h4>오늘 입을 스타일을 추천 해줄게요!</h4>
+                <ButtonContainer>
+                    <Button onClick={() => navigate("/ItemHave")}>
+                        옷장 속 가장 많은
+                        <br/>
+                        아이템
+                    </Button>
+                    <Button onClick={() => navigate("/ItemSeason")}>
+                        계절 별 아이템
+                        <br/>
+                        개수
+                    </Button>
+                    <Button onClick={() => navigate("/ItemFrequently")}>
+                        가장 자주 입은
+                        <br/>
+                        아이템
+                    </Button>
+                    <Button onClick={() => navigate("/ItemNotRecently")}>
+                        요즘 입지 않은
+                        <br/>
+                        아이템
+                    </Button>
+                </ButtonContainer>
+            </Container>
         </div>
-
-        <ButtonContainer>
-          <Button onClick={() => navigate("/ItemHave")}>
-            옷장 속 가장 많은
-            <br />
-            아이템
-          </Button>
-          <Button onClick={() => navigate("/ItemSeason")}>
-            계절 별 아이템
-            <br />
-            개수
-          </Button>
-          <Button onClick={() => navigate("/ItemFrequently")}>
-            가장 자주 입은
-            <br />
-            아이템
-          </Button>
-          <Button onClick={() => navigate("/ItemNotRecently")}>
-            요즘 입지 않은
-            <br />
-            아이템
-          </Button>
-        </ButtonContainer>
-      </Container>
-    </div>
-  );
+    );
 };
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;600&display=swap');
-  
+
   body {
     font-family: 'Poppins', sans-serif;
   }

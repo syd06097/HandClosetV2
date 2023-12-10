@@ -9,7 +9,7 @@ import refresh from "../images/refresh.png"
 
 const ClothingRecommendation = () => {
   const location = useLocation();
-  const {subcategories} = location.state;
+  const {subcategories, temperature} = location.state;
   const [recommendedClothes, setRecommendedClothes] = useState([]);
   const [apiToCall, setApiToCall] = useState("/api/clothing/recommendation"); // Default API
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -19,6 +19,9 @@ const ClothingRecommendation = () => {
   const [randomrecommendedClothes, setRandomRecommendedClothes] = useState([]);
   const [fewrecommendedClothes, setFewRecommendedClothes] = useState([]);
   const [activeButton, setActiveButton] = useState("casual");
+  const [casualsubcategory, setCasualsubcategory ] = useState([]);
+  const [formalsubcategory, setFormalsubcategory ] = useState([]);
+
 
   // 이미지 가져오기
   useEffect(() => {
@@ -44,6 +47,46 @@ const ClothingRecommendation = () => {
     } catch (error) {
       console.log(error);
       return null;
+    }
+  };
+
+  const TpoCasualCategory = (temperature) => {
+    if (temperature >= 28) {
+      return "민소매,반팔티,반바지,치마,청바지";
+    } else if (temperature >= 23) {
+      return "반팔티,블라우스/셔츠,반바지,면바지,치마,청바지,트레이닝/조거";
+    } else if (temperature >= 20) {
+      return "가디건,블라우스/셔츠,긴팔티,면바지,청바지,치마,트레이닝/조거";
+    } else if (temperature >= 17) {
+      return "니트,블라우스/셔츠,긴팔티,맨투맨/후디,청바지,치마,면바지,트레이닝/조거,가디건/베스트,";
+    } else if (temperature >= 12) {
+      return "자켓/점퍼,트렌치코트,가디건/베스트,야상,후드집업,맨투맨/후디,니트,면바지,청바지,트레이닝/조거,";
+    } else if (temperature >= 9) {
+      return "자켓/점퍼,트렌치코트,후드집업,야상,맨투맨/후디,니트,면바지,청바지,트레이닝/조거";
+    } else if (temperature >= 5) {
+      return "코트,무스탕,니트,맨투맨/후디,면바지,청바지,트레이닝/조거";
+    } else {
+      return "패딩,무스탕,코트,니트,맨투맨/후디,면바지,청바지,트레이닝/조거";
+    }
+  };
+
+  const TpoFormalCategory = (temperature) => {
+    if (temperature >= 28) {
+      return "반팔티,치마,슬랙스";
+    } else if (temperature >= 23) {
+      return "반팔티,블라우스/셔츠,치마,슬랙스";
+    } else if (temperature >= 20) {
+      return "가디건/베스트,블라우스/셔츠,긴팔티,치마,슬랙스";
+    } else if (temperature >= 17) {
+      return "니트,블라우스/셔츠,긴팔티,치마,슬랙스,가디건/베스트,블레이저";
+    } else if (temperature >= 12) {
+      return ",트렌치코트,가디건/베스트,니트,슬랙스,블레이저";
+    } else if (temperature >= 9) {
+      return ",트렌치코트,니트,슬랙스";
+    } else if (temperature >= 5) {
+      return "코트,니트,슬랙스";
+    } else {
+      return "코트,니트,슬랙스";
     }
   };
 
@@ -84,7 +127,10 @@ const ClothingRecommendation = () => {
         console.error("Error fetching recommended clothes:", error);
       }
     };
-
+    const casual = TpoCasualCategory(temperature);
+    setCasualsubcategory(casual.split(","));
+    const formal = TpoFormalCategory(temperature);
+    setFormalsubcategory(formal.split(","));
     fetchRecommendedClothes();
     fewRecommendation();
     handleRandomButtonClick();
@@ -314,7 +360,7 @@ const ClothingRecommendation = () => {
               <p>추천할 옷이 존재하지 않습니다.</p>
           )}
 
-          <h3 style={{textAlign: "left", marginLeft: "9%"}}>적게 입은 옷들</h3>
+          <h3 style={{textAlign: "left", marginLeft: "9%"}}>최근 입지 않았던 옷들</h3>
           {fewrecommendedClothes.length > 0 ? (
               <Container>
                 <RowContainer>
@@ -354,14 +400,12 @@ const ClothingRecommendation = () => {
           <ButtonContainer>
             <Tpobutton onClick={() => {
               setActiveButton("casual");
-              const tpostring = "트렌치코트,코트,자켓/점퍼,야상,무스탕,패딩,후드집업,가디건/베스트,민소매,반팔티,긴팔티,블라우스/셔츠,맨투맨/후디,니트,반바지,치마,면바지,청바지,트레이닝/조거"
-              setTpoSubcategories(tpostring.split(","))
+              setTpoSubcategories(casualsubcategory)
               handleTpoClick()
             }} active={activeButton === "casual"}>캐주얼</Tpobutton>
             <Tpobutton onClick={() => {
               setActiveButton("formal");
-              const tpostring = "트렌치코트,코트,가디건/베스트,블레이저,반팔티,긴팔티,블라우스/셔츠,니트,치마,슬렉스"
-              setTpoSubcategories(tpostring.split(","))
+              setTpoSubcategories(formalsubcategory)
               handleTpoClick()
             }} active={activeButton === "formal"}>포멀</Tpobutton>
           </ButtonContainer>
