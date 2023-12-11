@@ -119,7 +119,6 @@ const ClothingRecommendation = () => {
               };
             })
         );
-
         setRecommendedClothes(updatedClothes);
         console.log(updatedClothes); // 확인용 로그
         console.log(recommendedClothes);
@@ -241,6 +240,11 @@ const ClothingRecommendation = () => {
     }
   };
 
+  useEffect(() => {
+    if (tpoSubcategories.length > 0) {
+      handleTpoClick();
+    }
+  }, [tpoSubcategories]);
 
   const GloStyle = createGlobalStyle`
       @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
@@ -401,12 +405,10 @@ const ClothingRecommendation = () => {
             <Tpobutton onClick={() => {
               setActiveButton("casual");
               setTpoSubcategories(casualsubcategory)
-              handleTpoClick()
             }} active={activeButton === "casual"}>캐주얼</Tpobutton>
             <Tpobutton onClick={() => {
               setActiveButton("formal");
               setTpoSubcategories(formalsubcategory)
-              handleTpoClick()
             }} active={activeButton === "formal"}>포멀</Tpobutton>
           </ButtonContainer>
           {tporecommendedClothes.length > 0 ? (
