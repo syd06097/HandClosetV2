@@ -18,9 +18,7 @@ function DiaryDetail() {
   const [itemImageSrc, setItemImageSrc] = useState([]);
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-
   useEffect(() => {
-
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
@@ -33,12 +31,10 @@ function DiaryDetail() {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
-          data: { refreshToken: loginInfo.refreshToken },
         });
         setDiary(response.data);
         const imageIds = response.data.imageIds;
 
-        console.log(imageIds);
         if (imageIds.length > 0) {
           fetchClothesData(imageIds);
           fetchThumbnail(response.data.thumbnailpath);
@@ -122,7 +118,6 @@ function DiaryDetail() {
         headers: {
           Authorization: `Bearer ${loginInfo.accessToken}`,
         },
-        data: { refreshToken: loginInfo.refreshToken },
       });
       navigate("/Diary");
     } catch (error) {
@@ -165,7 +160,7 @@ function DiaryDetail() {
               <Elements>카테고리: {clothes.category}</Elements>
               <Elements>계절: {clothes.season}</Elements>
               <Elements>착용횟수: {clothes.wearcnt}회</Elements>
-              <Elements>등록일: {formatDate(clothes.createdate)}</Elements>
+              <Elements>최근 등록일: {formatDate(clothes.createdate)}</Elements>
             </Details>
           </ClothesItem>
         </div>

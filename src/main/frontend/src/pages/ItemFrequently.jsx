@@ -7,26 +7,21 @@ import { useNavigate } from "react-router-dom";
 const ItemFrequently = () => {
   const [topItems, setTopItems] = useState([]);
   const navigate = useNavigate();
-    const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-    useEffect(() => {
-        if (!loginInfo || !loginInfo.accessToken) {
-            navigate("/LoginForm");
-        }
-    }, [loginInfo, navigate]);
+  useEffect(() => {
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchTopItems = async () => {
       try {
-
-
-
-
         const response = await axios.get("/api/clothing/top-items", {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
-          data: { refreshToken: loginInfo.refreshToken },
         });
 
         const items = response.data;
@@ -51,16 +46,11 @@ const ItemFrequently = () => {
   }, []);
   const fetchImageBytes = async (id) => {
     try {
-
-
-
-
       const response = await axios.get(`/api/clothing/images/${id}`, {
         responseType: "arraybuffer",
         headers: {
           Authorization: `Bearer ${loginInfo.accessToken}`,
         },
-        data: { refreshToken: loginInfo.refreshToken },
       });
 
       return response.data;

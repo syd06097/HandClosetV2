@@ -1,11 +1,17 @@
 package HandCloset.HandCloset.entity;
 
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "diary")
 public class Diary {
 
@@ -28,14 +34,23 @@ public class Diary {
 
     private String note;
 
+    @CreatedDate
+    @Column(updatable = false,nullable = false)
+    private LocalDateTime regdate;
+
     @ElementCollection
     @CollectionTable(name = "diary_image_ids", joinColumns = @JoinColumn(name = "diary_id"))
     @Column(name = "image_id")
     private List<Long> imageIds;
 
 
+    public LocalDateTime getRegdate() {
+        return regdate;
+    }
 
-
+    public void setRegdate(LocalDateTime regdate) {
+        this.regdate = regdate;
+    }
 
     // Getters and setters
     public Long getMemberId() {

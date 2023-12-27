@@ -9,25 +9,19 @@ const ItemNotRecently = () => {
   const navigate = useNavigate();
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-    useEffect(() => {
-
-        if (!loginInfo || !loginInfo.accessToken) {
-            navigate("/LoginForm");
-        }
-    }, [loginInfo, navigate]);
+  useEffect(() => {
+    if (!loginInfo || !loginInfo.accessToken) {
+      navigate("/LoginForm");
+    }
+  }, [loginInfo, navigate]);
 
   useEffect(() => {
     const fetchBottomItems = async () => {
       try {
-
-
-
-
         const response = await axios.get("/api/clothing/bottom-items", {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
-          data: { refreshToken: loginInfo.refreshToken },
         });
         const items = response.data;
 
@@ -54,10 +48,9 @@ const ItemNotRecently = () => {
     try {
       const response = await axios.get(`/api/clothing/images/${id}`, {
         responseType: "arraybuffer",
-          headers: {
-              Authorization: `Bearer ${loginInfo.accessToken}`,
-          },
-          data: { refreshToken: loginInfo.refreshToken },
+        headers: {
+          Authorization: `Bearer ${loginInfo.accessToken}`,
+        },
       });
       return response.data;
     } catch (error) {

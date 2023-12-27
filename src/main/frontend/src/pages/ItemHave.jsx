@@ -19,23 +19,18 @@ const ItemHave = () => {
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
   useEffect(() => {
-
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
-
     }
   }, []);
 
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
-
-
-        const response = await axios.get("/api/clothing/category-item-count",{
+        const response = await axios.get("/api/clothing/category-item-count", {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
-          data: { refreshToken: loginInfo.refreshToken },
         });
         const data = response.data;
         setStatistics(Object.entries(data));

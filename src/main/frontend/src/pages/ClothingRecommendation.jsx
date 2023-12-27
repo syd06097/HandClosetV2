@@ -80,9 +80,9 @@ const ClothingRecommendation = () => {
     } else if (temperature >= 17) {
       return "니트,블라우스/셔츠,긴팔티,치마,슬랙스,가디건/베스트,블레이저";
     } else if (temperature >= 12) {
-      return ",트렌치코트,가디건/베스트,니트,슬랙스,블레이저";
+      return "트렌치코트,가디건/베스트,니트,슬랙스,블레이저";
     } else if (temperature >= 9) {
-      return ",트렌치코트,니트,슬랙스";
+      return "트렌치코트,니트,슬랙스,블레이저";
     } else if (temperature >= 5) {
       return "코트,니트,슬랙스";
     } else {

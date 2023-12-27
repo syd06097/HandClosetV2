@@ -5,7 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,6 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Table(name = "clothes")
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Clothes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +47,10 @@ public class Clothes {
 
     private Date createdate;
 
+    @CreatedDate
+    @Column(updatable = false,nullable = false)
+    private LocalDateTime regdate;
+
     public Long getMemberId() {
         return memberId;
     }
@@ -51,6 +60,13 @@ public class Clothes {
     }
 
 
+    public LocalDateTime getRegdate() {
+        return regdate;
+    }
+
+    public void setRegdate(LocalDateTime regdate) {
+        this.regdate = regdate;
+    }
 
     public Long getId() {
         return id;
