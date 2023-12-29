@@ -97,6 +97,7 @@ public class MemberController {
                 .refreshToken(refreshToken)
                 .memberId(member.getMemberId())
                 .nickname(member.getName())
+                .roles(member.getRoles())
                 .build();
         return new ResponseEntity(loginResponse, HttpStatus.OK);
     }

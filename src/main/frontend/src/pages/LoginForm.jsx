@@ -62,26 +62,39 @@ function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.post("http://localhost:8090/members/login", {
-        email,
-        password,
-      });
+      try {
+          const response = await axios.post("http://localhost:8090/members/login", {
+              email,
+              password,
+          });
 
-      if (response.status === 200) {
-        const loginInfo = response.data;
-        localStorage.setItem("loginInfo", JSON.stringify(loginInfo));
-        navigate("/MyPage"); // 메인 페이지로 이동
-        alert("로그인 완료");
-        // 로그인 상태 변경 이벤트 발생
-        const event = new Event("loginStatusChanged");
-        window.dispatchEvent(event);
+          if (response.status === 200) {
+              const loginInfo = response.data;
+              console.log("받아오는 데이터 정보: ", response.data);
+              localStorage.setItem("loginInfo", JSON.stringify(loginInfo));
+
+              // 추가된 부분
+              // const roleId = loginInfo.roles[0]?.roleId;
+              // roles 배열이 비어있지 않다면 첫 번째 역할의 roleId을 가져옴
+              const roleId = loginInfo.roles.length > 0 ? loginInfo.roles[0].roleId : null;
+              if (roleId === 2) {
+                  console.log("Navigating to AdminPage");
+                  navigate("/AdminPage");
+              }else{
+                  console.log("Navigating to MyPage");
+                  navigate("/MyPage");
+              }
+
+              alert("로그인 완료");
+              // 로그인 상태 변경 이벤트 발생
+              const event = new Event("loginStatusChanged");
+              window.dispatchEvent(event);
+          }
+      } catch (error) {
+          console.error(error);
+          alert("이메일이나 암호가 틀렸습니다.");
+          setErrorMessage("이메일이나 암호가 틀렸습니다.");
       }
-    } catch (error) {
-      console.error(error);
-      alert("이메일이나 암호가 틀렸습니다.");
-      setErrorMessage("이메일이나 암호가 틀렸습니다.");
-    }
   };
 
   return (
