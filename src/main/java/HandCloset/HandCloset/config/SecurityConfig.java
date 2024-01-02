@@ -4,7 +4,9 @@ import HandCloset.HandCloset.security.jwt.exception.CustomAuthenticationEntryPoi
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
@@ -21,6 +25,8 @@ import static org.springframework.http.HttpMethod.*;
 // Spring Security 설정.
 @Configuration
 @RequiredArgsConstructor
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final AuthenticationManagerConfig authenticationManagerConfig;
@@ -41,7 +47,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(httpRequests -> httpRequests
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청은 허용한다. https://velog.io/@jijang/%EC%82%AC%EC%A0%84-%EC%9A%94%EC%B2%AD-Preflight-request
                         .mvcMatchers( "/members/signup", "/members/login", "/members/refreshToken").permitAll()
-
                         .antMatchers("/**").permitAll() // 나중에 이거 지워야 할듯
                         .mvcMatchers(GET,"/**").hasAnyRole("USER", "ADMIN")
                         .mvcMatchers(POST,"/**").hasAnyRole("USER", "ADMIN")
@@ -51,47 +56,18 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .formLogin().disable() // 직접 id, password를 입력받아서 JWT토큰을 리턴하는 API를 직접 만든다.
-//                .csrf().disable() // CSRF는 Cross Site Request Forgery의 약자. CSRF공격을 막기 위한 방법.
-//                .cors() //.configurationSource(corsConfigurationSource())
-//                .and()
-//                .apply(authenticationManagerConfig)
-//                .and()
-//                .httpBasic().disable()
-//                .authorizeRequests()
-//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청은 허용한다. https://velog.io/@jijang/%EC%82%AC%EC%A0%84-%EC%9A%94%EC%B2%AD-Preflight-request
-//                .mvcMatchers( "/members/signup", "/members/login", "/members/refreshToken").permitAll()
-//                //.mvcMatchers(GET,"/Main").permitAll() // 테스트
-//                //.mvcMatchers(GET,"/").permitAll() // 테스트
-//                //.mvcMatchers(GET,"/api/clothing/images/**").permitAll() // 테스트
-////                .mvcMatchers(GET,"/api/diary/images/**").permitAll() // 테스트
-//                .antMatchers("/**").permitAll() // 나중에 이거 지워야 할듯
-//                .mvcMatchers(GET,"/**").hasAnyRole("USER", "ADMIN")
-//                .mvcMatchers(POST,"/**").hasAnyRole("USER", "ADMIN")
-//                .anyRequest().hasAnyRole("USER", "ADMIN")
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(customAuthenticationEntryPoint)
-//                .and()
-//                .build();
-//    }
 
-    @Bean
+
+    // <<Advanced>> Security Cors로 변경 시도
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-
+        // config.setAllowCredentials(true); // 이거 빼면 된다
+        // https://gareen.tistory.com/66
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedOrigin("*");
         config.addAllowedMethod("*");
         config.setAllowedMethods(List.of("GET","POST","DELETE","PATCH","OPTION","PUT"));
-
-        config.addAllowedHeader("//");
-        config.addExposedHeader("//");
         source.registerCorsConfiguration("/**", config);
 
         return source;

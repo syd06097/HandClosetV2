@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,5 +56,9 @@ public class MemberService {
 
         // 저장
         memberRepository.save(member);
+    }
+    @Transactional(readOnly = true)
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
     }
 }

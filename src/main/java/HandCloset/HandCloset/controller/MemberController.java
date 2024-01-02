@@ -7,6 +7,7 @@ import HandCloset.HandCloset.dto.*;
 import HandCloset.HandCloset.security.jwt.util.IfLogin;
 import HandCloset.HandCloset.security.jwt.util.JwtTokenizer;
 import HandCloset.HandCloset.security.jwt.util.LoginUserDto;
+import HandCloset.HandCloset.security.jwt.util.UnauthorizedException;
 import HandCloset.HandCloset.service.MemberManagementService;
 import HandCloset.HandCloset.service.MemberService;
 import HandCloset.HandCloset.service.RefreshTokenService;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -37,13 +39,6 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final MemberManagementService memberManagementService;
 
-
-//    public MemberController(JwtTokenizer jwtTokenizer, MemberService memberService, RefreshTokenService refreshTokenService, PasswordEncoder passwordEncoder) {
-//        this.jwtTokenizer = jwtTokenizer;
-//        this.memberService = memberService;
-//        this.refreshTokenService = refreshTokenService;
-//        this.passwordEncoder = passwordEncoder;
-//    }
 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody @Valid MemberSignupDto memberSignupDto, BindingResult bindingResult) {
@@ -173,6 +168,17 @@ public class MemberController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to update profile");
+        }
+    }
+
+    @GetMapping("/getMemberList")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<Member>> getMemberList(@IfLogin LoginUserDto loginUserDto) {
+        if (loginUserDto == null) {
+            throw new UnauthorizedException("로그인이 필요합니다.");
+        } else {
+            List<Member> memberList = memberService.getAllMembers();
+            return new ResponseEntity<>(memberList, HttpStatus.OK);
         }
     }
 }
