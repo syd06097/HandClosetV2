@@ -31,10 +31,6 @@ function App() {
     const refreshTokenInterval = setInterval(async () => {
       const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
-
-
-
-
       if (loginInfo) {
         const { accessToken, refreshToken } = loginInfo; // 수정된 코드
 

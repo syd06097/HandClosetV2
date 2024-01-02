@@ -21,6 +21,7 @@ const MyPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUserName, setEditedUserName] = useState(""); // 수정된 사용자 이름
   const [editedGender, setEditedGender] = useState(""); // 수정된 성별
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!loginInfo || !loginInfo.accessToken) {
@@ -84,7 +85,12 @@ const MyPage = () => {
     }, []);
 
   useEffect(() => {
-
+    if (loginInfo && loginInfo.roles) {
+      // roles 배열이 비어있지 않다면 첫 번째 역할의 roleId을 가져옴
+      const roleId = loginInfo.roles.length > 0 ? loginInfo.roles[0].roleId : null;
+      // roleId가 2이면 관리자로 설정
+      setIsAdmin(roleId === 2);
+    }
     const handleLoginStatusChange = () => {
       const loginInfo = localStorage.getItem("loginInfo");
       if (loginInfo) {
@@ -180,10 +186,10 @@ const MyPage = () => {
               <UserName>{userName}</UserName>
               <UserDetail>
                 <DataContainer1>
-                  소장옷 <span style={{ fontWeight: 'bold', fontSize:"21px" }}>{clothesCount}개</span>
+                  소장옷 <span style={{fontWeight: 'bold', fontSize: "21px"}}>{clothesCount}개</span>
                 </DataContainer1>
                 <DataContainer2>
-                  다이어리 <span style={{ fontWeight: 'bold' , fontSize:"21px"}}>{diaryCount}개</span>
+                  다이어리 <span style={{fontWeight: 'bold', fontSize: "21px"}}>{diaryCount}개</span>
                 </DataContainer2>
               </UserDetail>
 
@@ -197,18 +203,18 @@ const MyPage = () => {
         {/*  로그인 하러가기*/}
         {/*</Button>*/}
         <Button
-          style={{ display: isLoggedIn ? "block" : "none" }}
-          onClick={handleLogout}
+            style={{display: isLoggedIn ? "block" : "none"}}
+            onClick={handleLogout}
         >
           로그아웃 하러가기
         </Button>
         {/*회원 탈퇴 로직*/}
-        <hr style={{ border: "0", height: "1px", background: "#ccc", marginLeft:"9%", marginRight:"9%"}}/>
+        <hr style={{border: "0", height: "1px", background: "#ccc", marginLeft: "9%", marginRight: "9%"}}/>
         <Button onClick={() => setIsEditing(true)}>회원 정보 수정</Button>
         {isEditing && (
             <>
               {/* 배경 어둡게 처리 */}
-              <Backdrop />
+              <Backdrop/>
 
               {/* 회원 정보 수정 팝업 */}
               <EditProfilePopup>
@@ -243,25 +249,32 @@ const MyPage = () => {
               </EditProfilePopup>
             </>
         )}
-        <hr style={{ border: "0", height: "1px", background: "#ccc", marginLeft:"9%", marginRight:"9%"}}/>
+        <hr style={{border: "0", height: "1px", background: "#ccc", marginLeft: "9%", marginRight: "9%"}}/>
         <Button
             onClick={handleDeleteAccount}
         >
           탈퇴하기
         </Button>
-        <hr style={{ border: "0", height: "1px", background: "#ccc", marginLeft:"9%", marginRight:"9%"}}/>
-
+        <hr style={{border: "0", height: "1px", background: "#ccc", marginLeft: "9%", marginRight: "9%"}}/>
+        {isAdmin && (
+            <Button onClick={() => navigate("/AdminPage")}>
+              관리자 페이지 이동
+            </Button>
+        )}
+        {isAdmin && (
+        <hr style={{border: "0", height: "1px", background: "#ccc", marginLeft: "9%", marginRight: "9%"}}/>
+        )}
       </Container>
     </div>
   );
-};
+  };
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+  const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+  `;
 
-const UserImage = styled.img`
+  const UserImage = styled.img`
   width: 140px;
   height: 140px;
   text-align: center;

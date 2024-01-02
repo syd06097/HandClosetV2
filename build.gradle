@@ -50,6 +50,10 @@ dependencies {
 
 	// dto validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//oracle
+//	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+//	implementation 'com.oracle.database.jdbc:ojdbc11'
 }
 
 
@@ -101,10 +105,4 @@ task copyReactBuildFiles(type: Copy) {
 	from "$frontendDir/build"
 	into "$projectDir/src/main/resources/static"
 }
-//
-//task copyNativeLibs(type: Copy) {
-//   from configurations.runtimeClasspath
-//   into project.buildDir
-//}
-//
-//tasks.build.dependsOn copyNativeLibs
+

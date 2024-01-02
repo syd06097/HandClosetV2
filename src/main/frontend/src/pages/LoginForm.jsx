@@ -72,19 +72,7 @@ function LoginForm() {
               const loginInfo = response.data;
               console.log("받아오는 데이터 정보: ", response.data);
               localStorage.setItem("loginInfo", JSON.stringify(loginInfo));
-
-              // 추가된 부분
-              // const roleId = loginInfo.roles[0]?.roleId;
-              // roles 배열이 비어있지 않다면 첫 번째 역할의 roleId을 가져옴
-              const roleId = loginInfo.roles.length > 0 ? loginInfo.roles[0].roleId : null;
-              if (roleId === 2) {
-                  console.log("Navigating to AdminPage");
-                  navigate("/AdminPage");
-              }else{
-                  console.log("Navigating to MyPage");
-                  navigate("/MyPage");
-              }
-
+              navigate("/MyPage");
               alert("로그인 완료");
               // 로그인 상태 변경 이벤트 발생
               const event = new Event("loginStatusChanged");
