@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import React, { useEffect,useState } from "react";
 import "./App.css";
 import Main from "./pages/Main";
@@ -26,7 +26,13 @@ import myAxios from "./utils/myaxios"; // 추가된 코드
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeNav, setActiveNav] = useState(1);
+  // BottomNav를 숨길 페이지들의 경로 리스트
+  const pathsWithoutBottomNav = ["/LoginForm", "/JoinForm", "/AdminPage"];
+  // BottomNav를 보여줄지 여부를 결정하는 변수
+  const shouldShowBottomNav = !pathsWithoutBottomNav.includes(location.pathname);
+
   useEffect(() => {
     const refreshTokenInterval = setInterval(async () => {
       const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -65,10 +71,12 @@ function App() {
     };
   }, []);
 
+
+
   return (
     <div className="App">
       {/*<BottomNav />*/}
-      <BottomNav activeNav={activeNav} setActiveNav={setActiveNav} />
+      {shouldShowBottomNav && <BottomNav activeNav={activeNav} setActiveNav={setActiveNav} />}
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/Main" element={<Main />} />

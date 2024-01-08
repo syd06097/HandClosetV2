@@ -221,94 +221,94 @@ const ClothingForm = () => {
       <div className={styles.formAlign}>
         <div>
           <label className={styles.label}>카테고리</label>
-          <br />
+          <br/>
           <select
-            value={category}
-            onChange={handleCategoryChange}
-            className={styles.select}
-            required
+              value={category}
+              onChange={handleCategoryChange}
+              className={styles.select}
+              required
           >
             <option value="">카테고리 선택</option>
             {categories.map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.name}
-              </option>
+                <option key={category.name} value={category.name}>
+                  {category.name}
+                </option>
             ))}
           </select>
         </div>
         {category && (
-          <div style={{ marginTop: "1px" }}>
-            <filedset className={styles.subcat}>
-              {categories
-                .find((c) => c.name === category)
-                .subcategories.map((subcat) => (
-                  <label key={subcat} className={styles.subcat_label}>
-                    <input
-                      type="radio"
-                      name="subcategory"
-                      value={subcat}
-                      checked={subcategory === subcat}
-                      onChange={handleSubcategoryChange}
-                      id={styles.subcategory}
-                      required
-                    />
-                    <span>{subcat}</span>
-                  </label>
-                ))}
-            </filedset>
-          </div>
+            <div style={{marginTop: "1px"}}>
+              <filedset className={styles.subcat}>
+                {categories
+                    .find((c) => c.name === category)
+                    .subcategories.map((subcat) => (
+                        <label key={subcat} className={styles.subcat_label}>
+                          <input
+                              type="radio"
+                              name="subcategory"
+                              value={subcat}
+                              checked={subcategory === subcat}
+                              onChange={handleSubcategoryChange}
+                              id={styles.subcategory}
+                              required
+                          />
+                          <span>{subcat}</span>
+                        </label>
+                    ))}
+              </filedset>
+            </div>
         )}
-        <br />
+        <br/>
         <span className={styles.label}>계절</span>
         <div className={styles.ckbox_group}>
           <input
-            type="checkbox"
-            value="봄"
-            checked={season.includes("봄")}
-            onChange={handleSeasonChange}
-            id="spring"
+              type="checkbox"
+              value="봄"
+              checked={season.includes("봄")}
+              onChange={handleSeasonChange}
+              id="spring"
           />
           <label className={styles.btn_ckbox} htmlFor="spring">
             <span>봄</span>
           </label>
-          <br />
+          <br/>
 
           <input
-            type="checkbox"
-            value="여름"
-            checked={season.includes("여름")}
-            onChange={handleSeasonChange}
-            id="summer"
+              type="checkbox"
+              value="여름"
+              checked={season.includes("여름")}
+              onChange={handleSeasonChange}
+              id="summer"
           />
           <label className={styles.btn_ckbox} htmlFor="summer">
             <span>여름</span>
           </label>
-          <br />
+          <br/>
 
           <input
-            type="checkbox"
-            value="가을"
-            checked={season.includes("가을")}
-            onChange={handleSeasonChange}
-            id="autumn"
+              type="checkbox"
+              value="가을"
+              checked={season.includes("가을")}
+              onChange={handleSeasonChange}
+              id="autumn"
           />
           <label className={styles.btn_ckbox} htmlFor="autumn">
             <span>가을</span>
           </label>
-          <br />
+          <br/>
 
           <input
-            type="checkbox"
-            value="겨울"
-            checked={season.includes("겨울")}
-            onChange={handleSeasonChange}
-            id="winter"
+              type="checkbox"
+              value="겨울"
+              checked={season.includes("겨울")}
+              onChange={handleSeasonChange}
+              id="winter"
           />
           <label className={styles.btn_ckbox} htmlFor="winter">
             <span>겨울</span>
           </label>
         </div>
-        <br />
+        <br/>
         <div>
           <label className={styles.label}>색상</label>
           <br />
@@ -326,33 +326,33 @@ const ClothingForm = () => {
             ))}
           </select>
         </div>
-        <br />
+        <br/>
         <div>
           <label className={styles.label}>설명</label>
-          <br />
+          <br/>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className={styles.area}
-            placeholder="설명을 입력해주세요"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={styles.area}
+              placeholder="설명을 입력해주세요"
           />
         </div>
         <div>
           <button
-            onClick={() => navigate("/Closet")}
-            className={styles.btn_back}
+              onClick={() => navigate("/Closet")}
+              className={styles.btn_back}
           >
-            <img src={back} alt="back" style={{ width: "26px" }} />
+            <img src={back} alt="back" style={{width: "26px"}}/>
           </button>
         </div>
         <div>
           <button type="submit" className={styles.btn_submit}>
             {" "}
-            <img src={check} alt="check" style={{ width: "26px" }} />
+            <img src={check} alt="check" style={{width: "26px"}}/>
           </button>
         </div>
-        <br />
-        <br />
+        <br/>
+        <br/>
         {/*<br/>*/}
         {/*<br/>*/}
       </div>

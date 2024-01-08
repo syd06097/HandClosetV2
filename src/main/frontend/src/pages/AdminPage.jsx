@@ -84,8 +84,10 @@ const AdminPage = () => {
     return (
         <div style={{height: 400, width: '100%'}}>
             <h1>회원 목록</h1>
-            <button style={{marginBottom:"15px"}} onClick={handleGoToMyPage}>MyPage로 이동</button>
+            <button style={{marginBottom:"15px", float:"left"}} onClick={handleGoToMyPage}>MyPage로 이동</button>
+            <div style={{ clear: "left" }}>
             <DataGrid rows={users} columns={columns} pageSize={5} getRowId={(row) => row.memberId}/>
+            </div>
         </div>
     );
 };

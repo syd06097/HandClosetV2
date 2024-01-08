@@ -25,35 +25,24 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//   implementation 'com.googlecode.jopensurf:jopensurf:1.0.0'
-//   implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0', classifier: 'natives-windows-x86_64'
-//   implementation 'org.bytedeco:opencv-java:4.8.0:natives-windows-x86_64'
-//   implementation files('build/libs/opencv-480.jar')
-//   implementation fileTree(dir: 'libs', include: ['opencv4.8.0.jar'])
-//   implementation 'org.opencv:opencv-java:4.8.0'
-//   implementation 'org.openpnp:opencv:4.5.1-1'
-//   implementation group: 'org.bytedeco', name: 'opencv-java', version: '4.8.0'
-//   implementation group: 'org.bytedeco', name: 'javacv-platform', version: '1.5.9'
-//   implementation group: 'org.openpnp', name: 'opencv', version: '4.5.1-1'
 	implementation 'com.google.code.gson:gson:2.8.6'
 	implementation 'com.auth0:java-jwt:3.10.3'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.security:spring-security-test'
-
 	// jwts
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-
 	//gson - json 메시지를 다루기 위한 라이브러리
 	implementation 'com.google.code.gson:gson'
-
 	// dto validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
 	//oracle
 //	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 //	implementation 'com.oracle.database.jdbc:ojdbc11'
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 

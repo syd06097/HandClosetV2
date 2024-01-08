@@ -14,6 +14,7 @@ import HandCloset.HandCloset.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,7 +40,7 @@ public class MemberController {
     private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
     private final MemberManagementService memberManagementService;
-
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody @Valid MemberSignupDto memberSignupDto, BindingResult bindingResult) {
@@ -110,26 +112,31 @@ public class MemberController {
      */
     @PostMapping("/refreshToken")
     public ResponseEntity requestRefresh(@RequestBody RefreshTokenDto refreshTokenDto) {
-        RefreshToken refreshToken = refreshTokenService.findRefreshToken(refreshTokenDto.getRefreshToken()).orElseThrow(() -> new IllegalArgumentException("Refresh token not found"));
-        Claims claims = jwtTokenizer.parseRefreshToken(refreshToken.getValue());
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenService.findRefreshToken(refreshTokenDto.getRefreshToken());
 
-        Long memberId = Long.valueOf((Integer)claims.get("memberId"));
+        if (optionalRefreshToken.isPresent()) {
+            RefreshToken refreshToken = optionalRefreshToken.get();
+            Claims claims = jwtTokenizer.parseRefreshToken(refreshToken.getValue());
 
-        Member member = memberService.getMember(memberId).orElseThrow(() -> new IllegalArgumentException("Member not found"));
+            Long memberId = Long.valueOf((Integer) claims.get("memberId"));
+            Member member = memberService.getMember(memberId).orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
+            List<String> roles = (List) claims.get("roles");
+            String email = claims.getSubject();
 
-        List roles = (List) claims.get("roles");
-        String email = claims.getSubject();
+            String accessToken = jwtTokenizer.createAccessToken(memberId, email, member.getName(), roles);
 
-        String accessToken = jwtTokenizer.createAccessToken(memberId, email, member.getName(), roles);
+            MemberLoginResponseDto loginResponse = MemberLoginResponseDto.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshTokenDto.getRefreshToken())
+                    .memberId(member.getMemberId())
+                    .nickname(member.getName())
+                    .build();
 
-        MemberLoginResponseDto loginResponse = MemberLoginResponseDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshTokenDto.getRefreshToken())
-                .memberId(member.getMemberId())
-                .nickname(member.getName())
-                .build();
-        return new ResponseEntity(loginResponse, HttpStatus.OK);
+            return new ResponseEntity(loginResponse, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping("/info")
