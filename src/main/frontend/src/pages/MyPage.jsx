@@ -32,8 +32,7 @@ const MyPage = () => {
           const response = await axios.get("/members/info", {
             headers: {
               Authorization: `Bearer ${loginInfo.accessToken}`,
-            },
-            data: { refreshToken: loginInfo.refreshToken },
+            }
           }); // 서버에서 사용자 정보 가져오기
 
           setUserName(response.data.name);
@@ -49,7 +48,7 @@ const MyPage = () => {
           const response = await axios.get("/api/clothing/count", {
             headers: {
               Authorization: `Bearer ${loginInfo.accessToken}`,
-              data: { refreshToken: loginInfo.refreshToken },
+             
             },
           });
           console.log(response.data);
@@ -65,7 +64,7 @@ const MyPage = () => {
           const response = await axios.get("/api/diary/count", {
             headers: {
               Authorization: `Bearer ${loginInfo.accessToken}`,
-              data: {refreshToken: loginInfo.refreshToken},
+           
             },
           });
           console.log(response.data);
@@ -160,8 +159,7 @@ const MyPage = () => {
       }, {
         headers: {
           Authorization: `Bearer ${loginInfo.accessToken}`,
-        },
-        data: {refreshToken: loginInfo.refreshToken},
+        }
       });
 
       // 수정 완료 후 상태 업데이트
@@ -195,13 +193,7 @@ const MyPage = () => {
 
             </div>
         )}
-        {/*로그인 / 로그아웃 버튼 로직*/}
-        {/*<Button*/}
-        {/*  style={{ display: isLoggedIn ? "none" : "block" }}*/}
-        {/*  onClick={() => navigate("/LoginForm")}*/}
-        {/*>*/}
-        {/*  로그인 하러가기*/}
-        {/*</Button>*/}
+  
         <Button
             style={{display: isLoggedIn ? "block" : "none"}}
             onClick={handleLogout}

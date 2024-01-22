@@ -22,7 +22,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.projectlombok:lombok:1.18.26'
-	runtimeOnly 'com.h2database:h2'
+//	runtimeOnly 'com.h2database:h2'
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.google.code.gson:gson:2.8.6'
@@ -39,7 +39,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	//oracle
 //	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-//	implementation 'com.oracle.database.jdbc:ojdbc11'
+//	implementation 'com.oracle.database.jdbc:ojdbc11:23.3.0.23.09'
+	//MySQL
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'mysql:mysql-connector-java:8.0.33'
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 

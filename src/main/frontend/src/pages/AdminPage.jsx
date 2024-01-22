@@ -35,8 +35,7 @@ const AdminPage = () => {
             await axios.delete(`/members/${memberId}`, {
                 headers: {
                     Authorization: `Bearer ${loginInfo.accessToken}`,
-                },
-                data: {refreshToken: loginInfo.refreshToken},
+                }
             });
 
             // 삭제 후 목록 갱신
@@ -48,7 +47,7 @@ const AdminPage = () => {
     };
 
     const handleGoToMyPage = () => {
-        // Navigate to MyPage
+        
         navigate('/MyPage');
     };
 

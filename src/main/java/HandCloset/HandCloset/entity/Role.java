@@ -7,13 +7,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name="role")
+@Table(name = "role")
 @NoArgsConstructor
 @Setter
 @Getter
 public class Role {
     @Id
-    @Column(name="role_id")
+    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roleId;
 

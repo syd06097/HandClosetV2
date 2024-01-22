@@ -30,7 +30,7 @@ const DiaryAdd = () => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
-  }, [loginInfo, navigate]);
+  }, []);
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
     console.log(selectedFile);
@@ -79,7 +79,7 @@ const DiaryAdd = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("봐봐", e.target.file.files[0]);
+    
     if (season.length === 0 || selectedImageIds.length === 0) {
       // Use selectedImageIds here
       alert("적어도 하나의 계절과 아이템을 선택해주세요.");
@@ -104,17 +104,14 @@ const DiaryAdd = () => {
       formData.append("imageIds", selectedImageIds.join()); // Add selected image IDs
       formData.append("note", note || "");
 
-      for (let key of formData.keys()) {
-        console.log(key, ":", formData.get(key));
-      }
+      
       console.log(formattedDate);
       try {
         const response = await axios.post("/api/diary", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${loginInfo.accessToken}`,
-          },
-          data: { refreshToken: loginInfo.refreshToken },
+          }
         });
         const data = response.data;
         console.log(data);

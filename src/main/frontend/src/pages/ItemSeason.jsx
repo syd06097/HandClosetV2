@@ -16,7 +16,7 @@ const ItemSeason = () => {
         if (!loginInfo || !loginInfo.accessToken) {
             navigate("/LoginForm");
         }
-    }, [loginInfo, navigate]);
+    }, []);
 
   useEffect(() => {
     fetchData();
@@ -28,8 +28,7 @@ const ItemSeason = () => {
       const response = await axios.get("/api/clothing/statistics", {
         headers: {
           Authorization: `Bearer ${loginInfo.accessToken}`,
-        },
-        data: { refreshToken: loginInfo.refreshToken },
+        }
       });
 
       const data = response.data;

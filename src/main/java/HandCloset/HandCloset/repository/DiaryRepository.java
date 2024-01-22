@@ -1,6 +1,7 @@
 package HandCloset.HandCloset.repository;
 
 import HandCloset.HandCloset.entity.Diary;
+import HandCloset.HandCloset.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,20 +11,24 @@ import java.util.Optional;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
-    List<Diary> findAllByDateAndMemberId(Date date, Long memberId);
+    List<Diary> findAllByDateAndMember(Date date, Member member);
 //    List<Diary> findByIdAndMemberId(Long id, Long memberId);
 
-    Optional<Diary> findByIdAndMemberId(Long id, Long memberId);
-    List<Diary> findByMemberId(Long memberId);
-    List<Diary> findAllByImageIdsContainingAndMemberId(Long imageId, Long memberId);
-    void deleteByIdAndMemberId(Long id, Long memberId);
+    Optional<Diary> findByIdAndMember(Long id, Member member);
+
+    List<Diary> findByMember(Member member);
+
+    List<Diary> findAllByImageIdsContainingAndMember(Long imageId, Member member);
+
+    void deleteByIdAndMember(Long id, Member member);
+
     List<Diary> findAllByImageIdsContaining(Long imageId);
 
-    List<Diary> findAllByThumbnailpathAndMemberId(String thumbnailpath, Long memberId);
+    List<Diary> findAllByThumbnailpathAndMember(String thumbnailpath, Member member);
 
-    void deleteByMemberId(Long memberId);
+    void deleteByMember(Member member);
 
-    int countByMemberId(Long memberId);
+    int countByMember(Member member);
 
 
 }

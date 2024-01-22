@@ -13,7 +13,7 @@ const ItemNotRecently = () => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
-  }, [loginInfo, navigate]);
+  }, []);
 
   useEffect(() => {
     const fetchBottomItems = async () => {

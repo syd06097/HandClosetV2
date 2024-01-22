@@ -5,6 +5,8 @@ import AddClothes from "../components/AddClothes";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+
+
 function Closet() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -18,7 +20,7 @@ function Closet() {
       navigate("/LoginForm");
 
     }
-  }, [loginInfo, navigate]);
+  }, []);
 
   const handleClickCategory = (category, subcategory, items) => {
     setSelectedCategory(category);

@@ -18,7 +18,7 @@ const Diary = () => {
         if (!loginInfo || !loginInfo.accessToken) {
             navigate("/LoginForm");
         }
-    }, [loginInfo, navigate]);
+    }, []);
   useEffect(() => {
     // Fetch diary entries from API and update the state
     const fetchDiaryEntries = async () => {
@@ -30,8 +30,7 @@ const Diary = () => {
         const response = await axios.get("/api/diary/entries", {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
-          },
-          data: { refreshToken: loginInfo.refreshToken },
+          }
         });
 
         setDiaryEntries(response.data);

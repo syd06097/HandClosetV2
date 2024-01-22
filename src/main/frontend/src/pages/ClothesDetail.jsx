@@ -7,6 +7,8 @@ import back from "../images/back.png";
 import trash from "../images/trash.png";
 import update from "../images/update.png";
 import axios from "axios";
+
+
 function ClothesDetail() {
   const { id } = useParams();
   const [clothes, setClothes] = useState(null);
@@ -19,7 +21,7 @@ function ClothesDetail() {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
-  }, [loginInfo, navigate]);
+  }, []);
 
 
   useEffect(() => {
@@ -38,7 +40,7 @@ function ClothesDetail() {
           responseType: "arraybuffer",
         });
 
-        console.log("response:", response);
+        
 
         const arrayBufferView = new Uint8Array(response.data);
         const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
@@ -58,8 +60,8 @@ function ClothesDetail() {
   const handleDelete = async () => {
     try {
       console.log("삭제할 id:", id);
-      await deleteClothes(id); // 해당 옷 데이터를 삭제하는 API 호출
-      navigate("/Closet"); // 삭제 후에는 Closet 페이지로 이동
+      await deleteClothes(id);
+      navigate("/Closet"); 
     } catch (error) {
       console.error("Failed to delete clothes:", error);
     }

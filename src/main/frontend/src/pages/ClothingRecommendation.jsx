@@ -23,13 +23,13 @@ const ClothingRecommendation = () => {
   const [formalsubcategory, setFormalsubcategory ] = useState([]);
 
 
-  // 이미지 가져오기
+
   useEffect(() => {
 
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
-  }, [loginInfo, navigate]);
+  }, []);
 
 
   const fetchImage = async (id) => {
@@ -101,7 +101,7 @@ const ClothingRecommendation = () => {
           headers: {
             Authorization: `Bearer ${loginInfo.accessToken}`,
           },
-          data: {refreshToken: loginInfo.refreshToken},
+          
           params: {subcategories: encodedSubcategories},
           paramsSerializer: (params) => {
             return qs.stringify(params, {arrayFormat: "repeat"});
@@ -147,7 +147,7 @@ const ClothingRecommendation = () => {
         },
         params: {subcategories: encodedSubcategories},
 
-        data: {refreshToken: loginInfo.refreshToken},
+        
         paramsSerializer: (params) => {
           return qs.stringify(params, {arrayFormat: "repeat"});
         },
@@ -182,7 +182,7 @@ const ClothingRecommendation = () => {
         },
         params: {subcategories: encodedSubcategories},
 
-        data: {refreshToken: loginInfo.refreshToken},
+        
         paramsSerializer: (params) => {
           return qs.stringify(params, {arrayFormat: "repeat"});
         },
@@ -217,7 +217,7 @@ const ClothingRecommendation = () => {
         },
         params: {subcategories: encodedSubcategories},
 
-        data: {refreshToken: loginInfo.refreshToken},
+        
         paramsSerializer: (params) => {
           return qs.stringify(params, {arrayFormat: "repeat"});
         },

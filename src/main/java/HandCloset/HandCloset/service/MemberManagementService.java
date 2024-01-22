@@ -15,8 +15,8 @@ public class MemberManagementService {
 
     @Transactional
     public void deleteMemberAndRelatedData(Long memberId) {
-        memberService.deleteMember(memberId);
         clothesService.deleteAllClothes(memberId);
         diaryService.deleteAllDiaries(memberId);
+        memberService.deleteMember(memberId);
     }
 }

@@ -1,6 +1,7 @@
 package HandCloset.HandCloset.repository;
 
 import HandCloset.HandCloset.entity.Clothes;
+import HandCloset.HandCloset.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,33 +12,35 @@ import java.util.Optional;
 
 @Repository
 public interface ClothesRepository extends JpaRepository<Clothes, Long> {
-    List<Clothes> findByCategoryAndSubcategoryAndMemberId(String category, String subcategory, Long memberId);
+    List<Clothes> findByCategoryAndSubcategoryAndMember(String category, String subcategory, Member member);
 
-    List<Clothes> findByCategoryAndMemberId(String category, Long memberId);
+    List<Clothes> findByCategoryAndMember(String category, Member member);
 
-    List<Clothes> findBySubcategoryAndMemberId(String subcategory, Long memberId);
+    List<Clothes> findBySubcategoryAndMember(String subcategory, Member member);
 
 
-    Optional<Clothes> findByIdAndMemberId(Long id, Long memberId);
+    Optional<Clothes> findByIdAndMember(Long id, Member member);
 
-    List<Clothes> findByMemberId(Long memberId);
+    List<Clothes> findByMember(Member member);
 
-    void deleteByIdAndMemberId(Long id, Long memberId);
+    void deleteByIdAndMember(Long id, Member member);
 
-    List<Clothes> findTop5ByMemberIdOrderByWearcntDesc(Long memberId);
+    List<Clothes> findTop5ByMemberOrderByWearcntDesc(Member member);
 
-    List<Clothes> findTop5ByMemberIdOrderByCreatedateAsc(Long memberId);
+    List<Clothes> findTop5ByMemberOrderByCreatedateAsc(Member member);
 
-    List<Clothes> findTop2BySubcategoryAndMemberIdOrderByWearcntDesc(String subcategory, Long memberId);
+    List<Clothes> findTop2BySubcategoryAndMemberOrderByWearcntDesc(String subcategory, Member member);
 
-    List<Clothes> findTop2BySubcategoryAndMemberIdOrderByCreatedateAsc(String subcategory, Long memberId);
+    List<Clothes> findTop2BySubcategoryAndMemberOrderByCreatedateAsc(String subcategory, Member member);
 
-    List<Clothes> findByIdInAndMemberId(List<Long> ids, Long memberId);
+    List<Clothes> findByIdInAndMember(List<Long> ids, Member member);
 
-    @Query("SELECT c FROM Clothes c WHERE c.subcategory = :subcategory AND c.memberId = :memberId ORDER BY FUNCTION('RAND')")
-    List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory, @Param("memberId") Long memberId);
+    @Query("SELECT c FROM Clothes c WHERE c.subcategory = :subcategory AND c.member = :memberId ORDER BY FUNCTION('RAND')")
+    List<Clothes> getRandomRecommendedClothes(@Param("subcategory") String subcategory, @Param("memberId") Member member);
 
-    void deleteByMemberId(Long memberId);
+    void deleteByMember(Member member);
 
-    int countByMemberId(Long memberId);
+    int countByMember(Member member);
+
+    List<Clothes> findByImgpathAndMember(String imgpath, Member member);
 }

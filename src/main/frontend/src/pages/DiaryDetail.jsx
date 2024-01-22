@@ -22,7 +22,7 @@ function DiaryDetail() {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
-  }, [loginInfo, navigate]);
+  }, []);
 
   useEffect(() => {
     const fetchDiary = async () => {

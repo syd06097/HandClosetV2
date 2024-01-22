@@ -1,6 +1,7 @@
 package HandCloset.HandCloset.entity;
 
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,10 +13,12 @@ import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "diary")
 public class Diary {
-
-
 
 
     @Id
@@ -30,12 +33,14 @@ public class Diary {
     private String season;
 
     private String thumbnailpath;
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String note;
 
     @CreatedDate
-    @Column(updatable = false,nullable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDateTime regdate;
 
     @ElementCollection
@@ -44,70 +49,4 @@ public class Diary {
     private List<Long> imageIds;
 
 
-    public LocalDateTime getRegdate() {
-        return regdate;
-    }
-
-    public void setRegdate(LocalDateTime regdate) {
-        this.regdate = regdate;
-    }
-
-    // Getters and setters
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-
-    public String getThumbnailpath() {
-        return thumbnailpath;
-    }
-
-    public void setThumbnailpath(String thumbnailpath) {
-        this.thumbnailpath = thumbnailpath;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getSeason() {
-        return season;
-    }
-
-    public void setSeason(String season) {
-        this.season = season;
-    }
-
-    public List<Long> getImageIds() {
-        return imageIds;
-    }
-
-    public void setImageIds(List<Long> imageIds) {
-        this.imageIds = imageIds;
-    }
-
-    // Constructors
 }

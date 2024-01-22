@@ -4,6 +4,8 @@ import axios from "axios";
 import check from "../images/check.png";
 import back from "../images/back.png";
 import { useNavigate } from "react-router-dom";
+import categories from "../utils/categories";
+import availableColors from "../utils/availableColors";
 const ClothingForm = () => {
   const [imgpath, setImgpath] = useState(null);
   const [category, setCategory] = useState("");
@@ -19,7 +21,7 @@ const ClothingForm = () => {
     if (!loginInfo || !loginInfo.accessToken) {
       navigate("/LoginForm");
     }
-  }, [loginInfo, navigate]);
+  }, []);
   const handleImageChange = (e) => {
     //이미지 base64 형태로
     const selectedFile = e.target.files[0];
@@ -32,7 +34,7 @@ const ClothingForm = () => {
         };
         reader.readAsDataURL(selectedFile);
       } else {
-        // 이미지 파일이 아닐 경우 처리할 내용
+       
         alert("이미지 파일만 업로드 가능합니다.");
         e.target.value = null;
       }
@@ -83,16 +85,13 @@ const ClothingForm = () => {
       formData.append("description", description || "설명없음");
       formData.append("color", color);
 
-      for (let key of formData.keys()) {
-        console.log(key, ":", formData.get(key));
-      }
+      
       try {
         const response = await axios.post("/api/clothing", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${loginInfo.accessToken}`,
-          },
-          data: { refreshToken: loginInfo.refreshToken },
+          }
         });
         const data = response.data;
         console.log(data);
@@ -108,89 +107,8 @@ const ClothingForm = () => {
     }
   };
 
-  const categories = [
-    {
-      name: "상의",
-      subcategories: [
-        "민소매",
-        "반팔티",
-        "긴팔티",
-        "블라우스/셔츠",
-        "맨투맨/후디",
-        "니트",
-        "기타",
-      ],
-    },
-    {
-      name: "하의",
-      subcategories: [
-        "반바지",
-        "치마",
-        "면바지",
-        "슬랙스",
-        "청바지",
-        "트레이닝/조거",
-        "기타",
-      ],
-    },
-    {
-      name: "아우터",
-      subcategories: [
-        "트렌치코트",
-        "코트",
-        "자켓/점퍼",
-        "블레이저",
-        "야상",
-        "무스탕",
-        "패딩",
-        "후드집업",
-        "가디건/베스트",
-        "기타",
-      ],
-    },
-    {
-      name: "원피스",
-      subcategories: ["미니 원피스", "미디 원피스", "맥시 원피스", "기타"],
-    },
-    { name: "신발", subcategories: ["운동화", "구두", "부츠", "샌들", "기타"] },
-    {
-      name: "가방",
-      subcategories: ["백팩", "숄더/토트백", "크로스백", "클러치", "기타"],
-    },
-    {
-      name: "악세사리",
-      subcategories: [
-        "모자",
-        "양말",
-        "쥬얼리/시계",
-        "머플러/스카프",
-        "벨트",
-        "기타",
-      ],
-    },
-    { name: "기타", subcategories: ["이너웨어", "잠옷", "수영복"] },
-  ];
 
-  const availableColors = [
-    "화이트",
-    "블랙",
-    "네이비",
-    "블루",
-    "그레이",
-    "아이보리",
-    "베이지",
-    "옐로우",
-    "그린",
-    "카키",
-    "핑크",
-    "레드",
-    "퍼플",
-    "브라운",
-    "연청",
-    "중청",
-    "진청",
-    "흑청",
-  ];
+
 
   return (
     <form onSubmit={handleSubmit}>

@@ -5,19 +5,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity // Database Table과 맵핑하는 객체.
-@Table(name="member") // Database 테이블 이름 user3 와 User라는 객체가 맵핑.
+@Table(name = "member") // Database 테이블 이름 user3 와 User라는 객체가 맵핑.
 @NoArgsConstructor // 기본생성자가 필요하다.
 @Setter
 @Getter
 public class Member {
     @Id // 이 필드가 Table의 PK.
-    @Column(name="member_id")
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY) // memberId는 자동으로 생성되도록 한다. 1,2,3,4
     private Long memberId;
 
